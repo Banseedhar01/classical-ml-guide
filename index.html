@@ -1373,38 +1373,74 @@
         </div>
       </div>
 
-      <div class="card reveal" style="margin-top:1.5rem;">
-        <h3 style="margin-bottom:1rem; font-size:1.05rem;">Hyperparameters</h3>
-        <table class="compare-table">
-          <thead>
-            <tr>
-              <th>Parameter</th>
-              <th>Effect</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><code>max_depth</code></td>
-              <td>Limits tree depth → controls overfitting</td>
-            </tr>
-            <tr>
-              <td><code>min_samples_split</code></td>
-              <td>Min samples needed to split a node</td>
-            </tr>
-            <tr>
-              <td><code>min_samples_leaf</code></td>
-              <td>Min samples required at leaf</td>
-            </tr>
-            <tr>
-              <td><code>max_features</code></td>
-              <td>Features to consider per split</td>
-            </tr>
-            <tr>
-              <td><code>criterion</code></td>
-              <td>gini / entropy / squared_error</td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="grid-2" style="margin-top:1.5rem; align-items:stretch;">
+        <div class="card reveal" style="height:100%;">
+          <h3 style="margin-bottom:1rem; font-size:1.05rem;">Hyperparameters</h3>
+          <table class="compare-table" style="margin-top:0.5rem;">
+            <thead>
+              <tr>
+                <th>Parameter</th>
+                <th>Effect</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>max_depth</code></td>
+                <td>Limits tree depth → controls overfitting</td>
+              </tr>
+              <tr>
+                <td><code>min_samples_split</code></td>
+                <td>Min samples needed to split a node</td>
+              </tr>
+              <tr>
+                <td><code>min_samples_leaf</code></td>
+                <td>Min samples required at leaf</td>
+              </tr>
+              <tr>
+                <td><code>max_features</code></td>
+                <td>Features to consider per split</td>
+              </tr>
+              <tr>
+                <td><code>criterion</code></td>
+                <td>gini / entropy / squared_error</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card reveal" style="height:100%; border-top:3px solid #3b82f6;">
+          <h3 style="margin-bottom:1rem; font-size:1.05rem;">Time Complexity (Brief)</h3>
+          <ul class="check-list" style="margin:0; gap:0.5rem;">
+            <li><span class="mark mark-blue">Σ</span> <strong>Total training complexity:</strong> <code>O(n_features × n_samples × log n_samples)</code>.</li>
+          </ul>
+          <div style="margin:0.55rem 0 0 2.15rem; padding:0.55rem 0.7rem; border-left:2px solid rgba(147,197,253,0.45); background:rgba(2,6,23,0.18); border-radius:8px;">
+            <div style="font-size:0.78rem; letter-spacing:0.06em; text-transform:uppercase; color:#bfdbfe; font-weight:600; margin-bottom:0.35rem;">Details</div>
+            <div style="font-size:0.88rem; color:var(--text-secondary); line-height:1.5;">
+              For each feature: sort data <code>O(n log n)</code>, try splits <code>O(n)</code>.<br />
+              Across tree depth: about <code>log n_samples</code> levels (balanced tree).<br />
+              Combined: <code>O(n_features × n_samples × log n_samples)</code>.
+            </div>
+          </div>
+          <ul class="check-list" style="margin:0.6rem 0 0; gap:0.45rem;">
+            <li><span class="mark mark-blue">→</span> <strong>Inference:</strong> <code>O(depth)</code> per prediction; balanced trees are typically <code>O(log n_samples)</code>.</li>
+            <li><span class="mark mark-blue">→</span> <strong>Practical note:</strong> scikit-learn split-search optimizations often perform better than naive bounds.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card reveal" style="margin-top:1.25rem; border-top:3px solid #22c55e;">
+        <h3 style="margin-bottom:1rem; font-size:1.05rem;">Decision Tree — Key Limitations</h3>
+        <ul class="check-list" style="margin:0;">
+          <li><span class="mark mark-orange">⚠️</span> <strong>Overfitting:</strong> Deep trees can memorize training data and generalize poorly.</li>
+          <li><span class="mark mark-orange">⚠️</span> <strong>High variance:</strong> Small data changes can produce a very different tree.</li>
+          <li><span class="mark mark-orange">⚠️</span> <strong>Greedy splits:</strong> Best local split at each node may miss the global optimum.</li>
+          <li><span class="mark mark-orange">⚠️</span> <strong>Feature bias:</strong> High-cardinality categorical features can dominate Information Gain.</li>
+          <li><span class="mark mark-orange">⚠️</span> <strong>Linear pattern limits:</strong> Piecewise constant leaves struggle with smooth trends.</li>
+          <li><span class="mark mark-orange">⚠️</span> <strong>Depth cost:</strong> Very large trees increase comparison steps at inference time.</li>
+          <li><span class="mark mark-orange">⚠️</span> <strong>Axis-aligned splits:</strong> Diagonal boundaries usually require deeper trees.</li>
+          <li><span class="mark mark-orange">⚠️</span> <strong>Small-data risk:</strong> Trees can fit noise when training samples are limited.</li>
+          <li><span class="mark mark-orange">⚠️</span> <strong>Regression cap:</strong> Leaf means are constant and cannot extrapolate beyond training range.</li>
+        </ul>
       </div>
 
       <div class="topic-nav">
