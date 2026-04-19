@@ -791,102 +791,620 @@
       <div class="grid-2">
 
         <div class="card card-accent card-green reveal">
-          <h3 style="margin-bottom:0.75rem; font-size:1.1rem;">Splitting Criteria</h3>
-          <div class="formula-label">Gini Impurity (CART — default)</div>
-          <div class="formula-box">
-            $\text{Gini} = 1 - \sum_{k=1}^{K} p_k^2$
+          <h3 style="margin-bottom:0.75rem; font-size:1.1rem;">Key Components</h3>
+
+          <div class="dt-comp-grid">
+            <div class="dt-comp-item">
+              <div class="dt-comp-title">Root Node</div>
+              <p>The top node that picks the best feature to split the data first.</p>
+            </div>
+            <div class="dt-comp-item">
+              <div class="dt-comp-title">Internal Nodes</div>
+              <p>Decision points that apply feature-based rules and split records.</p>
+            </div>
+            <div class="dt-comp-item">
+              <div class="dt-comp-title">Leaf Nodes</div>
+              <p>Terminal outputs: class label for classification or value for regression.</p>
+            </div>
+            <div class="dt-comp-item">
+              <div class="dt-comp-title">Branches</div>
+              <p>Connections showing outcomes of each split condition.</p>
+            </div>
           </div>
-          <div class="formula-label" style="margin-top:0.75rem;">Entropy / Information Gain (ID3, C4.5)</div>
-          <div class="formula-box">
-            $H = -\sum_{k} p_k \log_2 p_k$
-          </div>
-          <div class="formula-box" style="margin-top:0.25rem;">
-            $\text{IG} = H(\text{parent}) - \sum_j \frac{n_j}{n} H(\text{child}_j)$
-          </div>
-          <div class="formula-label" style="margin-top:0.75rem;">Variance Reduction (Regression)</div>
-          <div class="formula-box">
-            $\text{VR} = \text{Var(parent)} - \sum_j \frac{n_j}{n}\text{Var(child}_j\text{)}$
+
+          <div class="dt-tree-mini">
+            <div class="dt-node dt-node-root">Root Node</div>
+            <div class="dt-tree-arrow">↓</div>
+            <div class="dt-node-row">
+              <div class="dt-branch-col">
+                <div class="dt-node dt-node-internal">Internal Node</div>
+                <div class="dt-tree-arrow">↓</div>
+                <div class="dt-node dt-node-leaf">Leaf Node</div>
+              </div>
+              <div class="dt-branch-col">
+                <div class="dt-node dt-node-internal">Internal Node</div>
+                <div class="dt-tree-arrow">↓</div>
+                <div class="dt-node dt-node-leaf">Leaf Node</div>
+              </div>
+            </div>
           </div>
         </div>
 
         <div class="card card-accent card-green reveal">
-          <h3 style="margin-bottom:0.75rem; font-size:1.1rem;">Tree Structure</h3>
+          <h3 style="margin-bottom:0.75rem; font-size:1.1rem;">How Decision Trees Work</h3>
+          <p class="dt-subtext">The process of creating a decision tree involves:</p>
 
-          <div class="flow-row" style="justify-content:center; flex-direction:column; align-items:center; gap:0.5rem;">
-            <div class="flow-node"
-              style="background:rgba(16,185,129,0.15); border-color:var(--accent-green); color:var(--accent-green); min-width:160px;">
-              🌱 Root Node<br /><small style="color:var(--text-muted); font-weight:400;">Best single split</small>
-            </div>
-            <div>↓</div>
-            <div style="display:flex; gap:2rem;">
-              <div style="display:flex; flex-direction:column; align-items:center; gap:0.4rem;">
-                <div class="flow-node" style="font-size:0.8rem;">Internal Node</div>
-                <div>↓</div>
-                <div class="flow-node"
-                  style="background:rgba(6,182,212,0.15); border-color:var(--accent-cyan); color:var(--accent-cyan); font-size:0.8rem;">
-                  Leaf</div>
+          <div class="dt-steps">
+            <div class="dt-step">
+              <div class="dt-step-num">1</div>
+              <div class="dt-step-body">
+                <div class="dt-step-title">Selecting the Best Attribute</div>
+                <p>Use Gini impurity, entropy, or information gain to choose the most useful split.</p>
               </div>
-              <div style="display:flex; flex-direction:column; align-items:center; gap:0.4rem;">
-                <div class="flow-node" style="font-size:0.8rem;">Internal Node</div>
-                <div>↓</div>
-                <div class="flow-node"
-                  style="background:rgba(6,182,212,0.15); border-color:var(--accent-cyan); color:var(--accent-cyan); font-size:0.8rem;">
-                  Leaf</div>
+            </div>
+            <div class="dt-step">
+              <div class="dt-step-num">2</div>
+              <div class="dt-step-body">
+                <div class="dt-step-title">Splitting the Dataset</div>
+                <p>Partition the data into subsets according to the selected feature rule.</p>
+              </div>
+            </div>
+            <div class="dt-step">
+              <div class="dt-step-num">3</div>
+              <div class="dt-step-body">
+                <div class="dt-step-title">Repeating the Process</div>
+                <p>Repeat recursively for each subset until stopping criteria are met (pure node or max depth).</p>
+              </div>
+            </div>
+            <div class="dt-step">
+              <div class="dt-step-num">4</div>
+              <div class="dt-step-body">
+                <div class="dt-step-title">Assign Each Leaf Node Prediction</div>
+                <p>Majority class (classification) or mean target (regression).</p>
               </div>
             </div>
           </div>
-          <ul class="check-list" style="margin-top:1rem;">
-            <li><span class="mark mark-green">→</span> Greedy, top-down, recursive splitting</li>
-            <li><span class="mark mark-green">→</span> Stops at max depth / min samples / pure leaf</li>
-            <li><span class="mark mark-green">⚠</span> Prone to overfitting — needs pruning</li>
+
+          <div class="formula-label" style="margin-top:0.9rem;">Common Stopping Criteria</div>
+          <ul class="check-list" style="margin-top:0.45rem;">
+            <li><span class="mark mark-cyan">✓</span> Node is pure (all samples same class).</li>
+            <li><span class="mark mark-cyan">✓</span> Max depth reached.</li>
+            <li><span class="mark mark-cyan">✓</span> Min samples split/leaf constraints triggered.</li>
           </ul>
         </div>
 
       </div>
 
       <div class="grid-2" style="margin-top:1.5rem;">
-        <div class="card reveal">
-          <h3 style="margin-bottom:1rem; font-size:1.05rem;">Hyperparameters</h3>
-          <table class="compare-table">
-            <thead>
-              <tr>
-                <th>Parameter</th>
-                <th>Effect</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><code>max_depth</code></td>
-                <td>Limits tree depth → controls overfitting</td>
-              </tr>
-              <tr>
-                <td><code>min_samples_split</code></td>
-                <td>Min samples needed to split a node</td>
-              </tr>
-              <tr>
-                <td><code>min_samples_leaf</code></td>
-                <td>Min samples required at leaf</td>
-              </tr>
-              <tr>
-                <td><code>max_features</code></td>
-                <td>Features to consider per split</td>
-              </tr>
-              <tr>
-                <td><code>criterion</code></td>
-                <td>gini / entropy / squared_error</td>
-              </tr>
-            </tbody>
-          </table>
+        <div class="card card-accent card-green reveal">
+          <h3 style="margin-bottom:0.75rem; font-size:1.1rem;">Entropy, IG &amp; Gini</h3>
+
+          <div class="formula-label">Entropy (uncertainty / disorder)</div>
+          <div class="formula-box" style="font-size:0.86rem;">
+            $\text{Entropy}(S) = -\sum_{k=1}^{K} p_k \log_2 p_k$
+          </div>
+          <div class="formula-label" style="margin-top:0.75rem;">Information Gain (depends on entropy)</div>
+          <div class="formula-box" style="font-size:0.86rem;">
+            $\text{IG} = \text{Entropy(parent)} - \sum_j \frac{n_j}{n}\text{Entropy(child}_j\text{)}$
+          </div>
+          <ul class="check-list" style="margin-top:0.65rem;">
+            <li><span class="mark mark-green">→</span> Entropy measures uncertainty or disorder in a node.</li>
+            <li><span class="mark mark-green">→</span> Low entropy = more ordered/homogeneous set; high entropy = more disorder/diversity.</li>
+            <li><span class="mark mark-green">→</span> Decision trees reduce entropy by choosing better features/split points.</li>
+            <li><span class="mark mark-green">→</span> The split with the <strong>largest entropy reduction</strong> (highest IG) is selected.</li>
+          </ul>
+
+          <div class="formula-label" style="margin-top:1rem;">Gini Impurity (separate criterion)</div>
+          <div class="formula-box" style="font-size:0.86rem;">
+            $\text{Gini}(S) = 1 - \sum_{k=1}^{K} p_k^2$
+          </div>
+          <ul class="check-list" style="margin-top:0.65rem;">
+            <li><span class="mark mark-green">→</span> Gini impurity measures impurity/disorder of elements in a node.</li>
+            <li><span class="mark mark-green">→</span> Lower Gini means a more homogeneous node and a better split.</li>
+            <li><span class="mark mark-green">→</span> CART-style trees choose feature and split point that minimize Gini at each node.</li>
+          </ul>
+
+          <div class="formula-label" style="margin-top:1rem;">Decision Tree Regression (what is used?)</div>
+          <div class="formula-box" style="font-size:0.84rem;">
+            In regression trees, <strong>neither Gini nor Entropy</strong> is used. Instead, splits are chosen by minimizing error/variance.
+          </div>
+          <div class="formula-label" style="margin-top:0.75rem;">Mean Squared Error (MSE) — most common</div>
+          <div class="formula-box" style="font-size:0.86rem;">
+            $\text{MSE} = \dfrac{1}{n}\sum_{i=1}^{n}(y_i - \bar{y})^2$
+          </div>
+          <ul class="check-list" style="margin-top:0.55rem;">
+            <li><span class="mark mark-green">→</span> Measures how far target values are from the node mean.</li>
+            <li><span class="mark mark-green">→</span> Goal: choose split that minimizes post-split MSE.</li>
+          </ul>
+          <div class="formula-label" style="margin-top:0.75rem;">How splitting works</div>
+          <ul class="check-list" style="margin-top:0.45rem;">
+            <li><span class="mark mark-cyan">1</span> Try candidate split points.</li>
+            <li><span class="mark mark-cyan">2</span> Compute MSE of left and right child nodes.</li>
+            <li><span class="mark mark-cyan">3</span> Compute weighted total error:
+              $(n_L/n)\,\text{MSE}_L + (n_R/n)\,\text{MSE}_R$.</li>
+            <li><span class="mark mark-cyan">4</span> Pick the split with the lowest weighted error.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card reveal" style="margin-top:1.5rem;">
+        <h3 style="margin-bottom:1rem; font-size:1.05rem;">Simulation: Play Tennis (Entropy / IG)</h3>
+        <div class="tabs" id="dtsim-tabs" style="margin:0 0 1rem;">
+          <button class="tab-btn active" id="dtsim-btn-overview" onclick="switchTab('dtsim', 'overview')">Root Split</button>
+          <button class="tab-btn" id="dtsim-btn-dataset" onclick="switchTab('dtsim', 'dataset')">Complete Dataset</button>
+          <button class="tab-btn" id="dtsim-btn-tree" onclick="switchTab('dtsim', 'tree')">Full Tree</button>
+          <button class="tab-btn" id="dtsim-btn-details" onclick="switchTab('dtsim', 'details')">Detailed Calc</button>
         </div>
 
-        <div class="card reveal">
-          <h3 style="margin-bottom:1rem; font-size:1.05rem;">Visual Reference</h3>
-          <div class="img-placeholder" id="img-decision-tree">
-            <div class="icon">🖼️</div>
-            <span>Reference image will be added</span>
-            <small style="color:var(--text-muted);">Decision tree diagram / feature splits</small>
+        <div id="dtsim-overview" class="tab-panel active">
+          <div id="img-decision-tree" class="dt-sim-wrap">
+            <div class="dt-sim-grid">
+              <div>
+                <div class="dt-sim-title">Overall Dataset Stats</div>
+                <div class="formula-box dt-sim-formula">
+                  Total = 14 instances → 9 Yes, 5 No
+                </div>
+                <div class="formula-box dt-sim-formula">
+                  Root Entropy $= -\frac{9}{14}\log_2\frac{9}{14} - \frac{5}{14}\log_2\frac{5}{14} = 0.940$
+                </div>
+                <div class="formula-box dt-sim-formula">
+                  Root Gini $= 1 - \left(\frac{9}{14}\right)^2 - \left(\frac{5}{14}\right)^2 = 0.459$
+                </div>
+
+                <div class="dt-sim-title" style="margin-top:0.8rem;">Outlook Split (root node)</div>
+                <table class="dt-sim-table">
+                  <thead>
+                    <tr>
+                      <th>Outlook</th>
+                      <th>Yes</th>
+                      <th>No</th>
+                      <th>Total</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Sunny</td>
+                      <td>2</td>
+                      <td>3</td>
+                      <td>5</td>
+                    </tr>
+                    <tr>
+                      <td>Overcast</td>
+                      <td>4</td>
+                      <td>0</td>
+                      <td>4</td>
+                    </tr>
+                    <tr>
+                      <td>Rain</td>
+                      <td>3</td>
+                      <td>2</td>
+                      <td>5</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div>
+                <div class="dt-sim-title">Root Split Calculation (Outlook)</div>
+                <div class="formula-box dt-sim-formula">
+                  Entropy(Sunny) $= -\frac{2}{5}\log_2\frac{2}{5} - \frac{3}{5}\log_2\frac{3}{5} = 0.971$
+                </div>
+                <div class="formula-box dt-sim-formula">
+                  Entropy(Overcast) $= 0$ (pure), Entropy(Rain) $= -\frac{3}{5}\log_2\frac{3}{5} - \frac{2}{5}\log_2\frac{2}{5} = 0.971$
+                </div>
+                <div class="formula-box dt-sim-formula">
+                  $\text{IG}(\text{Outlook}) = 0.940 - \left[\frac{5}{14}(0.971)+\frac{4}{14}(0)+\frac{5}{14}(0.971)\right] = 0.247$
+                </div>
+                <div class="formula-box dt-sim-formula">
+                  Gini(Sunny)$=0.480$, Gini(Overcast)$=0$, Gini(Rain)$=0.480$ → Weighted Gini$=\frac{5}{14}(0.480)+\frac{4}{14}(0)+\frac{5}{14}(0.480)=0.343$
+                </div>
+                <p class="dt-sim-note">Highest information gain chooses <strong>Outlook</strong> as root.</p>
+              </div>
+            </div>
+
+            <div class="dt-sim-title" style="margin-top:0.85rem;">Tree Formation (first levels)</div>
+            <div class="dt-sim-tree">
+              <div class="dt-node dt-node-root">Outlook</div>
+              <div class="dt-tree-arrow">↓</div>
+              <div class="dt-node-row">
+                <div class="dt-branch-col">
+                  <div class="dt-node dt-node-internal">Sunny</div>
+                  <div class="dt-tree-arrow">↓</div>
+                  <div class="dt-node dt-node-leaf">Split by Humidity</div>
+                </div>
+                <div class="dt-branch-col">
+                  <div class="dt-node dt-node-internal">Overcast</div>
+                  <div class="dt-tree-arrow">↓</div>
+                  <div class="dt-node dt-node-leaf">Leaf: Yes</div>
+                </div>
+                <div class="dt-branch-col">
+                  <div class="dt-node dt-node-internal">Rain</div>
+                  <div class="dt-tree-arrow">↓</div>
+                  <div class="dt-node dt-node-leaf">Split by Wind</div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
+
+        <div id="dtsim-dataset" class="tab-panel">
+          <div class="dt-sim-wrap">
+            <div class="dt-sim-title">Complete Dataset (Play Tennis)</div>
+            <div class="dt-sim-scroll">
+              <table class="dt-sim-table">
+                <thead>
+                  <tr>
+                    <th>Day</th>
+                    <th>Outlook</th>
+                    <th>Temperature</th>
+                    <th>Humidity</th>
+                    <th>Wind</th>
+                    <th>Play Tennis</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>D1</td><td>Sunny</td><td>Hot</td><td>High</td><td>Weak</td><td>No</td></tr>
+                  <tr><td>D2</td><td>Sunny</td><td>Hot</td><td>High</td><td>Strong</td><td>No</td></tr>
+                  <tr><td>D3</td><td>Overcast</td><td>Hot</td><td>High</td><td>Weak</td><td>Yes</td></tr>
+                  <tr><td>D4</td><td>Rain</td><td>Mild</td><td>High</td><td>Weak</td><td>Yes</td></tr>
+                  <tr><td>D5</td><td>Rain</td><td>Cool</td><td>Normal</td><td>Weak</td><td>Yes</td></tr>
+                  <tr><td>D6</td><td>Rain</td><td>Cool</td><td>Normal</td><td>Strong</td><td>No</td></tr>
+                  <tr><td>D7</td><td>Overcast</td><td>Cool</td><td>Normal</td><td>Strong</td><td>Yes</td></tr>
+                  <tr><td>D8</td><td>Sunny</td><td>Mild</td><td>High</td><td>Weak</td><td>No</td></tr>
+                  <tr><td>D9</td><td>Sunny</td><td>Cool</td><td>Normal</td><td>Weak</td><td>Yes</td></tr>
+                  <tr><td>D10</td><td>Rain</td><td>Mild</td><td>Normal</td><td>Weak</td><td>Yes</td></tr>
+                  <tr><td>D11</td><td>Sunny</td><td>Mild</td><td>Normal</td><td>Strong</td><td>Yes</td></tr>
+                  <tr><td>D12</td><td>Overcast</td><td>Mild</td><td>High</td><td>Strong</td><td>Yes</td></tr>
+                  <tr><td>D13</td><td>Overcast</td><td>Hot</td><td>Normal</td><td>Weak</td><td>Yes</td></tr>
+                  <tr><td>D14</td><td>Rain</td><td>Mild</td><td>High</td><td>Strong</td><td>No</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div id="dtsim-tree" class="tab-panel">
+          <div class="pt-ref">
+            <div class="pt-header">
+              <div>
+                <h4 class="pt-title">Play <span>Tennis</span> — Decision Tree</h4>
+                <p class="pt-subtitle">ID3 algorithm · Outlook as root · Entropy &amp; Gini across splits</p>
+              </div>
+              <div class="pt-stats">
+                <div class="pt-pill">Dataset <strong>14</strong></div>
+                <div class="pt-pill">Yes <strong>9</strong></div>
+                <div class="pt-pill">No <strong>5</strong></div>
+                <div class="pt-pill">Entropy <strong>0.940</strong></div>
+                <div class="pt-pill">Gini <strong>0.459</strong></div>
+              </div>
+            </div>
+
+            <div class="pt-formula-bar">
+              <div class="pt-formula-item">Entropy: <span>$E=-\Sigma p\log_2(p)$</span></div>
+              <div class="pt-formula-item">Gini: <span>$G=1-\Sigma p^2$</span></div>
+              <div class="pt-formula-item">IG: <span>$IG=E(p)-\Sigma(n_i/n)E(c_i)$</span></div>
+              <div class="pt-formula-item">$\Delta G$: <span>$G(p)-\Sigma(n_i/n)G(c_i)$</span></div>
+            </div>
+
+            <div class="pt-tree-scroll">
+              <div class="pt-tree-svg-wrap">
+                <svg class="pt-tree-svg" viewBox="0 0 960 680" xmlns="http://www.w3.org/2000/svg">
+                  <defs>
+                    <marker id="pt-arrowhead" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6"
+                      orient="auto-start-reverse">
+                      <path d="M2 2L8 5L2 8" fill="none" stroke="#2a3148" stroke-width="1.5" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    </marker>
+                  </defs>
+
+                  <path class="pt-edge" d="M380,68 C340,100 220,120 180,148" />
+                  <path class="pt-edge" d="M480,68 L480,148" />
+                  <path class="pt-edge" d="M580,68 C620,100 740,120 760,148" />
+
+                  <path class="pt-edge" d="M120,216 C100,240 76,268 70,298" />
+                  <path class="pt-edge" d="M180,216 L180,298" />
+                  <path class="pt-edge" d="M240,216 C260,240 280,268 296,298" />
+
+                  <path class="pt-edge" d="M152,366 C140,390 128,410 120,428" />
+                  <path class="pt-edge" d="M208,366 C220,390 232,410 240,428" />
+
+                  <path class="pt-edge" d="M720,216 C700,240 680,268 672,298" />
+                  <path class="pt-edge" d="M800,216 C820,240 856,268 868,298" />
+
+                  <path class="pt-edge" d="M636,366 C620,390 604,410 596,428" />
+                  <path class="pt-edge" d="M708,366 C720,390 736,410 748,428" />
+
+                  <path class="pt-edge" d="M840,366 C820,390 804,410 796,428" />
+                  <path class="pt-edge" d="M896,366 C912,390 928,410 940,428" />
+
+                  <path class="pt-edge" d="M560,496 C544,520 524,540 516,558" />
+                  <path class="pt-edge" d="M632,496 C648,520 668,540 680,558" />
+
+                  <text class="pt-edge-label" x="276" y="115" text-anchor="middle">Sunny</text>
+                  <text class="pt-edge-label" x="484" y="128" text-anchor="middle">Overcast</text>
+                  <text class="pt-edge-label" x="692" y="115" text-anchor="middle">Rain</text>
+                  <text class="pt-edge-label" x="82" y="265" text-anchor="middle">Hot</text>
+                  <text class="pt-edge-label" x="184" y="265" text-anchor="middle">Mild</text>
+                  <text class="pt-edge-label" x="286" y="265" text-anchor="middle">Cool</text>
+                  <text class="pt-edge-label" x="128" y="412" text-anchor="middle">High</text>
+                  <text class="pt-edge-label" x="248" y="412" text-anchor="middle">Normal</text>
+                  <text class="pt-edge-label" x="657" y="265" text-anchor="middle">Mild</text>
+                  <text class="pt-edge-label" x="846" y="265" text-anchor="middle">Cool</text>
+                  <text class="pt-edge-label" x="606" y="412" text-anchor="middle">High</text>
+                  <text class="pt-edge-label" x="742" y="412" text-anchor="middle">Normal</text>
+                  <text class="pt-edge-label" x="822" y="412" text-anchor="middle">Weak</text>
+                  <text class="pt-edge-label" x="928" y="412" text-anchor="middle">Strong</text>
+                  <text class="pt-edge-label" x="516" y="540" text-anchor="middle">Weak</text>
+                  <text class="pt-edge-label" x="668" y="540" text-anchor="middle">Strong</text>
+
+                  <g class="pt-node-internal" transform="translate(330,18)">
+                    <rect width="300" height="50" rx="8" />
+                    <text class="pt-label-main" x="150" y="20" text-anchor="middle" dominant-baseline="central">Outlook</text>
+                    <text class="pt-label-sub" x="150" y="38" text-anchor="middle" dominant-baseline="central">9Y/5N · E=0.940 · G=0.459 · IG=0.247 · ΔG=0.116</text>
+                  </g>
+
+                  <g class="pt-node-internal pt-node-temp" transform="translate(60,148)">
+                    <rect width="240" height="50" rx="8" />
+                    <text class="pt-label-main" x="120" y="20" text-anchor="middle" dominant-baseline="central">Temperature</text>
+                    <text class="pt-label-sub" x="120" y="38" text-anchor="middle" dominant-baseline="central">2Y/3N · E=0.971 · G=0.480 · IG=0.571</text>
+                  </g>
+
+                  <g class="pt-node-yes" transform="translate(370,148)">
+                    <rect width="220" height="50" rx="8" />
+                    <text class="pt-label-yes" x="110" y="20" text-anchor="middle" dominant-baseline="central">YES</text>
+                    <text class="pt-label-sub" x="110" y="38" text-anchor="middle" dominant-baseline="central">4Y/0N · E=0 · G=0 · Pure</text>
+                  </g>
+
+                  <g class="pt-node-internal pt-node-temp" transform="translate(620,148)">
+                    <rect width="240" height="50" rx="8" />
+                    <text class="pt-label-main" x="120" y="20" text-anchor="middle" dominant-baseline="central">Temperature</text>
+                    <text class="pt-label-sub" x="120" y="38" text-anchor="middle" dominant-baseline="central">3Y/2N · E=0.971 · G=0.480 · IG=0.020</text>
+                  </g>
+
+                  <g class="pt-node-no" transform="translate(20,298)">
+                    <rect width="100" height="50" rx="8" />
+                    <text class="pt-label-no" x="50" y="20" text-anchor="middle" dominant-baseline="central">NO</text>
+                    <text class="pt-label-sub" x="50" y="38" text-anchor="middle" dominant-baseline="central">0Y/2N · Pure</text>
+                  </g>
+
+                  <g class="pt-node-internal pt-node-humidity" transform="translate(120,298)">
+                    <rect width="200" height="50" rx="8" />
+                    <text class="pt-label-main" x="100" y="20" text-anchor="middle" dominant-baseline="central">Humidity</text>
+                    <text class="pt-label-sub" x="100" y="38" text-anchor="middle" dominant-baseline="central">1Y/1N · E=1.0 · G=0.5 · IG=1.0</text>
+                  </g>
+
+                  <g class="pt-node-yes" transform="translate(240,298)">
+                    <rect width="100" height="50" rx="8" />
+                    <text class="pt-label-yes" x="50" y="20" text-anchor="middle" dominant-baseline="central">YES</text>
+                    <text class="pt-label-sub" x="50" y="38" text-anchor="middle" dominant-baseline="central">1Y/0N · Pure</text>
+                  </g>
+
+                  <g class="pt-node-internal pt-node-humidity" transform="translate(548,298)">
+                    <rect width="220" height="50" rx="8" />
+                    <text class="pt-label-main" x="110" y="20" text-anchor="middle" dominant-baseline="central">Humidity</text>
+                    <text class="pt-label-sub" x="110" y="38" text-anchor="middle" dominant-baseline="central">2Y/1N · E=0.918 · G=0.444</text>
+                  </g>
+
+                  <g class="pt-node-internal pt-node-wind" transform="translate(784,298)">
+                    <rect width="180" height="50" rx="8" />
+                    <text class="pt-label-main" x="90" y="20" text-anchor="middle" dominant-baseline="central">Wind</text>
+                    <text class="pt-label-sub" x="90" y="38" text-anchor="middle" dominant-baseline="central">1Y/1N · E=1.0 · G=0.5 · IG=1.0</text>
+                  </g>
+
+                  <g class="pt-node-no" transform="translate(70,428)">
+                    <rect width="100" height="50" rx="8" />
+                    <text class="pt-label-no" x="50" y="20" text-anchor="middle" dominant-baseline="central">NO</text>
+                    <text class="pt-label-sub" x="50" y="38" text-anchor="middle" dominant-baseline="central">0Y/1N · Pure</text>
+                  </g>
+
+                  <g class="pt-node-yes" transform="translate(192,428)">
+                    <rect width="100" height="50" rx="8" />
+                    <text class="pt-label-yes" x="50" y="20" text-anchor="middle" dominant-baseline="central">YES</text>
+                    <text class="pt-label-sub" x="50" y="38" text-anchor="middle" dominant-baseline="central">1Y/0N · Pure</text>
+                  </g>
+
+                  <g class="pt-node-internal pt-node-wind" transform="translate(488,428)">
+                    <rect width="200" height="50" rx="8" />
+                    <text class="pt-label-main" x="100" y="20" text-anchor="middle" dominant-baseline="central">Wind</text>
+                    <text class="pt-label-sub" x="100" y="38" text-anchor="middle" dominant-baseline="central">1Y/1N · E=1.0 · G=0.5 · IG=1.0</text>
+                  </g>
+
+                  <g class="pt-node-yes" transform="translate(700,428)">
+                    <rect width="100" height="50" rx="8" />
+                    <text class="pt-label-yes" x="50" y="20" text-anchor="middle" dominant-baseline="central">YES</text>
+                    <text class="pt-label-sub" x="50" y="38" text-anchor="middle" dominant-baseline="central">1Y/0N · Pure</text>
+                  </g>
+
+                  <g class="pt-node-yes" transform="translate(746,428)">
+                    <rect width="100" height="50" rx="8" />
+                    <text class="pt-label-yes" x="50" y="20" text-anchor="middle" dominant-baseline="central">YES</text>
+                    <text class="pt-label-sub" x="50" y="38" text-anchor="middle" dominant-baseline="central">1Y/0N · Pure</text>
+                  </g>
+
+                  <g class="pt-node-no" transform="translate(900,428)">
+                    <rect width="52" height="50" rx="8" />
+                    <text class="pt-label-no" x="26" y="20" text-anchor="middle" dominant-baseline="central">NO</text>
+                    <text class="pt-label-sub" x="26" y="38" text-anchor="middle" dominant-baseline="central">0Y/1N</text>
+                  </g>
+
+                  <g class="pt-node-yes" transform="translate(466,558)">
+                    <rect width="100" height="46" rx="8" />
+                    <text class="pt-label-yes" x="50" y="18" text-anchor="middle" dominant-baseline="central">YES</text>
+                    <text class="pt-label-sub" x="50" y="36" text-anchor="middle" dominant-baseline="central">1Y/0N · Pure</text>
+                  </g>
+
+                  <g class="pt-node-no" transform="translate(630,558)">
+                    <rect width="100" height="46" rx="8" />
+                    <text class="pt-label-no" x="50" y="18" text-anchor="middle" dominant-baseline="central">NO</text>
+                    <text class="pt-label-sub" x="50" y="36" text-anchor="middle" dominant-baseline="central">0Y/1N · Pure</text>
+                  </g>
+                </svg>
+              </div>
+            </div>
+
+            <div class="pt-legend">
+              <div class="pt-legend-item"><span class="pt-legend-dot pt-root"></span>Root / Outlook split</div>
+              <div class="pt-legend-item"><span class="pt-legend-dot pt-temp"></span>Temperature split</div>
+              <div class="pt-legend-item"><span class="pt-legend-dot pt-hum"></span>Humidity split</div>
+              <div class="pt-legend-item"><span class="pt-legend-dot pt-wind"></span>Wind split</div>
+              <div class="pt-legend-item"><span class="pt-legend-dot pt-yes"></span>YES leaf</div>
+              <div class="pt-legend-item"><span class="pt-legend-dot pt-no"></span>NO leaf</div>
+            </div>
+
+            <div class="pt-table-wrap">
+              <p class="pt-table-title">Split summary — Entropy &amp; Gini at each node</p>
+              <div class="dt-sim-scroll" style="max-height:none;">
+                <table class="pt-table">
+                  <thead>
+                    <tr>
+                      <th>Node / Context</th>
+                      <th>Split On</th>
+                      <th>Distribution</th>
+                      <th>Entropy</th>
+                      <th>Gini</th>
+                      <th>Info Gain</th>
+                      <th>Gini Reduction</th>
+                      <th>Type</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>Root</td><td>Outlook</td><td>9Y/5N</td><td>0.940</td><td>0.459</td><td>0.247</td><td>0.116</td><td><span class="pt-badge pt-impure">Impure</span></td></tr>
+                    <tr><td>Sunny branch</td><td>Temperature</td><td>2Y/3N</td><td>0.971</td><td>0.480</td><td>0.571</td><td>0.280</td><td><span class="pt-badge pt-impure">Impure</span></td></tr>
+                    <tr><td>Overcast branch</td><td>—</td><td>4Y/0N</td><td>0.000</td><td>0.000</td><td>—</td><td>—</td><td><span class="pt-badge pt-pure">Pure</span></td></tr>
+                    <tr><td>Rain branch</td><td>Temperature</td><td>3Y/2N</td><td>0.971</td><td>0.480</td><td>0.020</td><td>0.040</td><td><span class="pt-badge pt-impure">Impure</span></td></tr>
+                    <tr><td>Sunny + Mild</td><td>Humidity</td><td>1Y/1N</td><td>1.000</td><td>0.500</td><td>1.000</td><td>0.500</td><td><span class="pt-badge pt-impure">Impure</span></td></tr>
+                    <tr><td>Rain + Cool</td><td>Wind</td><td>1Y/1N</td><td>1.000</td><td>0.500</td><td>1.000</td><td>0.500</td><td><span class="pt-badge pt-impure">Impure</span></td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="dtsim-details" class="tab-panel">
+          <div class="dt-sim-wrap">
+            <div class="dt-sim-title">Core Formulas</div>
+            <div class="formula-box dt-sim-formula">Entropy formula: $E = -\sum p\log_2(p)$</div>
+            <div class="formula-box dt-sim-formula">Gini formula: $G = 1 - \sum p^2$</div>
+            <div class="formula-box dt-sim-formula">Information Gain: $\text{IG} = E(\text{parent}) - \sum (n_i/n)\,E(\text{child}_i)$</div>
+
+            <div class="dt-sim-title">Sunny branch → Temperature split (2Y, 3N)</div>
+            <div class="dt-sim-scroll" style="max-height:none;">
+              <table class="dt-sim-table">
+                <thead>
+                  <tr>
+                    <th>Temp</th>
+                    <th>Yes</th>
+                    <th>No</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>Hot</td><td>0</td><td>2</td></tr>
+                  <tr><td>Mild</td><td>1</td><td>1</td></tr>
+                  <tr><td>Cool</td><td>1</td><td>0</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="formula-box dt-sim-formula">Entropy(Hot)$=0$, Entropy(Mild)$=1.0$, Entropy(Cool)$=0$</div>
+            <div class="formula-box dt-sim-formula">$\text{IG}(\text{Temp}\mid\text{Sunny}) = 0.971 - \left[\frac{2}{5}(0)+\frac{2}{5}(1.0)+\frac{1}{5}(0)\right] = 0.571$</div>
+            <div class="formula-box dt-sim-formula">Gini(Hot)$=0$, Gini(Mild)$=0.5$, Gini(Cool)$=0$ → Weighted Gini $= \frac{2}{5}(0)+\frac{2}{5}(0.5)+\frac{1}{5}(0)=0.200$</div>
+            <ul class="check-list" style="margin-top:0.55rem;">
+              <li><span class="mark mark-cyan">→</span> Hot → No (pure), Cool → Yes (pure), Mild → split by Humidity.</li>
+              <li><span class="mark mark-cyan">→</span> Sunny+Mild (1Y,1N): High → No, Normal → Yes (both pure).</li>
+            </ul>
+
+            <div class="dt-sim-title" style="margin-top:1rem;">Rain branch → Temperature split (3Y, 2N)</div>
+            <div class="dt-sim-scroll" style="max-height:none;">
+              <table class="dt-sim-table">
+                <thead>
+                  <tr>
+                    <th>Temp</th>
+                    <th>Yes</th>
+                    <th>No</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>Mild</td><td>2</td><td>1</td></tr>
+                  <tr><td>Cool</td><td>1</td><td>1</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="formula-box dt-sim-formula">Entropy(Mild)$= -\frac{2}{3}\log_2\frac{2}{3}-\frac{1}{3}\log_2\frac{1}{3}=0.918$, Entropy(Cool)$=1.0$</div>
+            <div class="formula-box dt-sim-formula">$\text{IG}(\text{Temp}\mid\text{Rain}) = 0.971 - \left[\frac{3}{5}(0.918)+\frac{2}{5}(1.0)\right] = 0.020$</div>
+            <ul class="check-list" style="margin-top:0.55rem;">
+              <li><span class="mark mark-cyan">→</span> Rain+Mild (2Y,1N): split by Humidity → High(1Y,1N) split by Wind: Weak→Yes, Strong→No; Normal(1Y,0N)→Yes.</li>
+              <li><span class="mark mark-cyan">→</span> Rain+Cool (1Y,1N): split by Wind → Weak→Yes, Strong→No.</li>
+            </ul>
+
+            <div class="dt-sim-title" style="margin-top:1rem;">Computed Summary Table</div>
+            <div class="dt-sim-scroll" style="max-height:none;">
+              <table class="dt-sim-table">
+                <thead>
+                  <tr>
+                    <th>Node</th>
+                    <th>Split on</th>
+                    <th>Entropy</th>
+                    <th>Gini</th>
+                    <th>IG</th>
+                    <th>Gini Reduction</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>Root (9Y/5N)</td><td>Outlook</td><td>0.940</td><td>0.459</td><td>0.247</td><td>0.116</td></tr>
+                  <tr><td>Sunny (2Y/3N)</td><td>Temperature</td><td>0.971</td><td>0.480</td><td>0.571</td><td>0.280</td></tr>
+                  <tr><td>Sunny+Mild (1Y/1N)</td><td>Humidity</td><td>1.000</td><td>0.500</td><td>1.000</td><td>0.500</td></tr>
+                  <tr><td>Rain (3Y/2N)</td><td>Temperature</td><td>0.971</td><td>0.480</td><td>0.020</td><td>0.040</td></tr>
+                  <tr><td>Rain+Mild (2Y/1N)</td><td>Humidity</td><td>0.918</td><td>0.444</td><td>—</td><td>—</td></tr>
+                  <tr><td>Rain+Mild+High (1Y/1N)</td><td>Wind</td><td>1.000</td><td>0.500</td><td>1.000</td><td>0.500</td></tr>
+                  <tr><td>Rain+Cool (1Y/1N)</td><td>Wind</td><td>1.000</td><td>0.500</td><td>1.000</td><td>0.500</td></tr>
+                  <tr><td>Overcast (4Y/0N)</td><td>—</td><td>0</td><td>0</td><td>Pure</td><td>Pure</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="dt-sim-title" style="margin-top:1rem;">Key Observations</div>
+            <ul class="check-list" style="margin-top:0.5rem;">
+              <li><span class="mark mark-green">✓</span> Overcast always leads to Yes — pure and highly decisive branch.</li>
+              <li><span class="mark mark-green">✓</span> Sunny branch splits strongly on Temperature (IG=0.571), then Humidity.</li>
+              <li><span class="mark mark-green">✓</span> Rain branch splits weakly on Temperature (IG=0.020), so deeper Wind splits are needed.</li>
+              <li><span class="mark mark-green">✓</span> Final leaves are pure (entropy and gini both approach 0 on leaf outcomes).</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="card reveal" style="margin-top:1.5rem;">
+        <h3 style="margin-bottom:1rem; font-size:1.05rem;">Hyperparameters</h3>
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th>Parameter</th>
+              <th>Effect</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>max_depth</code></td>
+              <td>Limits tree depth → controls overfitting</td>
+            </tr>
+            <tr>
+              <td><code>min_samples_split</code></td>
+              <td>Min samples needed to split a node</td>
+            </tr>
+            <tr>
+              <td><code>min_samples_leaf</code></td>
+              <td>Min samples required at leaf</td>
+            </tr>
+            <tr>
+              <td><code>max_features</code></td>
+              <td>Features to consider per split</td>
+            </tr>
+            <tr>
+              <td><code>criterion</code></td>
+              <td>gini / entropy / squared_error</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
 
       <div class="topic-nav">
