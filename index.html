@@ -379,11 +379,15 @@
         <div class="card reveal">
           <h3 style="margin-bottom:1rem; font-size:1.05rem;">Key Assumptions</h3>
           <ul class="check-list">
-            <li><span class="mark mark-blue">✓</span> <strong>Linearity</strong> — relationship between inputs and output is linear</li>
+            <li><span class="mark mark-blue">✓</span> <strong>Linearity</strong> — relationship between inputs and
+              output is linear</li>
             <li><span class="mark mark-blue">✓</span> <strong>Independence</strong> — observations are independent</li>
-            <li><span class="mark mark-blue">✓</span> <strong>Constant variance</strong> — errors have equal spread (no pattern)</li>
-            <li><span class="mark mark-blue">✓</span> <strong>Normality</strong> — errors follow a normal distribution</li>
-            <li><span class="mark mark-blue">✓</span> <strong>No multicollinearity</strong> — features are not highly correlated</li>
+            <li><span class="mark mark-blue">✓</span> <strong>Constant variance</strong> — errors have equal spread (no
+              pattern)</li>
+            <li><span class="mark mark-blue">✓</span> <strong>Normality</strong> — errors follow a normal distribution
+            </li>
+            <li><span class="mark mark-blue">✓</span> <strong>No multicollinearity</strong> — features are not highly
+              correlated</li>
           </ul>
           <div style="margin-top:1.5rem;">
             <h3 style="margin-bottom:0.75rem; font-size:1.05rem;">Regularization Variants</h3>
@@ -439,7 +443,8 @@
             <div class="formula-label">R² (Coefficient of Determination)</div>
             <div class="formula-box" style="font-size:0.88rem;">
               $R^2 = 1 - \dfrac{\sum (y_i - \hat{y}_i)^2}{\sum (y_i - \bar{y})^2}$
-              <div style="margin-top:0.45rem; font-size:0.76rem; color:var(--text-muted);">Numerator -> error from model</div>
+              <div style="margin-top:0.45rem; font-size:0.76rem; color:var(--text-muted);">Numerator -> error from model
+              </div>
               <div style="font-size:0.76rem; color:var(--text-muted);">Denominator -> error from predicting mean</div>
             </div>
           </div>
@@ -531,7 +536,8 @@
           <div class="formula-label" style="margin-top:1rem;">Prediction</div>
           <div class="formula-box" style="font-size:0.88rem;">
             $\hat{y} = \arg\max_k P(y=k|x)$
-            <div style="margin-top:0.45rem; font-size:0.76rem; color:var(--text-muted);">Choose class with highest probability.</div>
+            <div style="margin-top:0.45rem; font-size:0.76rem; color:var(--text-muted);">Choose class with highest
+              probability.</div>
           </div>
         </div>
 
@@ -585,7 +591,7 @@
 
             <small class="log-viz-note">Threshold rule: class 1 when probability >= 0.5, otherwise class 0.</small>
           </div>
-</div>
+        </div>
 
       </div>
 
@@ -635,8 +641,10 @@
           <ul class="check-list" style="margin-top:0.55rem;">
             <li><span class="mark mark-cyan">1</span> Choose the value of <strong>K</strong>.</li>
             <li><span class="mark mark-cyan">2</span> Compute distance from query point to all training points.</li>
-            <li><span class="mark mark-cyan">3</span> Sort distances and select the <strong>K nearest neighbors</strong>.</li>
-            <li><span class="mark mark-cyan">4</span> Predict using majority vote (classification) or mean (regression).</li>
+            <li><span class="mark mark-cyan">3</span> Sort distances and select the <strong>K nearest
+                neighbors</strong>.</li>
+            <li><span class="mark mark-cyan">4</span> Predict using majority vote (classification) or mean (regression).
+            </li>
           </ul>
         </div>
 
@@ -688,13 +696,209 @@
         </div>
 
         <div class="card reveal">
-          <h3 style="margin-bottom:1rem; font-size:1.05rem;">Visual Reference</h3>
-          <div class="img-placeholder" id="img-knn">
-            <div class="icon">🖼️</div>
-            <span>Reference image will be added</span>
-            <small style="color:var(--text-muted);">KNN decision boundary for different K values</small>
+          <!-- header row -->
+          <div
+            style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.6rem; margin-bottom:0.85rem;">
+            <h3 style="font-size:1.05rem; margin:0;">KNN Visual Simulation</h3>
+            <div style="display:flex; gap:0.35rem;">
+              <button id="knn-k1" onclick="knnSetK(1)"
+                style="font-size:0.73rem; font-weight:700; padding:0.28rem 0.8rem; border-radius:2rem; border:1.5px solid rgba(34,211,238,0.65); background:rgba(34,211,238,0.18); color:#22d3ee; cursor:pointer; outline:none;">K
+                = 1</button>
+              <button id="knn-k3" onclick="knnSetK(3)"
+                style="font-size:0.73rem; font-weight:500; padding:0.28rem 0.8rem; border-radius:2rem; border:1.5px solid rgba(255,255,255,0.1); background:transparent; color:#64748b; cursor:pointer; outline:none;">K
+                = 3</button>
+              <button id="knn-k7" onclick="knnSetK(7)"
+                style="font-size:0.73rem; font-weight:500; padding:0.28rem 0.8rem; border-radius:2rem; border:1.5px solid rgba(255,255,255,0.1); background:transparent; color:#64748b; cursor:pointer; outline:none;">K
+                = 7</button>
+            </div>
+          </div>
+
+          <!-- canvas wrapper -->
+          <div id="knn-wrap"
+            style="position:relative; border-radius:0.65rem; overflow:hidden; background:rgba(2,8,23,0.6); border:1px solid rgba(255,255,255,0.07);">
+            <canvas id="knn-canvas" style="display:block; width:100%; cursor:crosshair;"></canvas>
+            <div id="knn-overlay"
+              style="position:absolute; top:9px; right:9px; display:none; padding:0.32rem 0.72rem; border-radius:0.45rem; font-size:0.75rem; font-weight:700; border:1.5px solid; backdrop-filter:blur(6px);">
+            </div>
+          </div>
+
+          <!-- vote row (hidden until click) -->
+          <div id="knn-vrow" style="display:none; margin-top:0.6rem; align-items:center; gap:0.55rem; flex-wrap:wrap;">
+            <span style="font-size:0.68rem; color:#94a3b8;">Votes (K nearest):</span>
+            <div id="knn-va"
+              style="font-size:0.7rem; background:rgba(34,211,238,0.12); border:1px solid rgba(34,211,238,0.32); color:#22d3ee; padding:0.13rem 0.5rem; border-radius:2rem; font-weight:700;">
+            </div>
+            <div id="knn-vb"
+              style="font-size:0.7rem; background:rgba(251,146,60,0.12); border:1px solid rgba(251,146,60,0.32); color:#fb923c; padding:0.13rem 0.5rem; border-radius:2rem; font-weight:700;">
+            </div>
+          </div>
+
+          <!-- legend + hint -->
+          <div
+            style="margin-top:0.6rem; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.4rem;">
+            <div style="display:flex; gap:0.9rem; flex-wrap:wrap;">
+              <div style="display:flex; align-items:center; gap:0.3rem; font-size:0.68rem; color:#94a3b8;">
+                <span
+                  style="width:8px;height:8px;border-radius:50%;background:#22d3ee;display:inline-block;"></span>Class A
+              </div>
+              <div style="display:flex; align-items:center; gap:0.3rem; font-size:0.68rem; color:#94a3b8;">
+                <span
+                  style="width:8px;height:8px;border-radius:50%;background:#fb923c;display:inline-block;"></span>Class B
+              </div>
+              <div style="display:flex; align-items:center; gap:0.3rem; font-size:0.68rem; color:#94a3b8;">
+                <span
+                  style="width:8px;height:8px;background:#f8fafc;transform:rotate(45deg);display:inline-block;"></span>Query
+                ◇
+              </div>
+            </div>
+            <span style="font-size:0.65rem; color:#334155; font-style:italic;">Click canvas to classify</span>
           </div>
         </div>
+
+        <script>
+          (function () {
+            const DATA = [
+              [0.13, 0.16, 0], [0.21, 0.11, 0], [0.09, 0.27, 0], [0.27, 0.18, 0], [0.15, 0.35, 0],
+              [0.05, 0.13, 0], [0.31, 0.14, 0], [0.08, 0.42, 0], [0.23, 0.43, 0], [0.35, 0.26, 0],
+              [0.43, 0.18, 0], [0.37, 0.39, 0], [0.46, 0.31, 0],
+              [0.72, 0.64, 1], [0.63, 0.71, 1], [0.78, 0.58, 1], [0.66, 0.79, 1], [0.83, 0.68, 1],
+              [0.57, 0.64, 1], [0.75, 0.54, 1], [0.85, 0.60, 1], [0.55, 0.74, 1], [0.69, 0.82, 1],
+              [0.59, 0.54, 1], [0.51, 0.68, 1], [0.63, 0.57, 1],
+              [0.50, 0.35, 0], [0.39, 0.50, 0], [0.49, 0.52, 1], [0.55, 0.40, 1]
+            ];
+            const PAD = 20;
+            let K = 1, query = null;
+            const cv = document.getElementById('knn-canvas');
+            const ctx = cv.getContext('2d');
+            const dpr = window.devicePixelRatio || 1;
+
+            function setup() {
+              const w = cv.parentElement.offsetWidth;
+              cv.width = w * dpr; cv.height = 230 * dpr;
+              cv.style.width = w + 'px'; cv.style.height = '230px';
+              ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+              render();
+            }
+
+            function W() { return cv.width / dpr; }
+            function H() { return cv.height / dpr; }
+            function toC(nx, ny) { return [PAD + nx * (W() - 2 * PAD), PAD + ny * (H() - 2 * PAD)]; }
+            function fromC(cx, cy) { return [(cx - PAD) / (W() - 2 * PAD), (cy - PAD) / (H() - 2 * PAD)]; }
+            function cdist(a, b) {
+              const dx = (a[0] - b[0]) * (W() - 2 * PAD), dy = (a[1] - b[1]) * (H() - 2 * PAD);
+              return Math.sqrt(dx * dx + dy * dy);
+            }
+            function kNeighbors(q) {
+              return DATA.map((p, i) => ({ i, d: cdist([p[0], p[1]], [q[0], q[1]]) }))
+                .sort((a, b) => a.d - b.d).slice(0, K);
+            }
+
+            function render() {
+              ctx.clearRect(0, 0, W(), H());
+              // subtle grid
+              ctx.strokeStyle = 'rgba(255,255,255,0.03)'; ctx.lineWidth = 1;
+              for (let i = 1; i < 4; i++) {
+                const [gx] = toC(i / 4, 0); const [, gy] = toC(0, i / 4);
+                ctx.beginPath(); ctx.moveTo(gx, PAD); ctx.lineTo(gx, H() - PAD); ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(PAD, gy); ctx.lineTo(W() - PAD, gy); ctx.stroke();
+              }
+
+              const nbrs = query ? kNeighbors(query) : [];
+              const nSet = new Set(nbrs.map(n => n.i));
+
+              if (query) {
+                const qc = toC(query[0], query[1]);
+                const maxD = nbrs.length ? nbrs[nbrs.length - 1].d : 0;
+                // radius circle
+                ctx.beginPath(); ctx.arc(qc[0], qc[1], maxD + 7, 0, Math.PI * 2);
+                ctx.strokeStyle = 'rgba(255,255,255,0.07)'; ctx.lineWidth = 1.2;
+                ctx.setLineDash([4, 4]); ctx.stroke(); ctx.setLineDash([]);
+                // distance lines
+                nbrs.forEach(n => {
+                  const p = DATA[n.i], pc = toC(p[0], p[1]);
+                  ctx.beginPath(); ctx.moveTo(qc[0], qc[1]); ctx.lineTo(pc[0], pc[1]);
+                  ctx.strokeStyle = p[2] === 0 ? 'rgba(34,211,238,0.38)' : 'rgba(251,146,60,0.38)';
+                  ctx.lineWidth = 1.4; ctx.setLineDash([3, 3]); ctx.stroke(); ctx.setLineDash([]);
+                });
+              }
+
+              // data points
+              DATA.forEach((p, i) => {
+                const c = toC(p[0], p[1]), isN = nSet.has(i), r = isN ? 6.5 : 5;
+                if (isN) {
+                  ctx.beginPath(); ctx.arc(c[0], c[1], r + 5.5, 0, Math.PI * 2);
+                  ctx.fillStyle = p[2] === 0 ? 'rgba(34,211,238,0.14)' : 'rgba(251,146,60,0.14)'; ctx.fill();
+                  ctx.beginPath(); ctx.arc(c[0], c[1], r + 5.5, 0, Math.PI * 2);
+                  ctx.strokeStyle = p[2] === 0 ? 'rgba(34,211,238,0.8)' : 'rgba(251,146,60,0.8)';
+                  ctx.lineWidth = 1.5; ctx.stroke();
+                }
+                ctx.beginPath(); ctx.arc(c[0], c[1], r, 0, Math.PI * 2);
+                ctx.fillStyle = p[2] === 0 ? '#22d3ee' : '#fb923c'; ctx.fill();
+                ctx.strokeStyle = p[2] === 0 ? '#0891b2' : '#ea580c'; ctx.lineWidth = 1.5; ctx.stroke();
+              });
+
+              // query diamond
+              if (query) {
+                const qc = toC(query[0], query[1]);
+                const v0 = nbrs.filter(n => DATA[n.i][2] === 0).length;
+                const v1 = nbrs.filter(n => DATA[n.i][2] === 1).length;
+                const pc = v0 >= v1 ? '#22d3ee' : '#fb923c';
+                const pa = v0 >= v1 ? 'rgba(34,211,238,0.22)' : 'rgba(251,146,60,0.22)';
+                ctx.beginPath(); ctx.arc(qc[0], qc[1], 13, 0, Math.PI * 2);
+                ctx.fillStyle = pa; ctx.fill();
+                ctx.save(); ctx.translate(qc[0], qc[1]); ctx.rotate(Math.PI / 4);
+                ctx.beginPath(); ctx.rect(-5.5, -5.5, 11, 11);
+                ctx.fillStyle = '#f8fafc'; ctx.fill();
+                ctx.strokeStyle = pc; ctx.lineWidth = 2; ctx.stroke();
+                ctx.restore();
+                ctx.fillStyle = '#0f172a'; ctx.font = 'bold 8px system-ui,sans-serif';
+                ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+                ctx.fillText('?', qc[0], qc[1]);
+              }
+            }
+
+            function updateInfo() {
+              if (!query) return;
+              const nbrs = kNeighbors(query);
+              const v0 = nbrs.filter(n => DATA[n.i][2] === 0).length;
+              const v1 = nbrs.filter(n => DATA[n.i][2] === 1).length;
+              const pred = v0 >= v1 ? 0 : 1;
+              const ov = document.getElementById('knn-overlay');
+              ov.style.display = 'block';
+              ov.style.background = pred === 0 ? 'rgba(34,211,238,0.18)' : 'rgba(251,146,60,0.18)';
+              ov.style.borderColor = pred === 0 ? 'rgba(34,211,238,0.7)' : 'rgba(251,146,60,0.7)';
+              ov.style.color = pred === 0 ? '#22d3ee' : '#fb923c';
+              ov.textContent = pred === 0 ? '→ Predicted: Class A' : '→ Predicted: Class B';
+              const vrow = document.getElementById('knn-vrow');
+              vrow.style.display = 'flex';
+              document.getElementById('knn-va').textContent = 'Class A: ' + v0 + ' vote' + (v0 !== 1 ? 's' : '');
+              document.getElementById('knn-vb').textContent = 'Class B: ' + v1 + ' vote' + (v1 !== 1 ? 's' : '');
+            }
+
+            window.knnSetK = function (k) {
+              K = k;
+              [1, 3, 7].forEach(v => {
+                const b = document.getElementById('knn-k' + v), on = v === k;
+                b.style.background = on ? 'rgba(34,211,238,0.18)' : 'transparent';
+                b.style.borderColor = on ? 'rgba(34,211,238,0.65)' : 'rgba(255,255,255,0.1)';
+                b.style.color = on ? '#22d3ee' : '#64748b';
+                b.style.fontWeight = on ? '700' : '500';
+              });
+              render(); if (query) updateInfo();
+            };
+
+            cv.addEventListener('click', function (e) {
+              const r = cv.getBoundingClientRect();
+              const fc = fromC(e.clientX - r.left, e.clientY - r.top);
+              query = [Math.max(0.01, Math.min(0.99, fc[0])), Math.max(0.01, Math.min(0.99, fc[1]))];
+              render(); updateInfo();
+            });
+
+            const ro = new ResizeObserver(() => setup());
+            ro.observe(document.getElementById('knn-wrap'));
+            setTimeout(setup, 60);
+          })();
+        </script>
       </div>
 
       <div class="topic-nav">
@@ -727,6 +931,236 @@
         practical symptoms of this tradeoff.
       </p>
 
+      <!-- Overfitting / Underfitting visual card -->
+      <div class="reveal"
+        style="margin-bottom:2rem; padding:1.75rem 2rem; background:linear-gradient(135deg,rgba(94,234,212,0.06),rgba(94,234,212,0.02)); border-radius:1rem; border:1px solid rgba(94,234,212,0.22); width:100%; box-sizing:border-box;">
+
+        <!-- header -->
+        <div style="display:flex; align-items:center; gap:0.75rem; margin-bottom:1.5rem;">
+          <div
+            style="width:3px; height:20px; background:linear-gradient(to bottom,#5eead4,rgba(94,234,212,0.2)); border-radius:2px; flex-shrink:0;">
+          </div>
+          <span
+            style="font-size:0.82rem; color:#5eead4; font-weight:700; letter-spacing:0.1em; text-transform:uppercase;">Model
+            Fit Spectrum</span>
+          <div style="flex:1; height:1px; background:linear-gradient(to right,rgba(94,234,212,0.3),transparent);"></div>
+          <span
+            style="font-size:0.72rem; background:rgba(94,234,212,0.12); color:#5eead4; padding:0.2rem 0.75rem; border-radius:2rem; border:1px solid rgba(94,234,212,0.3); font-weight:600;">Training
+            vs Test Error</span>
+        </div>
+
+        <!-- three panels -->
+        <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:1.25rem;">
+
+          <!-- UNDERFITTING -->
+          <div
+            style="background:rgba(251,146,60,0.07); border:1.5px solid rgba(251,146,60,0.35); border-radius:0.85rem; padding:1.25rem 1rem 1rem; display:flex; flex-direction:column; gap:0.9rem;">
+            <div style="text-align:center;">
+              <span
+                style="font-size:0.68rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; background:rgba(251,146,60,0.2); color:#fb923c; padding:0.18rem 0.75rem; border-radius:2rem; border:1px solid rgba(251,146,60,0.4);">Underfitting</span>
+            </div>
+            <!-- SVG graph -->
+            <svg viewBox="0 0 200 130" style="width:100%; border-radius:0.5rem; background:rgba(0,0,0,0.18);">
+              <!-- axes -->
+              <line x1="24" y1="108" x2="190" y2="108" stroke="rgba(255,255,255,0.15)" stroke-width="1" />
+              <line x1="24" y1="108" x2="24" y2="12" stroke="rgba(255,255,255,0.15)" stroke-width="1" />
+              <!-- axis labels -->
+              <text x="107" y="124" text-anchor="middle" font-size="8" fill="rgba(255,255,255,0.55)">x</text>
+              <text x="12" y="62" text-anchor="middle" font-size="8" fill="rgba(255,255,255,0.55)"
+                transform="rotate(-90,12,62)">y</text>
+              <!-- true underlying pattern (subtle curve) -->
+              <path d="M30,90 Q80,30 180,22" stroke="rgba(94,234,212,0.3)" stroke-width="1.5" fill="none"
+                stroke-dasharray="4,3" />
+              <!-- scattered data points -->
+              <circle cx="38" cy="85" r="3.2" fill="#fb923c" opacity="0.85" />
+              <circle cx="52" cy="70" r="3.2" fill="#fb923c" opacity="0.85" />
+              <circle cx="65" cy="75" r="3.2" fill="#fb923c" opacity="0.85" />
+              <circle cx="78" cy="55" r="3.2" fill="#fb923c" opacity="0.85" />
+              <circle cx="92" cy="60" r="3.2" fill="#fb923c" opacity="0.85" />
+              <circle cx="107" cy="45" r="3.2" fill="#fb923c" opacity="0.85" />
+              <circle cx="120" cy="42" r="3.2" fill="#fb923c" opacity="0.85" />
+              <circle cx="136" cy="35" r="3.2" fill="#fb923c" opacity="0.85" />
+              <circle cx="150" cy="38" r="3.2" fill="#fb923c" opacity="0.85" />
+              <circle cx="165" cy="30" r="3.2" fill="#fb923c" opacity="0.85" />
+              <!-- underfit model line — nearly flat, misses the curve -->
+              <line x1="30" y1="80" x2="175" y2="48" stroke="#fb923c" stroke-width="2.5" stroke-linecap="round" />
+              <!-- label -->
+              <text x="100" y="14" text-anchor="middle" font-size="7.5" fill="#fb923c" font-weight="bold">High Bias ·
+                Low Variance</text>
+            </svg>
+            <!-- stats row -->
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.5rem;">
+              <div
+                style="background:rgba(251,146,60,0.12); border-radius:0.5rem; padding:0.5rem 0.6rem; text-align:center;">
+                <div
+                  style="font-size:0.65rem; color:rgba(255,255,255,0.65); margin-bottom:0.2rem; text-transform:uppercase; letter-spacing:0.05em;">
+                  Train Error</div>
+                <div style="font-size:0.9rem; font-weight:800; color:#fb923c;">HIGH</div>
+              </div>
+              <div
+                style="background:rgba(251,146,60,0.12); border-radius:0.5rem; padding:0.5rem 0.6rem; text-align:center;">
+                <div
+                  style="font-size:0.65rem; color:rgba(255,255,255,0.65); margin-bottom:0.2rem; text-transform:uppercase; letter-spacing:0.05em;">
+                  Test Error</div>
+                <div style="font-size:0.9rem; font-weight:800; color:#fb923c;">HIGH</div>
+              </div>
+            </div>
+            <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:0.35rem;">
+              <li style="font-size:0.78rem; color:#cbd5e1; display:flex; gap:0.4rem; align-items:flex-start;"><span
+                  style="color:#fb923c; flex-shrink:0;">›</span>Model too simple for data</li>
+              <li style="font-size:0.78rem; color:#cbd5e1; display:flex; gap:0.4rem; align-items:flex-start;"><span
+                  style="color:#fb923c; flex-shrink:0;">›</span>Misses true underlying pattern</li>
+              <li style="font-size:0.78rem; color:#cbd5e1; display:flex; gap:0.4rem; align-items:flex-start;"><span
+                  style="color:#fb923c; flex-shrink:0;">›</span>Fix: increase model complexity</li>
+            </ul>
+          </div>
+
+          <!-- GOOD FIT -->
+          <div
+            style="background:rgba(94,234,212,0.07); border:2px solid rgba(94,234,212,0.45); border-radius:0.85rem; padding:1.25rem 1rem 1rem; display:flex; flex-direction:column; gap:0.9rem; position:relative;">
+            <div
+              style="position:absolute; top:-0.6rem; left:50%; transform:translateX(-50%); background:#5eead4; color:#0f172a; font-size:0.62rem; font-weight:800; letter-spacing:0.08em; padding:0.15rem 0.7rem; border-radius:2rem; white-space:nowrap;">
+              ✦ SWEET SPOT</div>
+            <div style="text-align:center;">
+              <span
+                style="font-size:0.68rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; background:rgba(94,234,212,0.2); color:#5eead4; padding:0.18rem 0.75rem; border-radius:2rem; border:1px solid rgba(94,234,212,0.4);">Good
+                Fit</span>
+            </div>
+            <!-- SVG graph -->
+            <svg viewBox="0 0 200 130" style="width:100%; border-radius:0.5rem; background:rgba(0,0,0,0.18);">
+              <line x1="24" y1="108" x2="190" y2="108" stroke="rgba(255,255,255,0.15)" stroke-width="1" />
+              <line x1="24" y1="108" x2="24" y2="12" stroke="rgba(255,255,255,0.15)" stroke-width="1" />
+              <text x="107" y="124" text-anchor="middle" font-size="8" fill="rgba(255,255,255,0.55)">x</text>
+              <text x="12" y="62" text-anchor="middle" font-size="8" fill="rgba(255,255,255,0.55)"
+                transform="rotate(-90,12,62)">y</text>
+              <!-- data points scattered around curve -->
+              <circle cx="38" cy="85" r="3.2" fill="#5eead4" opacity="0.85" />
+              <circle cx="52" cy="68" r="3.2" fill="#5eead4" opacity="0.85" />
+              <circle cx="65" cy="77" r="3.2" fill="#5eead4" opacity="0.85" />
+              <circle cx="78" cy="52" r="3.2" fill="#5eead4" opacity="0.85" />
+              <circle cx="92" cy="58" r="3.2" fill="#5eead4" opacity="0.85" />
+              <circle cx="107" cy="43" r="3.2" fill="#5eead4" opacity="0.85" />
+              <circle cx="120" cy="44" r="3.2" fill="#5eead4" opacity="0.85" />
+              <circle cx="136" cy="33" r="3.2" fill="#5eead4" opacity="0.85" />
+              <circle cx="150" cy="40" r="3.2" fill="#5eead4" opacity="0.85" />
+              <circle cx="165" cy="28" r="3.2" fill="#5eead4" opacity="0.85" />
+              <!-- smooth curve following trend -->
+              <path d="M30,90 Q75,55 107,45 Q140,34 175,26" stroke="#5eead4" stroke-width="2.5" fill="none"
+                stroke-linecap="round" />
+              <text x="100" y="14" text-anchor="middle" font-size="7.5" fill="#5eead4" font-weight="bold">Low Bias · Low
+                Variance</text>
+            </svg>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.5rem;">
+              <div
+                style="background:rgba(94,234,212,0.12); border-radius:0.5rem; padding:0.5rem 0.6rem; text-align:center;">
+                <div
+                  style="font-size:0.65rem; color:rgba(255,255,255,0.65); margin-bottom:0.2rem; text-transform:uppercase; letter-spacing:0.05em;">
+                  Train Error</div>
+                <div style="font-size:0.9rem; font-weight:800; color:#5eead4;">LOW</div>
+              </div>
+              <div
+                style="background:rgba(94,234,212,0.12); border-radius:0.5rem; padding:0.5rem 0.6rem; text-align:center;">
+                <div
+                  style="font-size:0.65rem; color:rgba(255,255,255,0.65); margin-bottom:0.2rem; text-transform:uppercase; letter-spacing:0.05em;">
+                  Test Error</div>
+                <div style="font-size:0.9rem; font-weight:800; color:#5eead4;">LOW</div>
+              </div>
+            </div>
+            <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:0.35rem;">
+              <li style="font-size:0.78rem; color:#cbd5e1; display:flex; gap:0.4rem; align-items:flex-start;"><span
+                  style="color:#5eead4; flex-shrink:0;">›</span>Captures true pattern well</li>
+              <li style="font-size:0.78rem; color:#cbd5e1; display:flex; gap:0.4rem; align-items:flex-start;"><span
+                  style="color:#5eead4; flex-shrink:0;">›</span>Generalises to unseen data</li>
+              <li style="font-size:0.78rem; color:#cbd5e1; display:flex; gap:0.4rem; align-items:flex-start;"><span
+                  style="color:#5eead4; flex-shrink:0;">›</span>Goal of model selection</li>
+            </ul>
+          </div>
+
+          <!-- OVERFITTING -->
+          <div
+            style="background:rgba(239,68,68,0.07); border:1.5px solid rgba(239,68,68,0.35); border-radius:0.85rem; padding:1.25rem 1rem 1rem; display:flex; flex-direction:column; gap:0.9rem;">
+            <div style="text-align:center;">
+              <span
+                style="font-size:0.68rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; background:rgba(239,68,68,0.2); color:#f87171; padding:0.18rem 0.75rem; border-radius:2rem; border:1px solid rgba(239,68,68,0.4);">Overfitting</span>
+            </div>
+            <!-- SVG graph -->
+            <svg viewBox="0 0 200 130" style="width:100%; border-radius:0.5rem; background:rgba(0,0,0,0.18);">
+              <line x1="24" y1="108" x2="190" y2="108" stroke="rgba(255,255,255,0.15)" stroke-width="1" />
+              <line x1="24" y1="108" x2="24" y2="12" stroke="rgba(255,255,255,0.15)" stroke-width="1" />
+              <text x="107" y="124" text-anchor="middle" font-size="8" fill="rgba(255,255,255,0.55)">x</text>
+              <text x="12" y="62" text-anchor="middle" font-size="8" fill="rgba(255,255,255,0.55)"
+                transform="rotate(-90,12,62)">y</text>
+              <!-- data points -->
+              <circle cx="38" cy="85" r="3.2" fill="#f87171" opacity="0.85" />
+              <circle cx="52" cy="68" r="3.2" fill="#f87171" opacity="0.85" />
+              <circle cx="65" cy="77" r="3.2" fill="#f87171" opacity="0.85" />
+              <circle cx="78" cy="52" r="3.2" fill="#f87171" opacity="0.85" />
+              <circle cx="92" cy="58" r="3.2" fill="#f87171" opacity="0.85" />
+              <circle cx="107" cy="43" r="3.2" fill="#f87171" opacity="0.85" />
+              <circle cx="120" cy="44" r="3.2" fill="#f87171" opacity="0.85" />
+              <circle cx="136" cy="33" r="3.2" fill="#f87171" opacity="0.85" />
+              <circle cx="150" cy="40" r="3.2" fill="#f87171" opacity="0.85" />
+              <circle cx="165" cy="28" r="3.2" fill="#f87171" opacity="0.85" />
+              <!-- wiggly overfit curve threading through every point -->
+              <path
+                d="M30,85 C36,85 40,62 52,68 C58,72 60,80 65,77 C70,74 73,46 78,52 C83,58 86,62 92,58 C98,54 102,38 107,43 C112,48 114,48 120,44 C126,40 130,28 136,33 C142,38 144,44 150,40 C157,36 160,22 175,26"
+                stroke="#f87171" stroke-width="2.5" fill="none" stroke-linecap="round" />
+              <text x="100" y="14" text-anchor="middle" font-size="7.5" fill="#f87171" font-weight="bold">Low Bias ·
+                High Variance</text>
+            </svg>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.5rem;">
+              <div
+                style="background:rgba(239,68,68,0.12); border-radius:0.5rem; padding:0.5rem 0.6rem; text-align:center;">
+                <div
+                  style="font-size:0.65rem; color:rgba(255,255,255,0.65); margin-bottom:0.2rem; text-transform:uppercase; letter-spacing:0.05em;">
+                  Train Error</div>
+                <div style="font-size:0.9rem; font-weight:800; color:#f87171;">LOW</div>
+              </div>
+              <div
+                style="background:rgba(239,68,68,0.12); border-radius:0.5rem; padding:0.5rem 0.6rem; text-align:center;">
+                <div
+                  style="font-size:0.65rem; color:rgba(255,255,255,0.65); margin-bottom:0.2rem; text-transform:uppercase; letter-spacing:0.05em;">
+                  Test Error</div>
+                <div style="font-size:0.9rem; font-weight:800; color:#f87171;">HIGH</div>
+              </div>
+            </div>
+            <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:0.35rem;">
+              <li style="font-size:0.78rem; color:#cbd5e1; display:flex; gap:0.4rem; align-items:flex-start;"><span
+                  style="color:#f87171; flex-shrink:0;">›</span>Model memorises training noise</li>
+              <li style="font-size:0.78rem; color:#cbd5e1; display:flex; gap:0.4rem; align-items:flex-start;"><span
+                  style="color:#f87171; flex-shrink:0;">›</span>Fails to generalise to new data</li>
+              <li style="font-size:0.78rem; color:#cbd5e1; display:flex; gap:0.4rem; align-items:flex-start;"><span
+                  style="color:#f87171; flex-shrink:0;">›</span>Fix: regularise, prune, add data</li>
+            </ul>
+          </div>
+
+        </div>
+
+        <!-- bottom legend -->
+        <div
+          style="margin-top:1.25rem; padding-top:1rem; border-top:1px solid rgba(94,234,212,0.12); display:flex; align-items:center; justify-content:center; gap:2rem; flex-wrap:wrap;">
+          <div style="display:flex; align-items:center; gap:0.45rem; font-size:0.75rem; color:#94a3b8;">
+            <svg width="28" height="10">
+              <line x1="0" y1="5" x2="28" y2="5" stroke="#5eead4" stroke-width="2" stroke-dasharray="5,3" />
+            </svg>
+            True underlying pattern
+          </div>
+          <div style="display:flex; align-items:center; gap:0.45rem; font-size:0.75rem; color:#94a3b8;">
+            <svg width="28" height="10">
+              <line x1="0" y1="5" x2="28" y2="5" stroke="white" stroke-width="2.5" />
+            </svg>
+            Fitted model curve
+          </div>
+          <div style="display:flex; align-items:center; gap:0.45rem; font-size:0.75rem; color:#94a3b8;">
+            <svg width="10" height="10">
+              <circle cx="5" cy="5" r="4" fill="white" opacity="0.7" />
+            </svg>
+            Data points
+          </div>
+        </div>
+
+      </div>
+
       <div class="grid-2">
 
         <div class="card card-accent card-cyan reveal">
@@ -736,8 +1170,10 @@
             $\text{Error} = \text{Bias}^2 + \text{Variance} + \text{Noise}$
           </div>
           <ul class="check-list">
-            <li><span class="mark mark-cyan">→</span> <strong>High Bias:</strong> model is too simple, misses true pattern.</li>
-            <li><span class="mark mark-cyan">→</span> <strong>High Variance:</strong> model is too complex, fits noise.</li>
+            <li><span class="mark mark-cyan">→</span> <strong>High Bias:</strong> model is too simple, misses true
+              pattern.</li>
+            <li><span class="mark mark-cyan">→</span> <strong>High Variance:</strong> model is too complex, fits noise.
+            </li>
             <li><span class="mark mark-cyan">✓</span> Best models balance both for low test error.</li>
           </ul>
         </div>
@@ -745,14 +1181,19 @@
         <div class="card card-accent card-cyan reveal">
           <h3 style="margin-bottom:0.75rem; font-size:1.1rem;">Overfitting vs Underfitting</h3>
           <ul class="check-list">
-            <li><span class="mark mark-red">⚠</span> <strong>Underfitting:</strong> high train error + high validation error.</li>
-            <li><span class="mark mark-red">⚠</span> <strong>Overfitting:</strong> low train error + high validation error.</li>
-            <li><span class="mark mark-green">✓</span> <strong>Good fit:</strong> low train and validation errors, small gap.</li>
+            <li><span class="mark mark-red">⚠</span> <strong>Underfitting:</strong> high train error + high validation
+              error.</li>
+            <li><span class="mark mark-red">⚠</span> <strong>Overfitting:</strong> low train error + high validation
+              error.</li>
+            <li><span class="mark mark-green">✓</span> <strong>Good fit:</strong> low train and validation errors, small
+              gap.</li>
           </ul>
           <div class="formula-label" style="margin-top:0.9rem;">How to Fix</div>
           <ul class="check-list" style="margin-top:0.5rem;">
-            <li><span class="mark mark-green">+</span> Underfitting → increase model capacity, add features, reduce regularization.</li>
-            <li><span class="mark mark-green">+</span> Overfitting → regularize, simplify model, get more data, early stop.</li>
+            <li><span class="mark mark-green">+</span> Underfitting → increase model capacity, add features, reduce
+              regularization.</li>
+            <li><span class="mark mark-green">+</span> Overfitting → regularize, simplify model, get more data, early
+              stop.</li>
           </ul>
         </div>
 
@@ -889,9 +1330,12 @@
           </div>
           <ul class="check-list" style="margin-top:0.65rem;">
             <li><span class="mark mark-green">→</span> Entropy measures uncertainty or disorder in a node.</li>
-            <li><span class="mark mark-green">→</span> Low entropy = more ordered/homogeneous set; high entropy = more disorder/diversity.</li>
-            <li><span class="mark mark-green">→</span> Decision trees reduce entropy by choosing better features/split points.</li>
-            <li><span class="mark mark-green">→</span> The split with the <strong>largest entropy reduction</strong> (highest IG) is selected.</li>
+            <li><span class="mark mark-green">→</span> Low entropy = more ordered/homogeneous set; high entropy = more
+              disorder/diversity.</li>
+            <li><span class="mark mark-green">→</span> Decision trees reduce entropy by choosing better features/split
+              points.</li>
+            <li><span class="mark mark-green">→</span> The split with the <strong>largest entropy reduction</strong>
+              (highest IG) is selected.</li>
           </ul>
 
           <div class="formula-label" style="margin-top:1rem;">Gini Impurity (separate criterion)</div>
@@ -899,14 +1343,17 @@
             $\text{Gini}(S) = 1 - \sum_{k=1}^{K} p_k^2$
           </div>
           <ul class="check-list" style="margin-top:0.65rem;">
-            <li><span class="mark mark-green">→</span> Gini impurity measures impurity/disorder of elements in a node.</li>
+            <li><span class="mark mark-green">→</span> Gini impurity measures impurity/disorder of elements in a node.
+            </li>
             <li><span class="mark mark-green">→</span> Lower Gini means a more homogeneous node and a better split.</li>
-            <li><span class="mark mark-green">→</span> CART-style trees choose feature and split point that minimize Gini at each node.</li>
+            <li><span class="mark mark-green">→</span> CART-style trees choose feature and split point that minimize
+              Gini at each node.</li>
           </ul>
 
           <div class="formula-label" style="margin-top:1rem;">Decision Tree Regression (what is used?)</div>
           <div class="formula-box" style="font-size:0.84rem;">
-            In regression trees, <strong>neither Gini nor Entropy</strong> is used. Instead, splits are chosen by minimizing error/variance.
+            In regression trees, <strong>neither Gini nor Entropy</strong> is used. Instead, splits are chosen by
+            minimizing error/variance.
           </div>
           <div class="formula-label" style="margin-top:0.75rem;">Mean Squared Error (MSE) — most common</div>
           <div class="formula-box" style="font-size:0.86rem;">
@@ -930,8 +1377,10 @@
       <div class="card reveal" style="margin-top:1.5rem;">
         <h3 style="margin-bottom:1rem; font-size:1.05rem;">Simulation: Play Tennis (Entropy / IG)</h3>
         <div class="tabs" id="dtsim-tabs" style="margin:0 0 1rem;">
-          <button class="tab-btn active" id="dtsim-btn-overview" onclick="switchTab('dtsim', 'overview')">Root Split</button>
-          <button class="tab-btn" id="dtsim-btn-dataset" onclick="switchTab('dtsim', 'dataset')">Complete Dataset</button>
+          <button class="tab-btn active" id="dtsim-btn-overview" onclick="switchTab('dtsim', 'overview')">Root
+            Split</button>
+          <button class="tab-btn" id="dtsim-btn-dataset" onclick="switchTab('dtsim', 'dataset')">Complete
+            Dataset</button>
           <button class="tab-btn" id="dtsim-btn-tree" onclick="switchTab('dtsim', 'tree')">Full Tree</button>
           <button class="tab-btn" id="dtsim-btn-details" onclick="switchTab('dtsim', 'details')">Detailed Calc</button>
         </div>
@@ -990,13 +1439,16 @@
                   Entropy(Sunny) $= -\frac{2}{5}\log_2\frac{2}{5} - \frac{3}{5}\log_2\frac{3}{5} = 0.971$
                 </div>
                 <div class="formula-box dt-sim-formula">
-                  Entropy(Overcast) $= 0$ (pure), Entropy(Rain) $= -\frac{3}{5}\log_2\frac{3}{5} - \frac{2}{5}\log_2\frac{2}{5} = 0.971$
+                  Entropy(Overcast) $= 0$ (pure), Entropy(Rain) $= -\frac{3}{5}\log_2\frac{3}{5} -
+                  \frac{2}{5}\log_2\frac{2}{5} = 0.971$
                 </div>
                 <div class="formula-box dt-sim-formula">
-                  $\text{IG}(\text{Outlook}) = 0.940 - \left[\frac{5}{14}(0.971)+\frac{4}{14}(0)+\frac{5}{14}(0.971)\right] = 0.247$
+                  $\text{IG}(\text{Outlook}) = 0.940 -
+                  \left[\frac{5}{14}(0.971)+\frac{4}{14}(0)+\frac{5}{14}(0.971)\right] = 0.247$
                 </div>
                 <div class="formula-box dt-sim-formula">
-                  Gini(Sunny)$=0.480$, Gini(Overcast)$=0$, Gini(Rain)$=0.480$ → Weighted Gini$=\frac{5}{14}(0.480)+\frac{4}{14}(0)+\frac{5}{14}(0.480)=0.343$
+                  Gini(Sunny)$=0.480$, Gini(Overcast)$=0$, Gini(Rain)$=0.480$ → Weighted
+                  Gini$=\frac{5}{14}(0.480)+\frac{4}{14}(0)+\frac{5}{14}(0.480)=0.343$
                 </div>
                 <p class="dt-sim-note">Highest information gain chooses <strong>Outlook</strong> as root.</p>
               </div>
@@ -1043,20 +1495,118 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr><td>D1</td><td>Sunny</td><td>Hot</td><td>High</td><td>Weak</td><td>No</td></tr>
-                  <tr><td>D2</td><td>Sunny</td><td>Hot</td><td>High</td><td>Strong</td><td>No</td></tr>
-                  <tr><td>D3</td><td>Overcast</td><td>Hot</td><td>High</td><td>Weak</td><td>Yes</td></tr>
-                  <tr><td>D4</td><td>Rain</td><td>Mild</td><td>High</td><td>Weak</td><td>Yes</td></tr>
-                  <tr><td>D5</td><td>Rain</td><td>Cool</td><td>Normal</td><td>Weak</td><td>Yes</td></tr>
-                  <tr><td>D6</td><td>Rain</td><td>Cool</td><td>Normal</td><td>Strong</td><td>No</td></tr>
-                  <tr><td>D7</td><td>Overcast</td><td>Cool</td><td>Normal</td><td>Strong</td><td>Yes</td></tr>
-                  <tr><td>D8</td><td>Sunny</td><td>Mild</td><td>High</td><td>Weak</td><td>No</td></tr>
-                  <tr><td>D9</td><td>Sunny</td><td>Cool</td><td>Normal</td><td>Weak</td><td>Yes</td></tr>
-                  <tr><td>D10</td><td>Rain</td><td>Mild</td><td>Normal</td><td>Weak</td><td>Yes</td></tr>
-                  <tr><td>D11</td><td>Sunny</td><td>Mild</td><td>Normal</td><td>Strong</td><td>Yes</td></tr>
-                  <tr><td>D12</td><td>Overcast</td><td>Mild</td><td>High</td><td>Strong</td><td>Yes</td></tr>
-                  <tr><td>D13</td><td>Overcast</td><td>Hot</td><td>Normal</td><td>Weak</td><td>Yes</td></tr>
-                  <tr><td>D14</td><td>Rain</td><td>Mild</td><td>High</td><td>Strong</td><td>No</td></tr>
+                  <tr>
+                    <td>D1</td>
+                    <td>Sunny</td>
+                    <td>Hot</td>
+                    <td>High</td>
+                    <td>Weak</td>
+                    <td>No</td>
+                  </tr>
+                  <tr>
+                    <td>D2</td>
+                    <td>Sunny</td>
+                    <td>Hot</td>
+                    <td>High</td>
+                    <td>Strong</td>
+                    <td>No</td>
+                  </tr>
+                  <tr>
+                    <td>D3</td>
+                    <td>Overcast</td>
+                    <td>Hot</td>
+                    <td>High</td>
+                    <td>Weak</td>
+                    <td>Yes</td>
+                  </tr>
+                  <tr>
+                    <td>D4</td>
+                    <td>Rain</td>
+                    <td>Mild</td>
+                    <td>High</td>
+                    <td>Weak</td>
+                    <td>Yes</td>
+                  </tr>
+                  <tr>
+                    <td>D5</td>
+                    <td>Rain</td>
+                    <td>Cool</td>
+                    <td>Normal</td>
+                    <td>Weak</td>
+                    <td>Yes</td>
+                  </tr>
+                  <tr>
+                    <td>D6</td>
+                    <td>Rain</td>
+                    <td>Cool</td>
+                    <td>Normal</td>
+                    <td>Strong</td>
+                    <td>No</td>
+                  </tr>
+                  <tr>
+                    <td>D7</td>
+                    <td>Overcast</td>
+                    <td>Cool</td>
+                    <td>Normal</td>
+                    <td>Strong</td>
+                    <td>Yes</td>
+                  </tr>
+                  <tr>
+                    <td>D8</td>
+                    <td>Sunny</td>
+                    <td>Mild</td>
+                    <td>High</td>
+                    <td>Weak</td>
+                    <td>No</td>
+                  </tr>
+                  <tr>
+                    <td>D9</td>
+                    <td>Sunny</td>
+                    <td>Cool</td>
+                    <td>Normal</td>
+                    <td>Weak</td>
+                    <td>Yes</td>
+                  </tr>
+                  <tr>
+                    <td>D10</td>
+                    <td>Rain</td>
+                    <td>Mild</td>
+                    <td>Normal</td>
+                    <td>Weak</td>
+                    <td>Yes</td>
+                  </tr>
+                  <tr>
+                    <td>D11</td>
+                    <td>Sunny</td>
+                    <td>Mild</td>
+                    <td>Normal</td>
+                    <td>Strong</td>
+                    <td>Yes</td>
+                  </tr>
+                  <tr>
+                    <td>D12</td>
+                    <td>Overcast</td>
+                    <td>Mild</td>
+                    <td>High</td>
+                    <td>Strong</td>
+                    <td>Yes</td>
+                  </tr>
+                  <tr>
+                    <td>D13</td>
+                    <td>Overcast</td>
+                    <td>Hot</td>
+                    <td>Normal</td>
+                    <td>Weak</td>
+                    <td>Yes</td>
+                  </tr>
+                  <tr>
+                    <td>D14</td>
+                    <td>Rain</td>
+                    <td>Mild</td>
+                    <td>High</td>
+                    <td>Strong</td>
+                    <td>No</td>
+                  </tr>
                 </tbody>
               </table>
             </div>
@@ -1139,104 +1689,129 @@
 
                   <g class="pt-node-internal" transform="translate(330,18)">
                     <rect width="300" height="50" rx="8" />
-                    <text class="pt-label-main" x="150" y="20" text-anchor="middle" dominant-baseline="central">Outlook</text>
-                    <text class="pt-label-sub" x="150" y="38" text-anchor="middle" dominant-baseline="central">9Y/5N · E=0.940 · G=0.459 · IG=0.247 · ΔG=0.116</text>
+                    <text class="pt-label-main" x="150" y="20" text-anchor="middle"
+                      dominant-baseline="central">Outlook</text>
+                    <text class="pt-label-sub" x="150" y="38" text-anchor="middle" dominant-baseline="central">9Y/5N ·
+                      E=0.940 · G=0.459 · IG=0.247 · ΔG=0.116</text>
                   </g>
 
                   <g class="pt-node-internal pt-node-temp" transform="translate(60,148)">
                     <rect width="240" height="50" rx="8" />
-                    <text class="pt-label-main" x="120" y="20" text-anchor="middle" dominant-baseline="central">Temperature</text>
-                    <text class="pt-label-sub" x="120" y="38" text-anchor="middle" dominant-baseline="central">2Y/3N · E=0.971 · G=0.480 · IG=0.571</text>
+                    <text class="pt-label-main" x="120" y="20" text-anchor="middle"
+                      dominant-baseline="central">Temperature</text>
+                    <text class="pt-label-sub" x="120" y="38" text-anchor="middle" dominant-baseline="central">2Y/3N ·
+                      E=0.971 · G=0.480 · IG=0.571</text>
                   </g>
 
                   <g class="pt-node-yes" transform="translate(370,148)">
                     <rect width="220" height="50" rx="8" />
-                    <text class="pt-label-yes" x="110" y="20" text-anchor="middle" dominant-baseline="central">YES</text>
-                    <text class="pt-label-sub" x="110" y="38" text-anchor="middle" dominant-baseline="central">4Y/0N · E=0 · G=0 · Pure</text>
+                    <text class="pt-label-yes" x="110" y="20" text-anchor="middle"
+                      dominant-baseline="central">YES</text>
+                    <text class="pt-label-sub" x="110" y="38" text-anchor="middle" dominant-baseline="central">4Y/0N ·
+                      E=0 · G=0 · Pure</text>
                   </g>
 
                   <g class="pt-node-internal pt-node-temp" transform="translate(620,148)">
                     <rect width="240" height="50" rx="8" />
-                    <text class="pt-label-main" x="120" y="20" text-anchor="middle" dominant-baseline="central">Temperature</text>
-                    <text class="pt-label-sub" x="120" y="38" text-anchor="middle" dominant-baseline="central">3Y/2N · E=0.971 · G=0.480 · IG=0.020</text>
+                    <text class="pt-label-main" x="120" y="20" text-anchor="middle"
+                      dominant-baseline="central">Temperature</text>
+                    <text class="pt-label-sub" x="120" y="38" text-anchor="middle" dominant-baseline="central">3Y/2N ·
+                      E=0.971 · G=0.480 · IG=0.020</text>
                   </g>
 
                   <g class="pt-node-no" transform="translate(20,298)">
                     <rect width="100" height="50" rx="8" />
                     <text class="pt-label-no" x="50" y="20" text-anchor="middle" dominant-baseline="central">NO</text>
-                    <text class="pt-label-sub" x="50" y="38" text-anchor="middle" dominant-baseline="central">0Y/2N · Pure</text>
+                    <text class="pt-label-sub" x="50" y="38" text-anchor="middle" dominant-baseline="central">0Y/2N ·
+                      Pure</text>
                   </g>
 
                   <g class="pt-node-internal pt-node-humidity" transform="translate(120,298)">
                     <rect width="200" height="50" rx="8" />
-                    <text class="pt-label-main" x="100" y="20" text-anchor="middle" dominant-baseline="central">Humidity</text>
-                    <text class="pt-label-sub" x="100" y="38" text-anchor="middle" dominant-baseline="central">1Y/1N · E=1.0 · G=0.5 · IG=1.0</text>
+                    <text class="pt-label-main" x="100" y="20" text-anchor="middle"
+                      dominant-baseline="central">Humidity</text>
+                    <text class="pt-label-sub" x="100" y="38" text-anchor="middle" dominant-baseline="central">1Y/1N ·
+                      E=1.0 · G=0.5 · IG=1.0</text>
                   </g>
 
                   <g class="pt-node-yes" transform="translate(240,298)">
                     <rect width="100" height="50" rx="8" />
                     <text class="pt-label-yes" x="50" y="20" text-anchor="middle" dominant-baseline="central">YES</text>
-                    <text class="pt-label-sub" x="50" y="38" text-anchor="middle" dominant-baseline="central">1Y/0N · Pure</text>
+                    <text class="pt-label-sub" x="50" y="38" text-anchor="middle" dominant-baseline="central">1Y/0N ·
+                      Pure</text>
                   </g>
 
                   <g class="pt-node-internal pt-node-humidity" transform="translate(548,298)">
                     <rect width="220" height="50" rx="8" />
-                    <text class="pt-label-main" x="110" y="20" text-anchor="middle" dominant-baseline="central">Humidity</text>
-                    <text class="pt-label-sub" x="110" y="38" text-anchor="middle" dominant-baseline="central">2Y/1N · E=0.918 · G=0.444</text>
+                    <text class="pt-label-main" x="110" y="20" text-anchor="middle"
+                      dominant-baseline="central">Humidity</text>
+                    <text class="pt-label-sub" x="110" y="38" text-anchor="middle" dominant-baseline="central">2Y/1N ·
+                      E=0.918 · G=0.444</text>
                   </g>
 
                   <g class="pt-node-internal pt-node-wind" transform="translate(784,298)">
                     <rect width="180" height="50" rx="8" />
-                    <text class="pt-label-main" x="90" y="20" text-anchor="middle" dominant-baseline="central">Wind</text>
-                    <text class="pt-label-sub" x="90" y="38" text-anchor="middle" dominant-baseline="central">1Y/1N · E=1.0 · G=0.5 · IG=1.0</text>
+                    <text class="pt-label-main" x="90" y="20" text-anchor="middle"
+                      dominant-baseline="central">Wind</text>
+                    <text class="pt-label-sub" x="90" y="38" text-anchor="middle" dominant-baseline="central">1Y/1N ·
+                      E=1.0 · G=0.5 · IG=1.0</text>
                   </g>
 
                   <g class="pt-node-no" transform="translate(70,428)">
                     <rect width="100" height="50" rx="8" />
                     <text class="pt-label-no" x="50" y="20" text-anchor="middle" dominant-baseline="central">NO</text>
-                    <text class="pt-label-sub" x="50" y="38" text-anchor="middle" dominant-baseline="central">0Y/1N · Pure</text>
+                    <text class="pt-label-sub" x="50" y="38" text-anchor="middle" dominant-baseline="central">0Y/1N ·
+                      Pure</text>
                   </g>
 
                   <g class="pt-node-yes" transform="translate(192,428)">
                     <rect width="100" height="50" rx="8" />
                     <text class="pt-label-yes" x="50" y="20" text-anchor="middle" dominant-baseline="central">YES</text>
-                    <text class="pt-label-sub" x="50" y="38" text-anchor="middle" dominant-baseline="central">1Y/0N · Pure</text>
+                    <text class="pt-label-sub" x="50" y="38" text-anchor="middle" dominant-baseline="central">1Y/0N ·
+                      Pure</text>
                   </g>
 
                   <g class="pt-node-internal pt-node-wind" transform="translate(488,428)">
                     <rect width="200" height="50" rx="8" />
-                    <text class="pt-label-main" x="100" y="20" text-anchor="middle" dominant-baseline="central">Wind</text>
-                    <text class="pt-label-sub" x="100" y="38" text-anchor="middle" dominant-baseline="central">1Y/1N · E=1.0 · G=0.5 · IG=1.0</text>
+                    <text class="pt-label-main" x="100" y="20" text-anchor="middle"
+                      dominant-baseline="central">Wind</text>
+                    <text class="pt-label-sub" x="100" y="38" text-anchor="middle" dominant-baseline="central">1Y/1N ·
+                      E=1.0 · G=0.5 · IG=1.0</text>
                   </g>
 
                   <g class="pt-node-yes" transform="translate(700,428)">
                     <rect width="100" height="50" rx="8" />
                     <text class="pt-label-yes" x="50" y="20" text-anchor="middle" dominant-baseline="central">YES</text>
-                    <text class="pt-label-sub" x="50" y="38" text-anchor="middle" dominant-baseline="central">1Y/0N · Pure</text>
+                    <text class="pt-label-sub" x="50" y="38" text-anchor="middle" dominant-baseline="central">1Y/0N ·
+                      Pure</text>
                   </g>
 
                   <g class="pt-node-yes" transform="translate(746,428)">
                     <rect width="100" height="50" rx="8" />
                     <text class="pt-label-yes" x="50" y="20" text-anchor="middle" dominant-baseline="central">YES</text>
-                    <text class="pt-label-sub" x="50" y="38" text-anchor="middle" dominant-baseline="central">1Y/0N · Pure</text>
+                    <text class="pt-label-sub" x="50" y="38" text-anchor="middle" dominant-baseline="central">1Y/0N ·
+                      Pure</text>
                   </g>
 
                   <g class="pt-node-no" transform="translate(900,428)">
                     <rect width="52" height="50" rx="8" />
                     <text class="pt-label-no" x="26" y="20" text-anchor="middle" dominant-baseline="central">NO</text>
-                    <text class="pt-label-sub" x="26" y="38" text-anchor="middle" dominant-baseline="central">0Y/1N</text>
+                    <text class="pt-label-sub" x="26" y="38" text-anchor="middle"
+                      dominant-baseline="central">0Y/1N</text>
                   </g>
 
                   <g class="pt-node-yes" transform="translate(466,558)">
                     <rect width="100" height="46" rx="8" />
                     <text class="pt-label-yes" x="50" y="18" text-anchor="middle" dominant-baseline="central">YES</text>
-                    <text class="pt-label-sub" x="50" y="36" text-anchor="middle" dominant-baseline="central">1Y/0N · Pure</text>
+                    <text class="pt-label-sub" x="50" y="36" text-anchor="middle" dominant-baseline="central">1Y/0N ·
+                      Pure</text>
                   </g>
 
                   <g class="pt-node-no" transform="translate(630,558)">
                     <rect width="100" height="46" rx="8" />
                     <text class="pt-label-no" x="50" y="18" text-anchor="middle" dominant-baseline="central">NO</text>
-                    <text class="pt-label-sub" x="50" y="36" text-anchor="middle" dominant-baseline="central">0Y/1N · Pure</text>
+                    <text class="pt-label-sub" x="50" y="36" text-anchor="middle" dominant-baseline="central">0Y/1N ·
+                      Pure</text>
                   </g>
                 </svg>
               </div>
@@ -1268,12 +1843,66 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr><td>Root</td><td>Outlook</td><td>9Y/5N</td><td>0.940</td><td>0.459</td><td>0.247</td><td>0.116</td><td><span class="pt-badge pt-impure">Impure</span></td></tr>
-                    <tr><td>Sunny branch</td><td>Temperature</td><td>2Y/3N</td><td>0.971</td><td>0.480</td><td>0.571</td><td>0.280</td><td><span class="pt-badge pt-impure">Impure</span></td></tr>
-                    <tr><td>Overcast branch</td><td>—</td><td>4Y/0N</td><td>0.000</td><td>0.000</td><td>—</td><td>—</td><td><span class="pt-badge pt-pure">Pure</span></td></tr>
-                    <tr><td>Rain branch</td><td>Temperature</td><td>3Y/2N</td><td>0.971</td><td>0.480</td><td>0.020</td><td>0.040</td><td><span class="pt-badge pt-impure">Impure</span></td></tr>
-                    <tr><td>Sunny + Mild</td><td>Humidity</td><td>1Y/1N</td><td>1.000</td><td>0.500</td><td>1.000</td><td>0.500</td><td><span class="pt-badge pt-impure">Impure</span></td></tr>
-                    <tr><td>Rain + Cool</td><td>Wind</td><td>1Y/1N</td><td>1.000</td><td>0.500</td><td>1.000</td><td>0.500</td><td><span class="pt-badge pt-impure">Impure</span></td></tr>
+                    <tr>
+                      <td>Root</td>
+                      <td>Outlook</td>
+                      <td>9Y/5N</td>
+                      <td>0.940</td>
+                      <td>0.459</td>
+                      <td>0.247</td>
+                      <td>0.116</td>
+                      <td><span class="pt-badge pt-impure">Impure</span></td>
+                    </tr>
+                    <tr>
+                      <td>Sunny branch</td>
+                      <td>Temperature</td>
+                      <td>2Y/3N</td>
+                      <td>0.971</td>
+                      <td>0.480</td>
+                      <td>0.571</td>
+                      <td>0.280</td>
+                      <td><span class="pt-badge pt-impure">Impure</span></td>
+                    </tr>
+                    <tr>
+                      <td>Overcast branch</td>
+                      <td>—</td>
+                      <td>4Y/0N</td>
+                      <td>0.000</td>
+                      <td>0.000</td>
+                      <td>—</td>
+                      <td>—</td>
+                      <td><span class="pt-badge pt-pure">Pure</span></td>
+                    </tr>
+                    <tr>
+                      <td>Rain branch</td>
+                      <td>Temperature</td>
+                      <td>3Y/2N</td>
+                      <td>0.971</td>
+                      <td>0.480</td>
+                      <td>0.020</td>
+                      <td>0.040</td>
+                      <td><span class="pt-badge pt-impure">Impure</span></td>
+                    </tr>
+                    <tr>
+                      <td>Sunny + Mild</td>
+                      <td>Humidity</td>
+                      <td>1Y/1N</td>
+                      <td>1.000</td>
+                      <td>0.500</td>
+                      <td>1.000</td>
+                      <td>0.500</td>
+                      <td><span class="pt-badge pt-impure">Impure</span></td>
+                    </tr>
+                    <tr>
+                      <td>Rain + Cool</td>
+                      <td>Wind</td>
+                      <td>1Y/1N</td>
+                      <td>1.000</td>
+                      <td>0.500</td>
+                      <td>1.000</td>
+                      <td>0.500</td>
+                      <td><span class="pt-badge pt-impure">Impure</span></td>
+                    </tr>
                   </tbody>
                 </table>
               </div>
@@ -1286,7 +1915,8 @@
             <div class="dt-sim-title">Core Formulas</div>
             <div class="formula-box dt-sim-formula">Entropy formula: $E = -\sum p\log_2(p)$</div>
             <div class="formula-box dt-sim-formula">Gini formula: $G = 1 - \sum p^2$</div>
-            <div class="formula-box dt-sim-formula">Information Gain: $\text{IG} = E(\text{parent}) - \sum (n_i/n)\,E(\text{child}_i)$</div>
+            <div class="formula-box dt-sim-formula">Information Gain: $\text{IG} = E(\text{parent}) - \sum
+              (n_i/n)\,E(\text{child}_i)$</div>
 
             <div class="dt-sim-title">Sunny branch → Temperature split (2Y, 3N)</div>
             <div class="dt-sim-scroll" style="max-height:none;">
@@ -1299,17 +1929,32 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr><td>Hot</td><td>0</td><td>2</td></tr>
-                  <tr><td>Mild</td><td>1</td><td>1</td></tr>
-                  <tr><td>Cool</td><td>1</td><td>0</td></tr>
+                  <tr>
+                    <td>Hot</td>
+                    <td>0</td>
+                    <td>2</td>
+                  </tr>
+                  <tr>
+                    <td>Mild</td>
+                    <td>1</td>
+                    <td>1</td>
+                  </tr>
+                  <tr>
+                    <td>Cool</td>
+                    <td>1</td>
+                    <td>0</td>
+                  </tr>
                 </tbody>
               </table>
             </div>
             <div class="formula-box dt-sim-formula">Entropy(Hot)$=0$, Entropy(Mild)$=1.0$, Entropy(Cool)$=0$</div>
-            <div class="formula-box dt-sim-formula">$\text{IG}(\text{Temp}\mid\text{Sunny}) = 0.971 - \left[\frac{2}{5}(0)+\frac{2}{5}(1.0)+\frac{1}{5}(0)\right] = 0.571$</div>
-            <div class="formula-box dt-sim-formula">Gini(Hot)$=0$, Gini(Mild)$=0.5$, Gini(Cool)$=0$ → Weighted Gini $= \frac{2}{5}(0)+\frac{2}{5}(0.5)+\frac{1}{5}(0)=0.200$</div>
+            <div class="formula-box dt-sim-formula">$\text{IG}(\text{Temp}\mid\text{Sunny}) = 0.971 -
+              \left[\frac{2}{5}(0)+\frac{2}{5}(1.0)+\frac{1}{5}(0)\right] = 0.571$</div>
+            <div class="formula-box dt-sim-formula">Gini(Hot)$=0$, Gini(Mild)$=0.5$, Gini(Cool)$=0$ → Weighted Gini $=
+              \frac{2}{5}(0)+\frac{2}{5}(0.5)+\frac{1}{5}(0)=0.200$</div>
             <ul class="check-list" style="margin-top:0.55rem;">
-              <li><span class="mark mark-cyan">→</span> Hot → No (pure), Cool → Yes (pure), Mild → split by Humidity.</li>
+              <li><span class="mark mark-cyan">→</span> Hot → No (pure), Cool → Yes (pure), Mild → split by Humidity.
+              </li>
               <li><span class="mark mark-cyan">→</span> Sunny+Mild (1Y,1N): High → No, Normal → Yes (both pure).</li>
             </ul>
 
@@ -1324,15 +1969,26 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr><td>Mild</td><td>2</td><td>1</td></tr>
-                  <tr><td>Cool</td><td>1</td><td>1</td></tr>
+                  <tr>
+                    <td>Mild</td>
+                    <td>2</td>
+                    <td>1</td>
+                  </tr>
+                  <tr>
+                    <td>Cool</td>
+                    <td>1</td>
+                    <td>1</td>
+                  </tr>
                 </tbody>
               </table>
             </div>
-            <div class="formula-box dt-sim-formula">Entropy(Mild)$= -\frac{2}{3}\log_2\frac{2}{3}-\frac{1}{3}\log_2\frac{1}{3}=0.918$, Entropy(Cool)$=1.0$</div>
-            <div class="formula-box dt-sim-formula">$\text{IG}(\text{Temp}\mid\text{Rain}) = 0.971 - \left[\frac{3}{5}(0.918)+\frac{2}{5}(1.0)\right] = 0.020$</div>
+            <div class="formula-box dt-sim-formula">Entropy(Mild)$=
+              -\frac{2}{3}\log_2\frac{2}{3}-\frac{1}{3}\log_2\frac{1}{3}=0.918$, Entropy(Cool)$=1.0$</div>
+            <div class="formula-box dt-sim-formula">$\text{IG}(\text{Temp}\mid\text{Rain}) = 0.971 -
+              \left[\frac{3}{5}(0.918)+\frac{2}{5}(1.0)\right] = 0.020$</div>
             <ul class="check-list" style="margin-top:0.55rem;">
-              <li><span class="mark mark-cyan">→</span> Rain+Mild (2Y,1N): split by Humidity → High(1Y,1N) split by Wind: Weak→Yes, Strong→No; Normal(1Y,0N)→Yes.</li>
+              <li><span class="mark mark-cyan">→</span> Rain+Mild (2Y,1N): split by Humidity → High(1Y,1N) split by
+                Wind: Weak→Yes, Strong→No; Normal(1Y,0N)→Yes.</li>
               <li><span class="mark mark-cyan">→</span> Rain+Cool (1Y,1N): split by Wind → Weak→Yes, Strong→No.</li>
             </ul>
 
@@ -1350,24 +2006,84 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr><td>Root (9Y/5N)</td><td>Outlook</td><td>0.940</td><td>0.459</td><td>0.247</td><td>0.116</td></tr>
-                  <tr><td>Sunny (2Y/3N)</td><td>Temperature</td><td>0.971</td><td>0.480</td><td>0.571</td><td>0.280</td></tr>
-                  <tr><td>Sunny+Mild (1Y/1N)</td><td>Humidity</td><td>1.000</td><td>0.500</td><td>1.000</td><td>0.500</td></tr>
-                  <tr><td>Rain (3Y/2N)</td><td>Temperature</td><td>0.971</td><td>0.480</td><td>0.020</td><td>0.040</td></tr>
-                  <tr><td>Rain+Mild (2Y/1N)</td><td>Humidity</td><td>0.918</td><td>0.444</td><td>—</td><td>—</td></tr>
-                  <tr><td>Rain+Mild+High (1Y/1N)</td><td>Wind</td><td>1.000</td><td>0.500</td><td>1.000</td><td>0.500</td></tr>
-                  <tr><td>Rain+Cool (1Y/1N)</td><td>Wind</td><td>1.000</td><td>0.500</td><td>1.000</td><td>0.500</td></tr>
-                  <tr><td>Overcast (4Y/0N)</td><td>—</td><td>0</td><td>0</td><td>Pure</td><td>Pure</td></tr>
+                  <tr>
+                    <td>Root (9Y/5N)</td>
+                    <td>Outlook</td>
+                    <td>0.940</td>
+                    <td>0.459</td>
+                    <td>0.247</td>
+                    <td>0.116</td>
+                  </tr>
+                  <tr>
+                    <td>Sunny (2Y/3N)</td>
+                    <td>Temperature</td>
+                    <td>0.971</td>
+                    <td>0.480</td>
+                    <td>0.571</td>
+                    <td>0.280</td>
+                  </tr>
+                  <tr>
+                    <td>Sunny+Mild (1Y/1N)</td>
+                    <td>Humidity</td>
+                    <td>1.000</td>
+                    <td>0.500</td>
+                    <td>1.000</td>
+                    <td>0.500</td>
+                  </tr>
+                  <tr>
+                    <td>Rain (3Y/2N)</td>
+                    <td>Temperature</td>
+                    <td>0.971</td>
+                    <td>0.480</td>
+                    <td>0.020</td>
+                    <td>0.040</td>
+                  </tr>
+                  <tr>
+                    <td>Rain+Mild (2Y/1N)</td>
+                    <td>Humidity</td>
+                    <td>0.918</td>
+                    <td>0.444</td>
+                    <td>—</td>
+                    <td>—</td>
+                  </tr>
+                  <tr>
+                    <td>Rain+Mild+High (1Y/1N)</td>
+                    <td>Wind</td>
+                    <td>1.000</td>
+                    <td>0.500</td>
+                    <td>1.000</td>
+                    <td>0.500</td>
+                  </tr>
+                  <tr>
+                    <td>Rain+Cool (1Y/1N)</td>
+                    <td>Wind</td>
+                    <td>1.000</td>
+                    <td>0.500</td>
+                    <td>1.000</td>
+                    <td>0.500</td>
+                  </tr>
+                  <tr>
+                    <td>Overcast (4Y/0N)</td>
+                    <td>—</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>Pure</td>
+                    <td>Pure</td>
+                  </tr>
                 </tbody>
               </table>
             </div>
 
             <div class="dt-sim-title" style="margin-top:1rem;">Key Observations</div>
             <ul class="check-list" style="margin-top:0.5rem;">
-              <li><span class="mark mark-green">✓</span> Overcast always leads to Yes — pure and highly decisive branch.</li>
-              <li><span class="mark mark-green">✓</span> Sunny branch splits strongly on Temperature (IG=0.571), then Humidity.</li>
-              <li><span class="mark mark-green">✓</span> Rain branch splits weakly on Temperature (IG=0.020), so deeper Wind splits are needed.</li>
-              <li><span class="mark mark-green">✓</span> Final leaves are pure (entropy and gini both approach 0 on leaf outcomes).</li>
+              <li><span class="mark mark-green">✓</span> Overcast always leads to Yes — pure and highly decisive branch.
+              </li>
+              <li><span class="mark mark-green">✓</span> Sunny branch splits strongly on Temperature (IG=0.571), then
+                Humidity.</li>
+              <li><span class="mark mark-green">✓</span> Rain branch splits weakly on Temperature (IG=0.020), so deeper
+                Wind splits are needed.</li>
+              <li><span class="mark mark-green">✓</span> Final leaves are pure (entropy and gini both approach 0 on leaf
+                outcomes).</li>
             </ul>
           </div>
         </div>
@@ -1411,10 +2127,15 @@
         <div class="card reveal" style="height:100%; border-top:3px solid #3b82f6;">
           <h3 style="margin-bottom:1rem; font-size:1.05rem;">Time Complexity (Brief)</h3>
           <ul class="check-list" style="margin:0; gap:0.5rem;">
-            <li><span class="mark mark-blue">Σ</span> <strong>Total training complexity:</strong> <code>O(n_features × n_samples × log n_samples)</code>.</li>
+            <li><span class="mark mark-blue">Σ</span> <strong>Total training complexity:</strong>
+              <code>O(n_features × n_samples × log n_samples)</code>.
+            </li>
           </ul>
-          <div style="margin:0.55rem 0 0 2.15rem; padding:0.55rem 0.7rem; border-left:2px solid rgba(147,197,253,0.45); background:rgba(2,6,23,0.18); border-radius:8px;">
-            <div style="font-size:0.78rem; letter-spacing:0.06em; text-transform:uppercase; color:#bfdbfe; font-weight:600; margin-bottom:0.35rem;">Details</div>
+          <div
+            style="margin:0.55rem 0 0 2.15rem; padding:0.55rem 0.7rem; border-left:2px solid rgba(147,197,253,0.45); background:rgba(2,6,23,0.18); border-radius:8px;">
+            <div
+              style="font-size:0.78rem; letter-spacing:0.06em; text-transform:uppercase; color:#bfdbfe; font-weight:600; margin-bottom:0.35rem;">
+              Details</div>
             <div style="font-size:0.88rem; color:var(--text-secondary); line-height:1.5;">
               For each feature: sort data <code>O(n log n)</code>, try splits <code>O(n)</code>.<br />
               Across tree depth: about <code>log n_samples</code> levels (balanced tree).<br />
@@ -1422,8 +2143,10 @@
             </div>
           </div>
           <ul class="check-list" style="margin:0.6rem 0 0; gap:0.45rem;">
-            <li><span class="mark mark-blue">→</span> <strong>Inference:</strong> <code>O(depth)</code> per prediction; balanced trees are typically <code>O(log n_samples)</code>.</li>
-            <li><span class="mark mark-blue">→</span> <strong>Practical note:</strong> scikit-learn split-search optimizations often perform better than naive bounds.</li>
+            <li><span class="mark mark-blue">→</span> <strong>Inference:</strong> <code>O(depth)</code> per prediction;
+              balanced trees are typically <code>O(log n_samples)</code>.</li>
+            <li><span class="mark mark-blue">→</span> <strong>Practical note:</strong> scikit-learn split-search
+              optimizations often perform better than naive bounds.</li>
           </ul>
         </div>
       </div>
@@ -1431,15 +2154,24 @@
       <div class="card reveal" style="margin-top:1.25rem; border-top:3px solid #22c55e;">
         <h3 style="margin-bottom:1rem; font-size:1.05rem;">Decision Tree — Key Limitations</h3>
         <ul class="check-list" style="margin:0;">
-          <li><span class="mark mark-orange">⚠️</span> <strong>Overfitting:</strong> Deep trees can memorize training data and generalize poorly.</li>
-          <li><span class="mark mark-orange">⚠️</span> <strong>High variance:</strong> Small data changes can produce a very different tree.</li>
-          <li><span class="mark mark-orange">⚠️</span> <strong>Greedy splits:</strong> Best local split at each node may miss the global optimum.</li>
-          <li><span class="mark mark-orange">⚠️</span> <strong>Feature bias:</strong> High-cardinality categorical features can dominate Information Gain.</li>
-          <li><span class="mark mark-orange">⚠️</span> <strong>Linear pattern limits:</strong> Piecewise constant leaves struggle with smooth trends.</li>
-          <li><span class="mark mark-orange">⚠️</span> <strong>Depth cost:</strong> Very large trees increase comparison steps at inference time.</li>
-          <li><span class="mark mark-orange">⚠️</span> <strong>Axis-aligned splits:</strong> Diagonal boundaries usually require deeper trees.</li>
-          <li><span class="mark mark-orange">⚠️</span> <strong>Small-data risk:</strong> Trees can fit noise when training samples are limited.</li>
-          <li><span class="mark mark-orange">⚠️</span> <strong>Regression cap:</strong> Leaf means are constant and cannot extrapolate beyond training range.</li>
+          <li><span class="mark mark-orange">⚠️</span> <strong>Overfitting:</strong> Deep trees can memorize training
+            data and generalize poorly.</li>
+          <li><span class="mark mark-orange">⚠️</span> <strong>High variance:</strong> Small data changes can produce a
+            very different tree.</li>
+          <li><span class="mark mark-orange">⚠️</span> <strong>Greedy splits:</strong> Best local split at each node may
+            miss the global optimum.</li>
+          <li><span class="mark mark-orange">⚠️</span> <strong>Feature bias:</strong> High-cardinality categorical
+            features can dominate Information Gain.</li>
+          <li><span class="mark mark-orange">⚠️</span> <strong>Linear pattern limits:</strong> Piecewise constant leaves
+            struggle with smooth trends.</li>
+          <li><span class="mark mark-orange">⚠️</span> <strong>Depth cost:</strong> Very large trees increase comparison
+            steps at inference time.</li>
+          <li><span class="mark mark-orange">⚠️</span> <strong>Axis-aligned splits:</strong> Diagonal boundaries usually
+            require deeper trees.</li>
+          <li><span class="mark mark-orange">⚠️</span> <strong>Small-data risk:</strong> Trees can fit noise when
+            training samples are limited.</li>
+          <li><span class="mark mark-orange">⚠️</span> <strong>Regression cap:</strong> Leaf means are constant and
+            cannot extrapolate beyond training range.</li>
         </ul>
       </div>
 
@@ -1479,6 +2211,138 @@
           <span style="font-size:1.5rem;">🎒</span>
           <h3 style="font-size:1.25rem; color:var(--accent-orange);">Bagging (Bootstrap Aggregating)</h3>
           <span class="badge badge-orange">Variance ↓</span>
+        </div>
+
+        <!-- Bagging simulation -->
+        <div
+          style="margin-bottom:1.75rem; padding:1.5rem 1.75rem; background:linear-gradient(135deg,rgba(245,158,11,0.07),rgba(245,158,11,0.03)); border-radius:1rem; border:1px solid rgba(245,158,11,0.28); overflow-x:auto;">
+
+          <!-- header bar -->
+          <div style="display:flex; align-items:center; gap:0.7rem; margin-bottom:1.4rem;">
+            <div
+              style="width:3px; height:20px; background:linear-gradient(to bottom,#f59e0b,rgba(245,158,11,0.2)); border-radius:2px; flex-shrink:0;">
+            </div>
+            <span
+              style="font-size:0.82rem; color:#fcd34d; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; flex-shrink:0;">Algorithm
+              Flow</span>
+            <div style="flex:1; height:1px; background:linear-gradient(to right,rgba(245,158,11,0.35),transparent);">
+            </div>
+            <span
+              style="font-size:0.72rem; background:rgba(245,158,11,0.15); color:#fcd34d; padding:0.22rem 0.8rem; border-radius:2rem; border:1px solid rgba(245,158,11,0.35); flex-shrink:0; font-weight:600;">Parallel
+              · Independent · Low Variance</span>
+          </div>
+
+          <div style="display:flex; align-items:center; width:100%;">
+
+            <!-- STEP 1: Training Data -->
+            <div style="flex-shrink:0; text-align:center;">
+              <div
+                style="font-size:0.7rem; font-weight:700; color:#fbbf24; letter-spacing:0.06em; text-transform:uppercase; margin-bottom:0.5rem; background:rgba(245,158,11,0.2); border-radius:2rem; padding:0.15rem 0.65rem; display:inline-block;">
+                Input</div>
+              <div
+                style="background:rgba(245,158,11,0.13); border:1.5px solid rgba(245,158,11,0.55); border-radius:0.75rem; padding:0.85rem 1.1rem; box-shadow:0 2px 16px rgba(245,158,11,0.12);">
+                <div style="font-size:1.4rem; margin-bottom:0.25rem;">📊</div>
+                <div style="font-size:0.85rem; font-weight:700; color:#fcd34d; line-height:1.4;">Training<br>Data</div>
+              </div>
+            </div>
+
+            <!-- fork connectors — flex:1 absorbs space -->
+            <div
+              style="flex:1; display:flex; flex-direction:column; align-items:center; gap:0.45rem; margin-top:1.9rem; padding:0 0.5rem;">
+              <span style="color:#f59e0b; font-size:1.3rem; line-height:1;">→</span>
+              <span style="color:#f59e0b; font-size:1.3rem; line-height:1;">→</span>
+              <span style="color:#f59e0b; font-size:1.3rem; line-height:1;">→</span>
+            </div>
+
+            <!-- STEP 2: Bootstrap Samples -->
+            <div style="flex-shrink:0;">
+              <div
+                style="font-size:0.7rem; font-weight:700; color:#fbbf24; letter-spacing:0.06em; text-transform:uppercase; margin-bottom:0.5rem; background:rgba(245,158,11,0.2); border-radius:2rem; padding:0.15rem 0.65rem; display:inline-block;">
+                Bootstrap Samples</div>
+              <div style="display:flex; flex-direction:column; gap:0.35rem;">
+                <div
+                  style="background:rgba(245,158,11,0.09); border:1px dashed rgba(245,158,11,0.55); border-radius:0.5rem; padding:0.42rem 1rem; font-size:0.82rem; font-weight:600; color:#e2e8f0;">
+                  S₁ — n rows, with replacement</div>
+                <div
+                  style="background:rgba(245,158,11,0.09); border:1px dashed rgba(245,158,11,0.55); border-radius:0.5rem; padding:0.42rem 1rem; font-size:0.82rem; font-weight:600; color:#e2e8f0;">
+                  S₂ — n rows, with replacement</div>
+                <div
+                  style="background:rgba(245,158,11,0.09); border:1px dashed rgba(245,158,11,0.55); border-radius:0.5rem; padding:0.42rem 1rem; font-size:0.82rem; font-weight:600; color:#e2e8f0;">
+                  S₃ — n rows, with replacement</div>
+              </div>
+            </div>
+
+            <!-- connectors — flex:1 -->
+            <div
+              style="flex:1; display:flex; flex-direction:column; align-items:center; gap:0.45rem; margin-top:1.9rem; padding:0 0.5rem;">
+              <span style="color:#f59e0b; font-size:1.3rem; line-height:1;">→</span>
+              <span style="color:#f59e0b; font-size:1.3rem; line-height:1;">→</span>
+              <span style="color:#f59e0b; font-size:1.3rem; line-height:1;">→</span>
+            </div>
+
+            <!-- STEP 3: Parallel Trees -->
+            <div style="flex-shrink:0;">
+              <div
+                style="font-size:0.7rem; font-weight:700; color:#34d399; letter-spacing:0.06em; text-transform:uppercase; margin-bottom:0.5rem; background:rgba(16,185,129,0.18); border-radius:2rem; padding:0.15rem 0.65rem; display:inline-block;">
+                Parallel Trees</div>
+              <div style="display:flex; flex-direction:column; gap:0.35rem;">
+                <div
+                  style="background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.45); border-radius:0.5rem; padding:0.42rem 1rem; font-size:0.82rem; font-weight:600; color:#6ee7b7;">
+                  🌳 Tree 1 — independent</div>
+                <div
+                  style="background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.45); border-radius:0.5rem; padding:0.42rem 1rem; font-size:0.82rem; font-weight:600; color:#6ee7b7;">
+                  🌳 Tree 2 — independent</div>
+                <div
+                  style="background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.45); border-radius:0.5rem; padding:0.42rem 1rem; font-size:0.82rem; font-weight:600; color:#6ee7b7;">
+                  🌳 Tree 3 — independent</div>
+              </div>
+            </div>
+
+            <!-- converge connectors — flex:1 -->
+            <div
+              style="flex:1; display:flex; flex-direction:column; align-items:center; gap:0.45rem; margin-top:1.9rem; padding:0 0.5rem;">
+              <span style="color:#f59e0b; font-size:1.3rem; line-height:1;">→</span>
+              <span style="color:#f59e0b; font-size:1.3rem; line-height:1;">→</span>
+              <span style="color:#f59e0b; font-size:1.3rem; line-height:1;">→</span>
+            </div>
+
+            <!-- STEP 4: Aggregate -->
+            <div style="flex-shrink:0; text-align:center;">
+              <div
+                style="font-size:0.7rem; font-weight:700; color:#fbbf24; letter-spacing:0.06em; text-transform:uppercase; margin-bottom:0.5rem; background:rgba(245,158,11,0.2); border-radius:2rem; padding:0.15rem 0.65rem; display:inline-block;">
+                Combine</div>
+              <div
+                style="background:rgba(245,158,11,0.18); border:2px solid rgba(245,158,11,0.6); border-radius:0.75rem; padding:0.85rem 1.1rem; box-shadow:0 2px 18px rgba(245,158,11,0.18);">
+                <div style="font-size:1.4rem; margin-bottom:0.25rem;">🗳️</div>
+                <div style="font-size:0.85rem; font-weight:700; color:#fcd34d; line-height:1.4;">Aggregate</div>
+                <div style="font-size:0.72rem; color:#94a3b8; margin-top:0.15rem;">vote / avg</div>
+              </div>
+            </div>
+
+            <!-- final connector — flex:1 -->
+            <div style="flex:1; display:flex; justify-content:center; align-items:center; margin-top:1.9rem;">
+              <span style="color:#f59e0b; font-size:1.3rem;">→</span>
+            </div>
+
+            <!-- OUTPUT -->
+            <div style="flex-shrink:0; text-align:center;">
+              <div
+                style="font-size:0.7rem; font-weight:700; color:#fbbf24; letter-spacing:0.06em; text-transform:uppercase; margin-bottom:0.5rem; background:rgba(245,158,11,0.25); border-radius:2rem; padding:0.15rem 0.65rem; display:inline-block;">
+                Output</div>
+              <div
+                style="background:rgba(245,158,11,0.25); border:2px solid #f59e0b; border-radius:0.75rem; padding:0.85rem 1.1rem; box-shadow:0 0 24px rgba(245,158,11,0.28);">
+                <div style="font-size:1.55rem; font-weight:800; color:#fcd34d; font-family:monospace; line-height:1.1;">
+                  ŷ</div>
+                <div style="font-size:0.72rem; color:#94a3b8; margin-top:0.15rem;">prediction</div>
+              </div>
+            </div>
+
+          </div>
+
+          <div
+            style="margin-top:1rem; padding-top:0.8rem; border-top:1px solid rgba(245,158,11,0.15); font-size:0.76rem; color:#94a3b8; text-align:center; font-style:italic;">
+            Trees trained in parallel on different bootstrap samples — predictions averaged / majority-voted to reduce
+            variance</div>
         </div>
 
         <div class="grid-2">
@@ -1526,9 +2390,33 @@
               <li><span class="mark mark-orange">→</span> Feature importance via mean impurity decrease (MDI)</li>
             </ul>
 
-            <div class="img-placeholder" id="img-bagging" style="min-height:160px; margin-top:1rem;">
-              <div class="icon" style="font-size:1.5rem;">🖼️</div>
-              <span>Reference image — Bagging / Random Forest diagram</span>
+            <div
+              style="margin-top:1.25rem; padding:1rem; background:rgba(245,158,11,0.1); border-radius:0.75rem; border:1px solid rgba(245,158,11,0.3);">
+              <div
+                style="font-size:0.75rem; color:var(--accent-orange); margin-bottom:0.75rem; font-weight:700; letter-spacing:0.07em; text-transform:uppercase;">
+                Key Hyperparameters</div>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.6rem;">
+                <div style="display:flex; flex-direction:column; gap:0.2rem;">
+                  <code
+                    style="font-size:0.78rem; background:rgba(245,158,11,0.22); color:#fbbf24; padding:0.15rem 0.4rem; border-radius:0.3rem; width:fit-content;">n_estimators</code>
+                  <span style="font-size:0.8rem; color:var(--text-secondary);">Number of trees B</span>
+                </div>
+                <div style="display:flex; flex-direction:column; gap:0.2rem;">
+                  <code
+                    style="font-size:0.78rem; background:rgba(245,158,11,0.22); color:#fbbf24; padding:0.15rem 0.4rem; border-radius:0.3rem; width:fit-content;">max_features</code>
+                  <span style="font-size:0.8rem; color:var(--text-secondary);">√p features per split</span>
+                </div>
+                <div style="display:flex; flex-direction:column; gap:0.2rem;">
+                  <code
+                    style="font-size:0.78rem; background:rgba(245,158,11,0.22); color:#fbbf24; padding:0.15rem 0.4rem; border-radius:0.3rem; width:fit-content;">max_depth</code>
+                  <span style="font-size:0.8rem; color:var(--text-secondary);">Tree depth (usually full)</span>
+                </div>
+                <div style="display:flex; flex-direction:column; gap:0.2rem;">
+                  <code
+                    style="font-size:0.78rem; background:rgba(245,158,11,0.22); color:#fbbf24; padding:0.15rem 0.4rem; border-radius:0.3rem; width:fit-content;">oob_score</code>
+                  <span style="font-size:0.8rem; color:var(--text-secondary);">Free OOB validation</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -1540,6 +2428,147 @@
           <span style="font-size:1.5rem;">🚀</span>
           <h3 style="font-size:1.25rem; color:var(--accent-red);">Boosting</h3>
           <span class="badge badge-red">Bias ↓</span>
+        </div>
+
+        <!-- Boosting simulation -->
+        <div
+          style="margin-bottom:1.75rem; padding:1.5rem 1.75rem; background:linear-gradient(135deg,rgba(239,68,68,0.07),rgba(239,68,68,0.03)); border-radius:1rem; border:1px solid rgba(239,68,68,0.28); overflow-x:auto;">
+
+          <!-- header bar -->
+          <div style="display:flex; align-items:center; gap:0.7rem; margin-bottom:1.4rem;">
+            <div
+              style="width:3px; height:20px; background:linear-gradient(to bottom,#ef4444,rgba(239,68,68,0.2)); border-radius:2px; flex-shrink:0;">
+            </div>
+            <span
+              style="font-size:0.82rem; color:#fca5a5; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; flex-shrink:0;">Algorithm
+              Flow</span>
+            <div style="flex:1; height:1px; background:linear-gradient(to right,rgba(239,68,68,0.35),transparent);">
+            </div>
+            <span
+              style="font-size:0.72rem; background:rgba(239,68,68,0.15); color:#fca5a5; padding:0.22rem 0.8rem; border-radius:2rem; border:1px solid rgba(239,68,68,0.35); flex-shrink:0; font-weight:600;">Sequential
+              · Corrective · Low Bias</span>
+          </div>
+
+          <div style="display:flex; align-items:center; width:100%;">
+
+            <!-- Input -->
+            <div style="flex-shrink:0; text-align:center;">
+              <div
+                style="font-size:0.7rem; font-weight:700; color:#f87171; letter-spacing:0.06em; text-transform:uppercase; margin-bottom:0.5rem; background:rgba(239,68,68,0.2); border-radius:2rem; padding:0.15rem 0.65rem; display:inline-block;">
+                Input</div>
+              <div
+                style="background:rgba(239,68,68,0.13); border:1.5px solid rgba(239,68,68,0.55); border-radius:0.75rem; padding:0.85rem 1.05rem; box-shadow:0 2px 16px rgba(239,68,68,0.12);">
+                <div style="font-size:1.4rem; margin-bottom:0.22rem;">📊</div>
+                <div style="font-size:0.85rem; font-weight:700; color:#fca5a5; line-height:1.4;">Training<br>Data</div>
+                <div style="font-size:0.72rem; color:#94a3b8; margin-top:0.15rem; font-family:monospace;">w = 1/n</div>
+              </div>
+            </div>
+
+            <!-- arrow — flex:1 -->
+            <div style="flex:1; display:flex; justify-content:center; align-items:center;">
+              <span style="color:#ef4444; font-size:1.3rem;">→</span>
+            </div>
+
+            <!-- Round 1 -->
+            <div style="flex-shrink:0; text-align:center;">
+              <div
+                style="font-size:0.7rem; font-weight:700; color:#f87171; letter-spacing:0.06em; text-transform:uppercase; margin-bottom:0.5rem; background:rgba(239,68,68,0.2); border-radius:2rem; padding:0.15rem 0.65rem; display:inline-block;">
+                Round 1</div>
+              <div
+                style="background:rgba(239,68,68,0.1); border:1.5px solid rgba(239,68,68,0.45); border-radius:0.75rem; padding:0.75rem 1rem; box-shadow:0 2px 12px rgba(239,68,68,0.1);">
+                <div style="font-size:1.2rem; margin-bottom:0.18rem;">🪵</div>
+                <div style="font-size:0.85rem; font-weight:700; color:#fca5a5; font-family:monospace;">h₁(x)</div>
+                <div style="font-size:0.72rem; color:#94a3b8; margin-top:0.12rem; font-family:monospace;">α₁</div>
+              </div>
+            </div>
+
+            <!-- error arrow 1 — flex:1 -->
+            <div
+              style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.2rem;">
+              <div
+                style="font-size:0.68rem; color:#fca5a5; font-weight:700; white-space:nowrap; background:rgba(239,68,68,0.15); border-radius:2rem; padding:0.12rem 0.55rem;">
+                errors → w ↑</div>
+              <span style="color:#ef4444; font-size:1.3rem; line-height:1;">→</span>
+            </div>
+
+            <!-- Round 2 -->
+            <div style="flex-shrink:0; text-align:center;">
+              <div
+                style="font-size:0.7rem; font-weight:700; color:#f87171; letter-spacing:0.06em; text-transform:uppercase; margin-bottom:0.5rem; background:rgba(239,68,68,0.2); border-radius:2rem; padding:0.15rem 0.65rem; display:inline-block;">
+                Round 2</div>
+              <div
+                style="background:rgba(239,68,68,0.1); border:1.5px solid rgba(239,68,68,0.45); border-radius:0.75rem; padding:0.75rem 1rem; box-shadow:0 2px 12px rgba(239,68,68,0.1);">
+                <div style="font-size:1.2rem; margin-bottom:0.18rem;">🪵</div>
+                <div style="font-size:0.85rem; font-weight:700; color:#fca5a5; font-family:monospace;">h₂(x)</div>
+                <div style="font-size:0.72rem; color:#94a3b8; margin-top:0.12rem; font-family:monospace;">α₂</div>
+              </div>
+            </div>
+
+            <!-- error arrow 2 — flex:1 -->
+            <div
+              style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.2rem;">
+              <div
+                style="font-size:0.68rem; color:#fca5a5; font-weight:700; white-space:nowrap; background:rgba(239,68,68,0.15); border-radius:2rem; padding:0.12rem 0.55rem;">
+                errors → w ↑</div>
+              <span style="color:#ef4444; font-size:1.3rem; line-height:1;">→</span>
+            </div>
+
+            <!-- Round 3 -->
+            <div style="flex-shrink:0; text-align:center;">
+              <div
+                style="font-size:0.7rem; font-weight:700; color:#f87171; letter-spacing:0.06em; text-transform:uppercase; margin-bottom:0.5rem; background:rgba(239,68,68,0.2); border-radius:2rem; padding:0.15rem 0.65rem; display:inline-block;">
+                Round 3</div>
+              <div
+                style="background:rgba(239,68,68,0.1); border:1.5px solid rgba(239,68,68,0.45); border-radius:0.75rem; padding:0.75rem 1rem; box-shadow:0 2px 12px rgba(239,68,68,0.1);">
+                <div style="font-size:1.2rem; margin-bottom:0.18rem;">🪵</div>
+                <div style="font-size:0.85rem; font-weight:700; color:#fca5a5; font-family:monospace;">h₃(x)</div>
+                <div style="font-size:0.72rem; color:#94a3b8; margin-top:0.12rem; font-family:monospace;">α₃</div>
+              </div>
+            </div>
+
+            <!-- ellipsis — flex:1 -->
+            <div style="flex:1; display:flex; justify-content:center; align-items:center;">
+              <span style="color:#64748b; font-size:1.1rem; letter-spacing:0.15em;">···</span>
+            </div>
+
+            <!-- Combine -->
+            <div style="flex-shrink:0; text-align:center;">
+              <div
+                style="font-size:0.7rem; font-weight:700; color:#f87171; letter-spacing:0.06em; text-transform:uppercase; margin-bottom:0.5rem; background:rgba(239,68,68,0.2); border-radius:2rem; padding:0.15rem 0.65rem; display:inline-block;">
+                Combine</div>
+              <div
+                style="background:rgba(239,68,68,0.17); border:2px solid rgba(239,68,68,0.58); border-radius:0.75rem; padding:0.75rem 1.05rem; box-shadow:0 2px 18px rgba(239,68,68,0.18);">
+                <div
+                  style="font-size:0.9rem; font-weight:700; color:#fca5a5; font-family:monospace; white-space:nowrap;">Σ
+                  αt·ht(x)</div>
+                <div style="font-size:0.72rem; color:#94a3b8; margin-top:0.12rem;">weighted sum</div>
+              </div>
+            </div>
+
+            <!-- final arrow — flex:1 -->
+            <div style="flex:1; display:flex; justify-content:center; align-items:center;">
+              <span style="color:#ef4444; font-size:1.3rem;">→</span>
+            </div>
+
+            <!-- Output -->
+            <div style="flex-shrink:0; text-align:center;">
+              <div
+                style="font-size:0.7rem; font-weight:700; color:#f87171; letter-spacing:0.06em; text-transform:uppercase; margin-bottom:0.5rem; background:rgba(239,68,68,0.25); border-radius:2rem; padding:0.15rem 0.65rem; display:inline-block;">
+                Output</div>
+              <div
+                style="background:rgba(239,68,68,0.22); border:2px solid #ef4444; border-radius:0.75rem; padding:0.85rem 1.1rem; box-shadow:0 0 24px rgba(239,68,68,0.28);">
+                <div style="font-size:1.55rem; font-weight:800; color:#fca5a5; font-family:monospace; line-height:1.1;">
+                  ŷ</div>
+                <div style="font-size:0.72rem; color:#94a3b8; margin-top:0.15rem;">prediction</div>
+              </div>
+            </div>
+
+          </div>
+
+          <div
+            style="margin-top:1rem; padding-top:0.8rem; border-top:1px solid rgba(239,68,68,0.15); font-size:0.76rem; color:#94a3b8; text-align:center; font-style:italic;">
+            Sequential training — each learner corrects the previous one's errors by up-weighting misclassified samples
+          </div>
         </div>
 
         <div class="grid-2">
@@ -1603,9 +2632,33 @@
               where $\nu$ = learning rate, $h_m$ = tree fitted on residuals
             </div>
 
-            <div class="img-placeholder" id="img-boosting" style="min-height:160px; margin-top:1rem;">
-              <div class="icon" style="font-size:1.5rem;">🖼️</div>
-              <span>Reference image — Boosting sequential diagram</span>
+            <div
+              style="margin-top:1.25rem; padding:1rem; background:rgba(239,68,68,0.1); border-radius:0.75rem; border:1px solid rgba(239,68,68,0.3);">
+              <div
+                style="font-size:0.75rem; color:var(--accent-red); margin-bottom:0.75rem; font-weight:700; letter-spacing:0.07em; text-transform:uppercase;">
+                Key Hyperparameters</div>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.6rem;">
+                <div style="display:flex; flex-direction:column; gap:0.2rem;">
+                  <code
+                    style="font-size:0.78rem; background:rgba(239,68,68,0.22); color:#f87171; padding:0.15rem 0.4rem; border-radius:0.3rem; width:fit-content;">n_estimators</code>
+                  <span style="font-size:0.8rem; color:var(--text-secondary);">Number of rounds T</span>
+                </div>
+                <div style="display:flex; flex-direction:column; gap:0.2rem;">
+                  <code
+                    style="font-size:0.78rem; background:rgba(239,68,68,0.22); color:#f87171; padding:0.15rem 0.4rem; border-radius:0.3rem; width:fit-content;">learning_rate ν</code>
+                  <span style="font-size:0.8rem; color:var(--text-secondary);">Shrinks each tree's contribution</span>
+                </div>
+                <div style="display:flex; flex-direction:column; gap:0.2rem;">
+                  <code
+                    style="font-size:0.78rem; background:rgba(239,68,68,0.22); color:#f87171; padding:0.15rem 0.4rem; border-radius:0.3rem; width:fit-content;">max_depth</code>
+                  <span style="font-size:0.8rem; color:var(--text-secondary);">Shallow trees (1–5) typical</span>
+                </div>
+                <div style="display:flex; flex-direction:column; gap:0.2rem;">
+                  <code
+                    style="font-size:0.78rem; background:rgba(239,68,68,0.22); color:#f87171; padding:0.15rem 0.4rem; border-radius:0.3rem; width:fit-content;">subsample</code>
+                  <span style="font-size:0.8rem; color:var(--text-secondary);">Row sampling per round</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -1896,35 +2949,6 @@
         </div>
       </div>
 
-      <!-- Code snippet -->
-      <div class="card reveal" style="margin-top:1.5rem;">
-        <h3 style="margin-bottom:1rem; font-size:1.05rem;">Typical XGBoost Setup</h3>
-        <div class="code-block">
-          <span class="kw">import</span> xgboost <span class="kw">as</span> xgb
-          <span class="kw">from</span> sklearn.model_selection <span class="kw">import</span> train_test_split
-
-          X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=<span class="nm">0.2</span>)
-
-          model = xgb.<span class="fn">XGBClassifier</span>(
-          n_estimators = <span class="nm">500</span>,
-          learning_rate = <span class="nm">0.05</span>,
-          max_depth = <span class="nm">6</span>,
-          min_child_weight= <span class="nm">1</span>,
-          subsample = <span class="nm">0.8</span>,
-          colsample_bytree= <span class="nm">0.8</span>,
-          gamma = <span class="nm">0</span>,
-          reg_lambda = <span class="nm">1</span>,
-          reg_alpha = <span class="nm">0</span>,
-          use_label_encoder=<span class="kw">False</span>,
-          eval_metric = <span class="st">'logloss'</span>,
-          early_stopping_rounds=<span class="nm">50</span>,
-          random_state = <span class="nm">42</span>
-          )
-          model.<span class="fn">fit</span>(X_train, y_train, eval_set=[(X_val, y_val)], verbose=<span
-            class="nm">100</span>)
-        </div>
-      </div>
-
       <div class="topic-nav">
         <a href="#bagging-boosting">← Bagging &amp; Boosting</a>
         <a href="#lightgbm">LightGBM →</a>
@@ -2064,7 +3088,8 @@
               <li><span class="mark mark-green">→</span> Always expands the leaf with max delta loss</li>
               <li><span class="mark mark-green">→</span> Achieves lower loss with fewer iterations</li>
               <li><span class="mark mark-green">→</span> More prone to overfit on small datasets — use
-                <code>num_leaves</code> / <code>min_data_in_leaf</code></li>
+                <code>num_leaves</code> / <code>min_data_in_leaf</code>
+              </li>
             </ul>
           </div>
         </div>
@@ -2240,44 +3265,6 @@
             <span>Reference image will be added</span>
             <small style="color:var(--text-muted);">EFB feature bundling illustration</small>
           </div>
-        </div>
-      </div>
-
-      <!-- Code snippet -->
-      <div class="card reveal" style="margin-top:1.5rem;">
-        <h3 style="margin-bottom:1rem; font-size:1.05rem;">Typical LightGBM Setup</h3>
-        <div class="code-block">
-          <span class="kw">import</span> lightgbm <span class="kw">as</span> lgb
-
-          params = {
-          <span class="st">'objective'</span> : <span class="st">'binary'</span>,
-          <span class="st">'metric'</span> : <span class="st">'binary_logloss'</span>,
-          <span class="st">'num_leaves'</span> : <span class="nm">127</span>, <span class="cm"># most important — max
-            2^max_depth - 1</span>
-          <span class="st">'learning_rate'</span> : <span class="nm">0.05</span>,
-          <span class="st">'max_depth'</span> : <span class="nm">-1</span>, <span class="cm"># -1 = unlimited
-            (controlled by num_leaves)</span>
-          <span class="st">'min_data_in_leaf'</span>: <span class="nm">20</span>,
-          <span class="st">'feature_fraction'</span>: <span class="nm">0.8</span>,
-          <span class="st">'bagging_fraction'</span>: <span class="nm">0.8</span>,
-          <span class="st">'bagging_freq'</span> : <span class="nm">5</span>,
-          <span class="st">'lambda_l1'</span> : <span class="nm">0.1</span>,
-          <span class="st">'lambda_l2'</span> : <span class="nm">0.1</span>,
-          <span class="st">'verbose'</span> : <span class="nm">-1</span>,
-          }
-
-          dtrain = lgb.<span class="fn">Dataset</span>(X_train, label=y_train)
-          dval = lgb.<span class="fn">Dataset</span>(X_val, label=y_val, reference=dtrain)
-
-          callbacks = [lgb.<span class="fn">early_stopping</span>(<span class="nm">50</span>), lgb.<span
-            class="fn">log_evaluation</span>(<span class="nm">100</span>)]
-
-          model = lgb.<span class="fn">train</span>(
-          params, dtrain,
-          num_boost_round = <span class="nm">1000</span>,
-          valid_sets = [dval],
-          callbacks = callbacks
-          )
         </div>
       </div>
 
@@ -2927,6 +3914,3 @@
 </body>
 
 </html>
-
-
-
