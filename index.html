@@ -2738,13 +2738,223 @@
       </div>
 
       <p class="section-desc reveal">
-        XGBoost supercharges gradient boosting with second-order Taylor expansion of the loss,
-        built-in regularisation, sparsity-aware splits, and highly optimised C++ implementation
-        with parallel tree construction — making it the go-to model for structured tabular data.
+        XGBoost is gradient boosting on steroids, with three big upgrades: <strong>regularization</strong>, <strong>second-order optimization</strong>, and <strong>systems-level engineering</strong>.
       </p>
 
-      <!-- Objective Function (key innovation) -->
-      <div class="card card-accent card-red reveal">
+      <!-- Analogy -->
+      <div class="card reveal" style="background:linear-gradient(135deg,rgba(239,68,68,0.08),rgba(251,146,60,0.06)); border:1px solid rgba(239,68,68,0.2); margin-top:1.5rem;">
+        <h3 style="margin-bottom:0.75rem; font-size:1.05rem;">🎯 The Analogy</h3>
+        <p style="font-size:1.08rem; line-height:1.75; color:#f1c6c6; font-style:italic; margin-bottom:1.25rem;">
+          "XGBoost is like a <strong style="color:#fca5a5;">careful, disciplined coach</strong>. Each session (tree) is short and focused. The coach doesn't push the student too hard
+          (<strong style="color:#fcd34d;">ν</strong>, the learning rate) and refuses to add a drill unless it clearly helps (the Gain check with
+          <strong style="color:#fcd34d;">γ</strong>). They also won't let the student over-specialise on one weakness (the L2 penalty
+          <strong style="color:#fcd34d;">λ</strong>). The result is a student who's strong and well-rounded."
+        </p>
+        <div style="display:flex; gap:0.75rem; flex-wrap:wrap;">
+          <div style="flex:1; min-width:140px; background:rgba(239,68,68,0.12); border:1px solid rgba(239,68,68,0.25); border-radius:10px; padding:0.75rem 1rem;">
+            <div style="font-size:1.4rem; margin-bottom:0.3rem;">🏃</div>
+            <div style="font-size:0.8rem; color:#fca5a5; font-weight:600; margin-bottom:0.25rem;">Short Sessions</div>
+            <div style="font-size:0.78rem; color:#d1d5db;">Shallow trees (ν controls step size)</div>
+          </div>
+          <div style="flex:1; min-width:140px; background:rgba(251,146,60,0.12); border:1px solid rgba(251,146,60,0.25); border-radius:10px; padding:0.75rem 1rem;">
+            <div style="font-size:1.4rem; margin-bottom:0.3rem;">🎯</div>
+            <div style="font-size:0.8rem; color:#fdba74; font-weight:600; margin-bottom:0.25rem;">Only Useful Drills</div>
+            <div style="font-size:0.78rem; color:#d1d5db;">γ blocks splits that don't improve the model</div>
+          </div>
+          <div style="flex:1; min-width:140px; background:rgba(99,102,241,0.12); border:1px solid rgba(99,102,241,0.25); border-radius:10px; padding:0.75rem 1rem;">
+            <div style="font-size:1.4rem; margin-bottom:0.3rem;">⚖️</div>
+            <div style="font-size:0.8rem; color:#a5b4fc; font-weight:600; margin-bottom:0.25rem;">No Over-Specialising</div>
+            <div style="font-size:0.78rem; color:#d1d5db;">L2 penalty λ keeps weights balanced</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Key Innovations -->
+      <div class="card reveal" style="margin-top:1.5rem;">
+        <h3 style="margin-bottom:1.25rem; font-size:1.05rem;">⚙️ Key Innovations</h3>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.85rem;">
+
+          <!-- 1 -->
+          <div style="background:rgba(239,68,68,0.07); border:1px solid rgba(239,68,68,0.18); border-radius:12px; padding:1rem 1.1rem;">
+            <div style="display:flex; align-items:center; gap:0.6rem; margin-bottom:0.5rem;">
+              <div style="width:26px; height:26px; border-radius:50%; background:rgba(239,68,68,0.2); color:#f87171; font-size:0.78rem; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0;">1</div>
+              <strong style="font-size:0.9rem; color:#fca5a5;">Sparsity-Aware Split Finding</strong>
+            </div>
+            <div style="font-size:0.75rem; color:#f87171; font-weight:600; margin-bottom:0.4rem; letter-spacing:0.03em;">Handles missing values intelligently</div>
+            <p style="font-size:0.8rem; color:var(--text-secondary); margin:0 0 0.75rem;">Learns the best default direction for missing values during tree splitting instead of ignoring them.</p>
+            <!-- Visual: split node routing -->
+            <svg viewBox="0 0 220 110" style="width:100%; height:auto; display:block; margin-bottom:0.65rem;" xmlns="http://www.w3.org/2000/svg">
+              <!-- root node -->
+              <rect x="75" y="6" width="70" height="28" rx="7" fill="rgba(239,68,68,0.18)" stroke="#f87171" stroke-width="1.2"/>
+              <text x="110" y="24" text-anchor="middle" font-size="9" fill="#fca5a5" font-family="Inter,sans-serif" font-weight="600">Split Node</text>
+              <!-- left branch: present value -->
+              <line x1="90" y1="34" x2="46" y2="65" stroke="rgba(255,255,255,0.2)" stroke-width="1.2"/>
+              <rect x="6" y="65" width="80" height="26" rx="6" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.18)" stroke-width="1"/>
+              <text x="46" y="80" text-anchor="middle" font-size="8" fill="#94a3b8" font-family="Inter,sans-serif">Value present → Left</text>
+              <!-- right branch: missing -->
+              <line x1="130" y1="34" x2="174" y2="65" stroke="#f87171" stroke-width="1.8" stroke-dasharray="4,2"/>
+              <rect x="134" y="65" width="80" height="26" rx="6" fill="rgba(239,68,68,0.15)" stroke="#f87171" stroke-width="1.4"/>
+              <text x="174" y="76" text-anchor="middle" font-size="8" fill="#fca5a5" font-family="Inter,sans-serif" font-weight="600">Missing (?) →</text>
+              <text x="174" y="87" text-anchor="middle" font-size="8" fill="#fcd34d" font-family="Inter,sans-serif" font-weight="700">Default Right ★</text>
+              <!-- label -->
+              <text x="110" y="107" text-anchor="middle" font-size="7.5" fill="#64748b" font-family="Inter,sans-serif">Dashed = learned default direction for NaN</text>
+            </svg>
+            <div style="font-size:0.75rem; color:#94a3b8; background:rgba(0,0,0,0.2); border-radius:6px; padding:0.35rem 0.6rem;">💡 Missing data can still provide useful signals.</div>
+          </div>
+
+          <!-- 2 -->
+          <div style="background:rgba(251,146,60,0.07); border:1px solid rgba(251,146,60,0.18); border-radius:12px; padding:1rem 1.1rem;">
+            <div style="display:flex; align-items:center; gap:0.6rem; margin-bottom:0.5rem;">
+              <div style="width:26px; height:26px; border-radius:50%; background:rgba(251,146,60,0.2); color:#fdba74; font-size:0.78rem; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0;">2</div>
+              <strong style="font-size:0.9rem; color:#fdba74;">Weighted Quantile Sketch</strong>
+            </div>
+            <div style="font-size:0.75rem; color:#fb923c; font-weight:600; margin-bottom:0.4rem; letter-spacing:0.03em;">Fast approximate split finding</div>
+            <p style="font-size:0.8rem; color:var(--text-secondary); margin:0 0 0.75rem;">Uses quantile-based binning to efficiently find good splits without scanning all values.</p>
+            <!-- Visual: brute force dots vs quantile bins -->
+            <svg viewBox="0 0 220 110" style="width:100%; height:auto; display:block; margin-bottom:0.65rem;" xmlns="http://www.w3.org/2000/svg">
+              <!-- Brute force row -->
+              <text x="6" y="16" font-size="8" fill="#94a3b8" font-family="Inter,sans-serif" font-weight="600">Brute Force — scan every value</text>
+              <line x1="6" y1="32" x2="214" y2="32" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+              <!-- many dots -->
+              <g fill="#64748b">
+                <circle cx="12"  cy="32" r="3"/><circle cx="22"  cy="32" r="3"/><circle cx="31"  cy="32" r="3"/>
+                <circle cx="42"  cy="32" r="3"/><circle cx="50"  cy="32" r="3"/><circle cx="60"  cy="32" r="3"/>
+                <circle cx="70"  cy="32" r="3"/><circle cx="79"  cy="32" r="3"/><circle cx="89"  cy="32" r="3"/>
+                <circle cx="99"  cy="32" r="3"/><circle cx="108" cy="32" r="3"/><circle cx="118" cy="32" r="3"/>
+                <circle cx="128" cy="32" r="3"/><circle cx="137" cy="32" r="3"/><circle cx="147" cy="32" r="3"/>
+                <circle cx="157" cy="32" r="3"/><circle cx="166" cy="32" r="3"/><circle cx="176" cy="32" r="3"/>
+                <circle cx="186" cy="32" r="3"/><circle cx="196" cy="32" r="3"/><circle cx="205" cy="32" r="3"/>
+              </g>
+              <text x="214" y="35" font-size="7.5" fill="#ef4444" font-family="Inter,sans-serif" text-anchor="end">slow ✗</text>
+              <!-- divider -->
+              <line x1="6" y1="52" x2="214" y2="52" stroke="rgba(255,255,255,0.06)" stroke-width="0.8" stroke-dasharray="3,3"/>
+              <!-- Quantile row -->
+              <text x="6" y="66" font-size="8" fill="#fb923c" font-family="Inter,sans-serif" font-weight="600">Quantile Sketch — scan only bin boundaries</text>
+              <line x1="6" y1="82" x2="214" y2="82" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+              <!-- 5 wide bins -->
+              <rect x="6"   y="72" width="38" height="20" rx="3" fill="rgba(251,146,60,0.18)" stroke="#fb923c" stroke-width="1"/>
+              <rect x="48"  y="72" width="38" height="20" rx="3" fill="rgba(251,146,60,0.22)" stroke="#fb923c" stroke-width="1"/>
+              <rect x="90"  y="72" width="38" height="20" rx="3" fill="rgba(251,146,60,0.28)" stroke="#fdba74" stroke-width="1.4"/>
+              <rect x="132" y="72" width="38" height="20" rx="3" fill="rgba(251,146,60,0.22)" stroke="#fb923c" stroke-width="1"/>
+              <rect x="174" y="72" width="38" height="20" rx="3" fill="rgba(251,146,60,0.18)" stroke="#fb923c" stroke-width="1"/>
+              <text x="25"  y="85" text-anchor="middle" font-size="7" fill="#fdba74" font-family="Inter,sans-serif">Q1</text>
+              <text x="67"  y="85" text-anchor="middle" font-size="7" fill="#fdba74" font-family="Inter,sans-serif">Q2</text>
+              <text x="109" y="85" text-anchor="middle" font-size="8" fill="#fef9c3" font-family="Inter,sans-serif" font-weight="700">Q3★</text>
+              <text x="151" y="85" text-anchor="middle" font-size="7" fill="#fdba74" font-family="Inter,sans-serif">Q4</text>
+              <text x="193" y="85" text-anchor="middle" font-size="7" fill="#fdba74" font-family="Inter,sans-serif">Q5</text>
+              <text x="214" y="99" font-size="7.5" fill="#22c55e" font-family="Inter,sans-serif" text-anchor="end">fast ✓</text>
+              <text x="6" y="108" font-size="7.5" fill="#64748b" font-family="Inter,sans-serif">★ Best split found at quantile boundary — far fewer comparisons</text>
+            </svg>
+            <div style="font-size:0.75rem; color:#94a3b8; background:rgba(0,0,0,0.2); border-radius:6px; padding:0.35rem 0.6rem;">💡 Smart approximation instead of brute force.</div>
+          </div>
+
+          <!-- 3 -->
+          <div style="background:rgba(99,102,241,0.07); border:1px solid rgba(99,102,241,0.18); border-radius:12px; padding:1rem 1.1rem;">
+            <div style="display:flex; align-items:center; gap:0.6rem; margin-bottom:0.5rem;">
+              <div style="width:26px; height:26px; border-radius:50%; background:rgba(99,102,241,0.2); color:#a5b4fc; font-size:0.78rem; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0;">3</div>
+              <strong style="font-size:0.9rem; color:#a5b4fc;">Column Block for Parallel Trees</strong>
+            </div>
+            <div style="font-size:0.75rem; color:#818cf8; font-weight:600; margin-bottom:0.4rem; letter-spacing:0.03em;">Parallel split evaluation</div>
+            <p style="font-size:0.8rem; color:var(--text-secondary); margin:0 0 0.75rem;">Stores data column-wise so features can be processed in parallel and sorted efficiently.</p>
+            <!-- Visual: column-major matrix with parallel arrows -->
+            <svg viewBox="0 0 220 110" style="width:100%; height:auto; display:block; margin-bottom:0.65rem;" xmlns="http://www.w3.org/2000/svg">
+              <text x="110" y="12" text-anchor="middle" font-size="8" fill="#94a3b8" font-family="Inter,sans-serif" font-weight="600">Data stored in sorted column blocks</text>
+              <!-- column headers -->
+              <text x="32"  y="26" text-anchor="middle" font-size="7.5" fill="#a5b4fc" font-family="Inter,sans-serif" font-weight="700">F1</text>
+              <text x="74"  y="26" text-anchor="middle" font-size="7.5" fill="#818cf8" font-family="Inter,sans-serif" font-weight="700">F2</text>
+              <text x="116" y="26" text-anchor="middle" font-size="7.5" fill="#6366f1" font-family="Inter,sans-serif" font-weight="700">F3</text>
+              <text x="158" y="26" text-anchor="middle" font-size="7.5" fill="#4f46e5" font-family="Inter,sans-serif" font-weight="700">F4</text>
+              <!-- cells -->
+              <g>
+                <rect x="8"  y="30" width="48" height="13" rx="2" fill="rgba(165,180,252,0.18)" stroke="rgba(165,180,252,0.3)" stroke-width="0.8"/>
+                <rect x="8"  y="45" width="48" height="13" rx="2" fill="rgba(165,180,252,0.12)" stroke="rgba(165,180,252,0.2)" stroke-width="0.8"/>
+                <rect x="8"  y="60" width="48" height="13" rx="2" fill="rgba(165,180,252,0.18)" stroke="rgba(165,180,252,0.3)" stroke-width="0.8"/>
+
+                <rect x="60" y="30" width="48" height="13" rx="2" fill="rgba(129,140,248,0.15)" stroke="rgba(129,140,248,0.25)" stroke-width="0.8"/>
+                <rect x="60" y="45" width="48" height="13" rx="2" fill="rgba(129,140,248,0.10)" stroke="rgba(129,140,248,0.2)" stroke-width="0.8"/>
+                <rect x="60" y="60" width="48" height="13" rx="2" fill="rgba(129,140,248,0.15)" stroke="rgba(129,140,248,0.25)" stroke-width="0.8"/>
+
+                <rect x="112" y="30" width="48" height="13" rx="2" fill="rgba(99,102,241,0.15)" stroke="rgba(99,102,241,0.3)" stroke-width="0.8"/>
+                <rect x="112" y="45" width="48" height="13" rx="2" fill="rgba(99,102,241,0.10)" stroke="rgba(99,102,241,0.2)" stroke-width="0.8"/>
+                <rect x="112" y="60" width="48" height="13" rx="2" fill="rgba(99,102,241,0.15)" stroke="rgba(99,102,241,0.3)" stroke-width="0.8"/>
+
+                <rect x="164" y="30" width="48" height="13" rx="2" fill="rgba(79,70,229,0.15)" stroke="rgba(79,70,229,0.3)" stroke-width="0.8"/>
+                <rect x="164" y="45" width="48" height="13" rx="2" fill="rgba(79,70,229,0.10)" stroke="rgba(79,70,229,0.2)" stroke-width="0.8"/>
+                <rect x="164" y="60" width="48" height="13" rx="2" fill="rgba(79,70,229,0.15)" stroke="rgba(79,70,229,0.3)" stroke-width="0.8"/>
+              </g>
+              <!-- parallel down arrows -->
+              <defs>
+                <marker id="arr-ind" markerWidth="5" markerHeight="5" refX="2.5" refY="2.5" orient="auto">
+                  <polygon points="0,0 5,2.5 0,5" fill="#a5b4fc"/>
+                </marker>
+              </defs>
+              <line x1="32"  y1="76" x2="32"  y2="92" stroke="#a5b4fc" stroke-width="1.5" marker-end="url(#arr-ind)"/>
+              <line x1="74"  y1="76" x2="74"  y2="92" stroke="#818cf8" stroke-width="1.5" marker-end="url(#arr-ind)"/>
+              <line x1="116" y1="76" x2="116" y2="92" stroke="#6366f1" stroke-width="1.5" marker-end="url(#arr-ind)"/>
+              <line x1="158" y1="76" x2="158" y2="92" stroke="#4f46e5" stroke-width="1.5" marker-end="url(#arr-ind)"/>
+              <text x="14"  y="104" font-size="7.5" fill="#a5b4fc" font-family="Inter,sans-serif">Thread 1</text>
+              <text x="56"  y="104" font-size="7.5" fill="#818cf8" font-family="Inter,sans-serif">Thread 2</text>
+              <text x="98"  y="104" font-size="7.5" fill="#6366f1" font-family="Inter,sans-serif">Thread 3</text>
+              <text x="140" y="104" font-size="7.5" fill="#4f46e5" font-family="Inter,sans-serif">Thread 4</text>
+            </svg>
+            <div style="font-size:0.75rem; color:#94a3b8; background:rgba(0,0,0,0.2); border-radius:6px; padding:0.35rem 0.6rem;">💡 Organize by features to compute faster.</div>
+          </div>
+
+          <!-- 4 -->
+          <div style="background:rgba(16,185,129,0.07); border:1px solid rgba(16,185,129,0.18); border-radius:12px; padding:1rem 1.1rem;">
+            <div style="display:flex; align-items:center; gap:0.6rem; margin-bottom:0.5rem;">
+              <div style="width:26px; height:26px; border-radius:50%; background:rgba(16,185,129,0.2); color:#6ee7b7; font-size:0.78rem; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0;">4</div>
+              <strong style="font-size:0.9rem; color:#6ee7b7;">Cache-Aware Access</strong>
+            </div>
+            <div style="font-size:0.75rem; color:#10b981; font-weight:600; margin-bottom:0.4rem; letter-spacing:0.03em;">Optimized memory usage</div>
+            <p style="font-size:0.8rem; color:var(--text-secondary); margin:0 0 0.75rem;">Uses sequential access and prefetching to make better use of CPU cache and reduce latency.</p>
+            <!-- Visual: memory hierarchy + access pattern -->
+            <svg viewBox="0 0 220 110" style="width:100%; height:auto; display:block; margin-bottom:0.65rem;" xmlns="http://www.w3.org/2000/svg">
+              <!-- Random access (bad) -->
+              <text x="52" y="12" text-anchor="middle" font-size="7.5" fill="#ef4444" font-family="Inter,sans-serif" font-weight="600">Random Access ✗</text>
+              <g>
+                <rect x="6"  y="18" width="16" height="14" rx="2" fill="rgba(255,255,255,0.07)" stroke="rgba(255,255,255,0.15)" stroke-width="0.8"/>
+                <rect x="26" y="18" width="16" height="14" rx="2" fill="rgba(255,255,255,0.07)" stroke="rgba(255,255,255,0.15)" stroke-width="0.8"/>
+                <rect x="46" y="18" width="16" height="14" rx="2" fill="rgba(255,255,255,0.07)" stroke="rgba(255,255,255,0.15)" stroke-width="0.8"/>
+                <rect x="66" y="18" width="16" height="14" rx="2" fill="rgba(255,255,255,0.07)" stroke="rgba(255,255,255,0.15)" stroke-width="0.8"/>
+                <rect x="86" y="18" width="16" height="14" rx="2" fill="rgba(255,255,255,0.07)" stroke="rgba(255,255,255,0.15)" stroke-width="0.8"/>
+                <!-- zigzag access arrows -->
+                <path d="M14,32 C35,48 55,16 74,32 C88,44 98,20 110,36" stroke="#ef4444" stroke-width="1.2" fill="none" stroke-dasharray="2,2"/>
+                <text x="14" y="50" font-size="7" fill="#ef4444" font-family="Inter,sans-serif">cache miss → slow RAM fetch each time</text>
+              </g>
+              <!-- divider -->
+              <line x1="6" y1="58" x2="214" y2="58" stroke="rgba(255,255,255,0.06)" stroke-width="0.8" stroke-dasharray="3,3"/>
+              <!-- Sequential access (good) -->
+              <text x="52" y="70" text-anchor="middle" font-size="7.5" fill="#10b981" font-family="Inter,sans-serif" font-weight="600">Sequential Access ✓</text>
+              <g>
+                <rect x="6"  y="76" width="16" height="14" rx="2" fill="rgba(16,185,129,0.25)" stroke="#10b981" stroke-width="1"/>
+                <rect x="26" y="76" width="16" height="14" rx="2" fill="rgba(16,185,129,0.25)" stroke="#10b981" stroke-width="1"/>
+                <rect x="46" y="76" width="16" height="14" rx="2" fill="rgba(16,185,129,0.25)" stroke="#10b981" stroke-width="1"/>
+                <rect x="66" y="76" width="16" height="14" rx="2" fill="rgba(16,185,129,0.18)" stroke="#34d399" stroke-width="0.8"/>
+                <rect x="86" y="76" width="16" height="14" rx="2" fill="rgba(16,185,129,0.18)" stroke="#34d399" stroke-width="0.8"/>
+                <!-- straight arrow -->
+                <line x1="22" y1="83" x2="62" y2="83" stroke="#6ee7b7" stroke-width="1.4" marker-end="url(#arr-g)"/>
+                <defs>
+                  <marker id="arr-g" markerWidth="5" markerHeight="5" refX="2.5" refY="2.5" orient="auto">
+                    <polygon points="0,0 5,2.5 0,5" fill="#6ee7b7"/>
+                  </marker>
+                </defs>
+                <text x="14" y="100" font-size="7" fill="#6ee7b7" font-family="Inter,sans-serif">prefetch loads next blocks into cache → fast</text>
+              </g>
+              <!-- CPU cache label -->
+              <rect x="168" y="64" width="46" height="42" rx="5" fill="rgba(16,185,129,0.08)" stroke="rgba(16,185,129,0.3)" stroke-width="1"/>
+              <text x="191" y="79"  text-anchor="middle" font-size="7.5" fill="#6ee7b7" font-family="Inter,sans-serif" font-weight="700">CPU</text>
+              <text x="191" y="90"  text-anchor="middle" font-size="7.5" fill="#6ee7b7" font-family="Inter,sans-serif" font-weight="700">Cache</text>
+              <text x="191" y="100" text-anchor="middle" font-size="6.5" fill="#34d399" font-family="Inter,sans-serif">fast ⚡</text>
+            </svg>
+            <div style="font-size:0.75rem; color:#94a3b8; background:rgba(0,0,0,0.2); border-radius:6px; padding:0.35rem 0.6rem;">💡 Keep data close to CPU for speed.</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Objective Function -->
+      <div class="card card-accent card-red reveal" style="margin-top:1.5rem;">
         <h3 style="margin-bottom:0.75rem; font-size:1.15rem;">🎯 The XGBoost Objective</h3>
         <p style="color:var(--text-secondary); font-size:0.9rem; margin-bottom:1rem;">
           XGBoost minimises a regularised objective, adding a complexity penalty to the standard loss:
@@ -2756,8 +2966,7 @@
         <div class="formula-box" style="border-left-color:var(--accent-orange);">
           $\Omega(f) = \gamma T + \dfrac{1}{2}\lambda\sum_{j=1}^{T}w_j^2$
         </div>
-        <div
-          style="display:flex; gap:2rem; flex-wrap:wrap; margin-top:0.75rem; font-size:0.85rem; color:var(--text-muted);">
+        <div style="display:flex; gap:2rem; flex-wrap:wrap; margin-top:0.75rem; font-size:0.85rem; color:var(--text-muted);">
           <span>$T$ = number of leaves</span>
           <span>$w_j$ = leaf weight (score)</span>
           <span>$\gamma$ = min gain to split</span>
@@ -2794,161 +3003,6 @@
         </div>
       </div>
 
-      <!-- Key Features & Tricks -->
-      <div class="grid-2" style="margin-top:1.5rem;">
-
-        <div class="card reveal">
-          <h3 style="margin-bottom:1rem; font-size:1.05rem;">⚙️ Key Innovations</h3>
-          <ul class="step-list">
-            <li class="step-item">
-              <div class="step-num" style="background:rgba(239,68,68,0.2); color:var(--accent-red);">1</div>
-              <div class="step-content">
-                <strong>Sparsity-Aware Split Finding</strong>
-                <p>Handles missing values automatically by learning default split directions</p>
-              </div>
-            </li>
-            <li class="step-item">
-              <div class="step-num" style="background:rgba(239,68,68,0.2); color:var(--accent-red);">2</div>
-              <div class="step-content">
-                <strong>Weighted Quantile Sketch</strong>
-                <p>Approximate split finding using data distribution sketches — enables distributed training</p>
-              </div>
-            </li>
-            <li class="step-item">
-              <div class="step-num" style="background:rgba(239,68,68,0.2); color:var(--accent-red);">3</div>
-              <div class="step-content">
-                <strong>Column Block for Parallel Trees</strong>
-                <p>Data stored column-wise in sorted blocks — enables parallel split evaluation</p>
-              </div>
-            </li>
-            <li class="step-item">
-              <div class="step-num" style="background:rgba(239,68,68,0.2); color:var(--accent-red);">4</div>
-              <div class="step-content">
-                <strong>Cache-Aware Access</strong>
-                <p>Prefetches gradient statistics for cache-friendly computation</p>
-              </div>
-            </li>
-          </ul>
-        </div>
-
-        <div class="card reveal">
-          <h3 style="margin-bottom:1rem; font-size:1.05rem;">🔧 Key Hyperparameters</h3>
-
-          <div class="tabs" id="xgb-tabs">
-            <button class="tab-btn active" onclick="switchTab('xgb','tree')">Tree Params</button>
-            <button class="tab-btn" onclick="switchTab('xgb','boost')">Boost Params</button>
-            <button class="tab-btn" onclick="switchTab('xgb','reg')">Regularisation</button>
-          </div>
-
-          <div id="xgb-tree" class="tab-panel active">
-            <div class="param-row">
-              <div class="param-label"><span>max_depth</span><span style="color:var(--accent-red)">High impact</span>
-              </div>
-              <div class="param-bar">
-                <div class="param-fill" style="width:85%; background:var(--gradient-warm);"></div>
-              </div>
-            </div>
-            <div class="param-row">
-              <div class="param-label"><span>min_child_weight</span><span
-                  style="color:var(--accent-orange)">Medium</span></div>
-              <div class="param-bar">
-                <div class="param-fill" style="width:65%; background:var(--gradient-warm);"></div>
-              </div>
-            </div>
-            <div class="param-row">
-              <div class="param-label"><span>max_leaves</span><span style="color:var(--accent-orange)">Medium</span>
-              </div>
-              <div class="param-bar">
-                <div class="param-fill" style="width:55%; background:var(--gradient-warm);"></div>
-              </div>
-            </div>
-            <div class="param-row">
-              <div class="param-label"><span>colsample_bytree</span><span
-                  style="color:var(--accent-orange)">Medium</span></div>
-              <div class="param-bar">
-                <div class="param-fill" style="width:60%; background:var(--gradient-warm);"></div>
-              </div>
-            </div>
-          </div>
-
-          <div id="xgb-boost" class="tab-panel">
-            <div class="param-row">
-              <div class="param-label"><span>n_estimators</span><span style="color:var(--accent-red)">High impact</span>
-              </div>
-              <div class="param-bar">
-                <div class="param-fill" style="width:80%; background:var(--gradient-warm);"></div>
-              </div>
-            </div>
-            <div class="param-row">
-              <div class="param-label"><span>learning_rate (eta)</span><span
-                  style="color:var(--accent-red)">Critical</span></div>
-              <div class="param-bar">
-                <div class="param-fill" style="width:90%; background:var(--gradient-warm);"></div>
-              </div>
-            </div>
-            <div class="param-row">
-              <div class="param-label"><span>subsample</span><span style="color:var(--accent-orange)">Medium</span>
-              </div>
-              <div class="param-bar">
-                <div class="param-fill" style="width:60%; background:var(--gradient-warm);"></div>
-              </div>
-            </div>
-            <div class="param-row">
-              <div class="param-label"><span>early_stopping_rounds</span><span
-                  style="color:var(--accent-green)">Practical</span></div>
-              <div class="param-bar">
-                <div class="param-fill" style="width:70%; background:var(--gradient-green);"></div>
-              </div>
-            </div>
-          </div>
-
-          <div id="xgb-reg" class="tab-panel">
-            <div class="param-row">
-              <div class="param-label"><span>gamma (min_split_loss)</span><span style="color:var(--accent-red)">High
-                  impact</span></div>
-              <div class="param-bar">
-                <div class="param-fill" style="width:75%; background:var(--gradient-blue);"></div>
-              </div>
-            </div>
-            <div class="param-row">
-              <div class="param-label"><span>lambda (L2 reg)</span><span
-                  style="color:var(--accent-blue)">Important</span></div>
-              <div class="param-bar">
-                <div class="param-fill" style="width:70%; background:var(--gradient-blue);"></div>
-              </div>
-            </div>
-            <div class="param-row">
-              <div class="param-label"><span>alpha (L1 reg)</span><span
-                  style="color:var(--accent-blue)">Important</span></div>
-              <div class="param-bar">
-                <div class="param-fill" style="width:65%; background:var(--gradient-blue);"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- Visual Reference -->
-      <div class="grid-2" style="margin-top:1.5rem;">
-        <div class="card reveal">
-          <h3 style="margin-bottom:1rem; font-size:1.05rem;">Visual Reference — Architecture</h3>
-          <div class="img-placeholder" id="img-xgboost-arch">
-            <div class="icon">🖼️</div>
-            <span>Reference image will be added</span>
-            <small style="color:var(--text-muted);">XGBoost tree construction / gain calculation</small>
-          </div>
-        </div>
-        <div class="card reveal">
-          <h3 style="margin-bottom:1rem; font-size:1.05rem;">Visual Reference — Performance</h3>
-          <div class="img-placeholder" id="img-xgboost-perf">
-            <div class="icon">🖼️</div>
-            <span>Reference image will be added</span>
-            <small style="color:var(--text-muted);">Feature importance / learning curves</small>
-          </div>
-        </div>
-      </div>
-
       <div class="topic-nav">
         <a href="#bagging-boosting">← Bagging &amp; Boosting</a>
         <a href="#lightgbm">LightGBM →</a>
@@ -2970,6 +3024,7 @@
         <div class="topic-header-text">
           <div class="tag" style="color:var(--accent-pink)">07 · GRADIENT BOOSTING · IN DEPTH</div>
           <h2>LightGBM</h2>
+          <div style="font-size:0.95rem; color:var(--accent-purple); font-weight:600; margin-top:0.3rem; letter-spacing:0.04em;">Light · Fast · Smart</div>
           <div style="font-size:0.8rem; color:var(--text-muted); margin-top:0.2rem;">Light Gradient Boosting Machine —
             Microsoft, 2017</div>
         </div>
@@ -2977,11 +3032,37 @@
       </div>
 
       <p class="section-desc reveal">
-        LightGBM rethinks how trees are built. Instead of the traditional level-wise
-        (breadth-first) strategy, it grows trees <strong>leaf-wise</strong>, targeting the leaf
-        with maximum loss reduction each iteration — plus two revolutionary techniques:
-        <strong>GOSS</strong> and <strong>EFB</strong> that make it orders of magnitude faster on large datasets.
+        LightGBM (by Microsoft) targets the same problem as XGBoost but with different design choices that make it <strong>dramatically faster</strong> and <strong>more memory-efficient</strong> on large datasets — often with comparable or better accuracy.
       </p>
+
+      <!-- Analogy -->
+      <div class="card reveal" style="background:linear-gradient(135deg,rgba(168,85,247,0.08),rgba(236,72,153,0.06)); border:1px solid rgba(168,85,247,0.2); margin-top:1.5rem; margin-bottom:1.5rem;">
+        <h3 style="margin-bottom:0.75rem; font-size:1.05rem;">🎯 The Analogy</h3>
+        <p style="font-size:1.08rem; line-height:1.75; color:#e9c6f8; font-style:italic; margin-bottom:1.25rem;">
+          "LightGBM is the <strong style="color:#d8b4fe;">smart, efficient coach</strong>. It only spends time on the students who need help (<strong style="color:#f9a8d4;">GOSS</strong>), bundles related topics together to teach faster (<strong style="color:#f9a8d4;">EFB</strong>), and goes deep on whichever weak area looks most fixable (<strong style="color:#f9a8d4;">leaf-wise growth</strong>). Faster sessions, often the same final result."
+        </p>
+        <div style="display:flex; gap:0.75rem; flex-wrap:wrap;">
+          <div style="flex:1; min-width:140px; background:rgba(168,85,247,0.12); border:1px solid rgba(168,85,247,0.25); border-radius:10px; padding:0.75rem 1rem;">
+            <div style="font-size:1.4rem; margin-bottom:0.3rem;">🎯</div>
+            <div style="font-size:0.8rem; color:#d8b4fe; font-weight:600; margin-bottom:0.25rem;">Target the Weak</div>
+            <div style="font-size:0.78rem; color:#d1d5db;">GOSS focuses only on high-gradient samples</div>
+          </div>
+          <div style="flex:1; min-width:140px; background:rgba(236,72,153,0.12); border:1px solid rgba(236,72,153,0.25); border-radius:10px; padding:0.75rem 1rem;">
+            <div style="font-size:1.4rem; margin-bottom:0.3rem;">📦</div>
+            <div style="font-size:0.8rem; color:#f9a8d4; font-weight:600; margin-bottom:0.25rem;">Bundle Topics</div>
+            <div style="font-size:0.78rem; color:#d1d5db;">EFB merges mutually exclusive features</div>
+          </div>
+          <div style="flex:1; min-width:140px; background:rgba(52,211,153,0.12); border:1px solid rgba(52,211,153,0.25); border-radius:10px; padding:0.75rem 1rem;">
+            <div style="font-size:1.4rem; margin-bottom:0.3rem;">🌿</div>
+            <div style="font-size:0.8rem; color:#6ee7b7; font-weight:600; margin-bottom:0.25rem;">Go Deep Where It Counts</div>
+            <div style="font-size:0.78rem; color:#d1d5db;">Leaf-wise growth targets the highest-loss leaf</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Key Innovations -->
+      <div style="margin-top:1.5rem;">
+        <h3 class="reveal" style="font-size:1.05rem; color:var(--accent-purple); margin-bottom:1rem; letter-spacing:0.03em;">⚙️ Key Innovations</h3>
 
       <!-- GOSS & EFB -->
       <div class="grid-2 reveal">
@@ -3023,6 +3104,128 @@
           <div class="formula-box" style="border-left-color:var(--accent-green); color:#6ee7b7;">
             $\tilde{g}_i = \dfrac{1-a}{b} \cdot g_i \quad \text{for small-gradient samples}$
           </div>
+
+          <!-- GOSS Simulation -->
+          <div style="margin-top:1rem; background:rgba(0,0,0,0.25); border-radius:10px; padding:0.9rem;">
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:0.6rem; flex-wrap:wrap; gap:0.5rem;">
+              <span style="font-size:0.75rem; font-weight:700; color:#6ee7b7; letter-spacing:0.04em;">GOSS SAMPLING VISUALISED</span>
+              <button onclick="gossSimRun()" style="background:rgba(16,185,129,0.2); border:1px solid rgba(16,185,129,0.4); color:#6ee7b7; border-radius:7px; padding:0.25rem 0.7rem; font-size:0.75rem; cursor:pointer; font-weight:600;">▶ Run</button>
+            </div>
+            <canvas id="goss-canvas" style="width:100%; border-radius:7px;"></canvas>
+            <div id="goss-legend" style="display:flex; gap:1rem; flex-wrap:wrap; margin-top:0.5rem; font-size:0.7rem; color:#94a3b8;">
+              <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#22c55e;vertical-align:middle;margin-right:3px;"></span>Kept (large |g|)</span>
+              <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#fbbf24;vertical-align:middle;margin-right:3px;"></span>Sampled small |g|</span>
+              <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.2);vertical-align:middle;margin-right:3px;"></span>Discarded</span>
+            </div>
+          </div>
+          <script>
+          (function(){
+            const cv = document.getElementById('goss-canvas');
+            const N = 28, TOP_A = 0.35, SAMPLE_B = 0.4;
+            const dpr = window.devicePixelRatio||1;
+            let animated = false;
+
+            // generate samples with random gradients
+            const samples = Array.from({length:N}, (_,i) => ({
+              id: i,
+              g: Math.abs((Math.random()*0.9 + 0.05) * (Math.random()<0.3 ? 3 : 1)),
+              state: 'pending' // pending | kept | sampled | discarded
+            }));
+            // sort descending for assignment
+            const sorted = [...samples].sort((a,b)=>b.g-a.g);
+            const topK = Math.ceil(N * TOP_A);
+            sorted.forEach((s,i)=>{
+              if(i < topK) s.finalState = 'kept';
+              else {
+                const remaining = sorted.length - topK;
+                s.finalState = Math.random() < SAMPLE_B ? 'sampled' : 'discarded';
+              }
+            });
+
+            function colFor(state){
+              if(state==='kept')      return '#22c55e';
+              if(state==='sampled')   return '#fbbf24';
+              if(state==='discarded') return 'rgba(255,255,255,0.15)';
+              return 'rgba(255,255,255,0.25)';
+            }
+            function strokeFor(state){
+              if(state==='kept')      return '#4ade80';
+              if(state==='sampled')   return '#fcd34d';
+              if(state==='discarded') return 'rgba(255,255,255,0.15)';
+              return 'rgba(255,255,255,0.35)';
+            }
+
+            function draw(progress){
+              const W = cv.clientWidth || 300;
+              const H = 120;
+              cv.width  = W * dpr;
+              cv.height = H * dpr;
+              cv.style.height = H + 'px';
+              const ctx = cv.getContext('2d');
+              ctx.scale(dpr, dpr);
+              ctx.clearRect(0,0,W,H);
+
+              const maxG = Math.max(...samples.map(s=>s.g));
+              const cols = Math.ceil(Math.sqrt(N * 1.8));
+              const rows = Math.ceil(N / cols);
+              const cellW = W / cols, cellH = (H - 16) / rows;
+              const R = Math.min(cellW, cellH) * 0.32;
+
+              // draw axis label
+              ctx.fillStyle='rgba(255,255,255,0.3)';
+              ctx.font=`${7*dpr/dpr}px Inter,sans-serif`;
+              ctx.textAlign='left';
+              ctx.fillText('samples →', 4, H-3);
+
+              samples.forEach((s, idx) => {
+                const col = idx % cols;
+                const row = Math.floor(idx / cols);
+                const cx = (col + 0.5) * cellW;
+                const cy = 10 + (row + 0.5) * cellH;
+
+                const reveal = idx / N < progress;
+                const state = reveal ? s.finalState : 'pending';
+                const r = R * (0.5 + 0.5 * (s.g / maxG));
+
+                ctx.beginPath();
+                ctx.arc(cx, cy, r, 0, Math.PI*2);
+                ctx.fillStyle = colFor(state);
+                ctx.fill();
+                ctx.strokeStyle = strokeFor(state);
+                ctx.lineWidth = state==='kept' ? 1.5 : 0.8;
+                ctx.stroke();
+
+                // gradient bar inside circle for kept/sampled
+                if(reveal && state !== 'discarded'){
+                  ctx.fillStyle='rgba(255,255,255,0.6)';
+                  ctx.font=`bold ${Math.max(5,r*0.7)}px Inter,sans-serif`;
+                  ctx.textAlign='center';
+                  ctx.fillText(s.g.toFixed(1), cx, cy+r*0.3);
+                }
+              });
+            }
+
+            window.gossSimRun = function(){
+              if(animated) return;
+              animated = true;
+              samples.forEach(s=>s.finalState='pending');
+              let start = null;
+              const dur = 1200;
+              function frame(ts){
+                if(!start) start=ts;
+                const p = Math.min((ts-start)/dur, 1);
+                draw(p);
+                if(p<1) requestAnimationFrame(frame);
+                else { animated=false; }
+              }
+              requestAnimationFrame(frame);
+            };
+
+            const ro = new ResizeObserver(()=>draw(1));
+            ro.observe(cv.parentElement);
+            setTimeout(()=>draw(1), 100);
+          })();
+          </script>
         </div>
 
         <!-- EFB -->
@@ -3065,6 +3268,101 @@
             📌 <strong>Net effect:</strong> Reduces #features from $D$ to $K \ll D$, drastically cutting histogram
             construction time
           </div>
+
+          <!-- EFB Visualization -->
+          <div style="margin-top:1rem; background:rgba(0,0,0,0.25); border-radius:10px; padding:0.9rem;">
+            <div style="font-size:0.75rem; font-weight:700; color:#c4b5fd; letter-spacing:0.04em; margin-bottom:0.75rem;">EFB BUNDLING VISUALISED</div>
+            <svg viewBox="0 0 280 148" style="width:100%; height:auto; display:block;" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="efb-arr" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+                  <polygon points="0,0 6,3 0,6" fill="#a78bfa"/>
+                </marker>
+              </defs>
+
+              <!-- BEFORE label -->
+              <text x="4" y="11" font-size="7.5" fill="#94a3b8" font-family="Inter,sans-serif" font-weight="700">BEFORE — 4 sparse features</text>
+
+              <!-- Feature columns: rows = 8 samples, cols = F1..F4 -->
+              <!-- F1: values in rows 0,2,5 -->
+              <text x="18"  y="24" text-anchor="middle" font-size="7" fill="#a78bfa" font-family="Inter,sans-serif" font-weight="700">F1</text>
+              <text x="60"  y="24" text-anchor="middle" font-size="7" fill="#818cf8" font-family="Inter,sans-serif" font-weight="700">F2</text>
+              <text x="102" y="24" text-anchor="middle" font-size="7" fill="#6366f1" font-family="Inter,sans-serif" font-weight="700">F3</text>
+              <text x="144" y="24" text-anchor="middle" font-size="7" fill="#4f46e5" font-family="Inter,sans-serif" font-weight="700">F4</text>
+
+              <!-- helper: each cell is 28px wide, 10px tall, starting y=28 -->
+              <!-- F1 col x=4: active rows 0,2,5 -->
+              <g>
+                <rect x="4"  y="28" width="28" height="9" rx="2" fill="rgba(167,139,250,0.55)" stroke="#a78bfa" stroke-width="0.8"/><text x="18" y="36" text-anchor="middle" font-size="6.5" fill="#fff" font-family="Inter,sans-serif">1.2</text>
+                <rect x="4"  y="39" width="28" height="9" rx="2" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/><text x="18" y="47" text-anchor="middle" font-size="6" fill="#334155" font-family="Inter,sans-serif">0</text>
+                <rect x="4"  y="50" width="28" height="9" rx="2" fill="rgba(167,139,250,0.55)" stroke="#a78bfa" stroke-width="0.8"/><text x="18" y="58" text-anchor="middle" font-size="6.5" fill="#fff" font-family="Inter,sans-serif">0.8</text>
+                <rect x="4"  y="61" width="28" height="9" rx="2" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/><text x="18" y="69" text-anchor="middle" font-size="6" fill="#334155" font-family="Inter,sans-serif">0</text>
+                <rect x="4"  y="72" width="28" height="9" rx="2" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/><text x="18" y="80" text-anchor="middle" font-size="6" fill="#334155" font-family="Inter,sans-serif">0</text>
+                <rect x="4"  y="83" width="28" height="9" rx="2" fill="rgba(167,139,250,0.55)" stroke="#a78bfa" stroke-width="0.8"/><text x="18" y="91" text-anchor="middle" font-size="6.5" fill="#fff" font-family="Inter,sans-serif">2.1</text>
+                <rect x="4"  y="94" width="28" height="9" rx="2" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/><text x="18" y="102" text-anchor="middle" font-size="6" fill="#334155" font-family="Inter,sans-serif">0</text>
+                <rect x="4"  y="105" width="28" height="9" rx="2" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/><text x="18" y="113" text-anchor="middle" font-size="6" fill="#334155" font-family="Inter,sans-serif">0</text>
+              </g>
+              <!-- F2 col x=46: active rows 1,3,6 -->
+              <g>
+                <rect x="46" y="28" width="28" height="9" rx="2" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/><text x="60" y="36" text-anchor="middle" font-size="6" fill="#334155" font-family="Inter,sans-serif">0</text>
+                <rect x="46" y="39" width="28" height="9" rx="2" fill="rgba(129,140,248,0.55)" stroke="#818cf8" stroke-width="0.8"/><text x="60" y="47" text-anchor="middle" font-size="6.5" fill="#fff" font-family="Inter,sans-serif">0.5</text>
+                <rect x="46" y="50" width="28" height="9" rx="2" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/><text x="60" y="58" text-anchor="middle" font-size="6" fill="#334155" font-family="Inter,sans-serif">0</text>
+                <rect x="46" y="61" width="28" height="9" rx="2" fill="rgba(129,140,248,0.55)" stroke="#818cf8" stroke-width="0.8"/><text x="60" y="69" text-anchor="middle" font-size="6.5" fill="#fff" font-family="Inter,sans-serif">1.7</text>
+                <rect x="46" y="72" width="28" height="9" rx="2" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/><text x="60" y="80" text-anchor="middle" font-size="6" fill="#334155" font-family="Inter,sans-serif">0</text>
+                <rect x="46" y="83" width="28" height="9" rx="2" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/><text x="60" y="91" text-anchor="middle" font-size="6" fill="#334155" font-family="Inter,sans-serif">0</text>
+                <rect x="46" y="94" width="28" height="9" rx="2" fill="rgba(129,140,248,0.55)" stroke="#818cf8" stroke-width="0.8"/><text x="60" y="102" text-anchor="middle" font-size="6.5" fill="#fff" font-family="Inter,sans-serif">0.9</text>
+                <rect x="46" y="105" width="28" height="9" rx="2" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/><text x="60" y="113" text-anchor="middle" font-size="6" fill="#334155" font-family="Inter,sans-serif">0</text>
+              </g>
+              <!-- F3 col x=88: active rows 4,7 -->
+              <g>
+                <rect x="88" y="28" width="28" height="9" rx="2" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
+                <rect x="88" y="39" width="28" height="9" rx="2" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
+                <rect x="88" y="50" width="28" height="9" rx="2" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
+                <rect x="88" y="61" width="28" height="9" rx="2" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
+                <rect x="88" y="72" width="28" height="9" rx="2" fill="rgba(99,102,241,0.55)" stroke="#6366f1" stroke-width="0.8"/><text x="102" y="80" text-anchor="middle" font-size="6.5" fill="#fff" font-family="Inter,sans-serif">1.4</text>
+                <rect x="88" y="83" width="28" height="9" rx="2" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
+                <rect x="88" y="94" width="28" height="9" rx="2" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
+                <rect x="88" y="105" width="28" height="9" rx="2" fill="rgba(99,102,241,0.55)" stroke="#6366f1" stroke-width="0.8"/><text x="102" y="113" text-anchor="middle" font-size="6.5" fill="#fff" font-family="Inter,sans-serif">0.6</text>
+              </g>
+              <!-- F4 col x=130: active rows 2,5 — same as F1? No, to show mutual exclusivity with F1 -->
+              <g>
+                <rect x="130" y="28" width="28" height="9" rx="2" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
+                <rect x="130" y="39" width="28" height="9" rx="2" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
+                <rect x="130" y="50" width="28" height="9" rx="2" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
+                <rect x="130" y="61" width="28" height="9" rx="2" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
+                <rect x="130" y="72" width="28" height="9" rx="2" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
+                <rect x="130" y="83" width="28" height="9" rx="2" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
+                <rect x="130" y="94" width="28" height="9" rx="2" fill="rgba(79,70,229,0.55)" stroke="#4f46e5" stroke-width="0.8"/><text x="144" y="102" text-anchor="middle" font-size="6.5" fill="#fff" font-family="Inter,sans-serif">3.0</text>
+                <rect x="130" y="105" width="28" height="9" rx="2" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
+              </g>
+
+              <!-- sparse labels -->
+              <text x="4"   y="122" font-size="6.5" fill="#64748b" font-family="Inter,sans-serif">mostly zeros ↑</text>
+              <text x="4"   y="130" font-size="6.5" fill="#64748b" font-family="Inter,sans-serif">mutually exclusive</text>
+
+              <!-- Arrow -->
+              <line x1="172" y1="72" x2="196" y2="72" stroke="#a78bfa" stroke-width="1.8" marker-end="url(#efb-arr)"/>
+              <text x="182" y="68" text-anchor="middle" font-size="6.5" fill="#c4b5fd" font-family="Inter,sans-serif" font-weight="700">EFB</text>
+              <text x="182" y="82" text-anchor="middle" font-size="6" fill="#94a3b8" font-family="Inter,sans-serif">bundle</text>
+
+              <!-- AFTER label -->
+              <text x="200" y="11" font-size="7.5" fill="#c4b5fd" font-family="Inter,sans-serif" font-weight="700">AFTER — 1 bundle</text>
+
+              <!-- Bundled column x=200 -->
+              <text x="214" y="24" text-anchor="middle" font-size="7" fill="#e879f9" font-family="Inter,sans-serif" font-weight="700">B1</text>
+              <rect x="200" y="28"  width="52" height="9" rx="2" fill="rgba(167,139,250,0.55)" stroke="#a78bfa" stroke-width="1"/><text x="226" y="36" text-anchor="middle" font-size="6.5" fill="#fff" font-family="Inter,sans-serif">F1=1.2</text>
+              <rect x="200" y="39"  width="52" height="9" rx="2" fill="rgba(129,140,248,0.55)" stroke="#818cf8" stroke-width="1"/><text x="226" y="47" text-anchor="middle" font-size="6.5" fill="#fff" font-family="Inter,sans-serif">F2=0.5</text>
+              <rect x="200" y="50"  width="52" height="9" rx="2" fill="rgba(167,139,250,0.55)" stroke="#a78bfa" stroke-width="1"/><text x="226" y="58" text-anchor="middle" font-size="6.5" fill="#fff" font-family="Inter,sans-serif">F1=0.8</text>
+              <rect x="200" y="61"  width="52" height="9" rx="2" fill="rgba(129,140,248,0.55)" stroke="#818cf8" stroke-width="1"/><text x="226" y="69" text-anchor="middle" font-size="6.5" fill="#fff" font-family="Inter,sans-serif">F2=1.7</text>
+              <rect x="200" y="72"  width="52" height="9" rx="2" fill="rgba(99,102,241,0.55)"  stroke="#6366f1" stroke-width="1"/><text x="226" y="80" text-anchor="middle" font-size="6.5" fill="#fff" font-family="Inter,sans-serif">F3=1.4</text>
+              <rect x="200" y="83"  width="52" height="9" rx="2" fill="rgba(167,139,250,0.55)" stroke="#a78bfa" stroke-width="1"/><text x="226" y="91" text-anchor="middle" font-size="6.5" fill="#fff" font-family="Inter,sans-serif">F1=2.1</text>
+              <rect x="200" y="94"  width="52" height="9" rx="2" fill="rgba(79,70,229,0.55)"   stroke="#4f46e5" stroke-width="1"/><text x="226" y="102" text-anchor="middle" font-size="6.5" fill="#fff" font-family="Inter,sans-serif">F4=3.0</text>
+              <rect x="200" y="105" width="52" height="9" rx="2" fill="rgba(99,102,241,0.55)"  stroke="#6366f1" stroke-width="1"/><text x="226" y="113" text-anchor="middle" font-size="6.5" fill="#fff" font-family="Inter,sans-serif">F3=0.6</text>
+
+              <!-- No zeros label -->
+              <text x="200" y="122" font-size="6.5" fill="#6ee7b7" font-family="Inter,sans-serif">no zeros — dense ✓</text>
+              <text x="200" y="130" font-size="6.5" fill="#6ee7b7" font-family="Inter,sans-serif">4 cols → 1 col</text>
+            </svg>
+          </div>
         </div>
 
       </div>
@@ -3093,105 +3391,303 @@
             </ul>
           </div>
         </div>
-        <div class="img-placeholder" id="img-lgbm-leafwise" style="min-height:180px; margin-top:1.5rem;">
-          <div class="icon">🖼️</div>
-          <span>Reference image — Leaf-wise vs Level-wise growth comparison</span>
+        <!-- Tree Growth Simulation -->
+        <div id="tree-sim-wrap" style="margin-top:1.5rem; background:rgba(0,0,0,0.25); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:1.25rem;">
+
+          <!-- Controls -->
+          <div style="display:flex; align-items:center; gap:0.75rem; flex-wrap:wrap; margin-bottom:1rem;">
+            <span style="font-size:0.8rem; color:var(--text-muted); font-weight:600; text-transform:uppercase; letter-spacing:0.05em;">Step</span>
+            <div id="tree-step-dots" style="display:flex; gap:0.4rem;"></div>
+            <div style="margin-left:auto; display:flex; gap:0.5rem;">
+              <button onclick="treeSimPrev()" style="background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.12); color:#e2e8f0; border-radius:8px; padding:0.35rem 0.85rem; font-size:0.8rem; cursor:pointer;">← Prev</button>
+              <button onclick="treeSimNext()" style="background:rgba(168,85,247,0.25); border:1px solid rgba(168,85,247,0.4); color:#d8b4fe; border-radius:8px; padding:0.35rem 0.85rem; font-size:0.8rem; cursor:pointer; font-weight:600;">Next →</button>
+              <button onclick="treeSimReset()" style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); color:var(--text-muted); border-radius:8px; padding:0.35rem 0.85rem; font-size:0.8rem; cursor:pointer;">↺</button>
+            </div>
+          </div>
+
+          <!-- Step label -->
+          <div id="tree-step-label" style="font-size:0.82rem; color:var(--text-muted); margin-bottom:1rem; min-height:1.2rem; text-align:center;"></div>
+
+          <!-- Two canvases side by side -->
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+            <div>
+              <div style="text-align:center; font-size:0.78rem; font-weight:700; color:#f87171; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:0.5rem;">Level-wise (XGBoost)</div>
+              <canvas id="tree-canvas-level" style="width:100%; border-radius:10px; background:rgba(239,68,68,0.04); border:1px solid rgba(239,68,68,0.15);"></canvas>
+            </div>
+            <div>
+              <div style="text-align:center; font-size:0.78rem; font-weight:700; color:#a78bfa; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:0.5rem;">Leaf-wise (LightGBM)</div>
+              <canvas id="tree-canvas-leaf" style="width:100%; border-radius:10px; background:rgba(168,85,247,0.04); border:1px solid rgba(168,85,247,0.15);"></canvas>
+            </div>
+          </div>
+
+          <!-- Loss comparison bar -->
+          <div style="margin-top:1rem;">
+            <div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:0.4rem; text-align:center; letter-spacing:0.04em;">LOSS REDUCTION (lower = better)</div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+              <div>
+                <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:#f87171; margin-bottom:0.25rem;"><span>XGBoost</span><span id="loss-lvl">100%</span></div>
+                <div style="background:rgba(255,255,255,0.07); border-radius:4px; height:8px; overflow:hidden;"><div id="loss-bar-lvl" style="height:100%; background:linear-gradient(90deg,#ef4444,#f97316); border-radius:4px; transition:width 0.5s ease; width:100%;"></div></div>
+              </div>
+              <div>
+                <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:#a78bfa; margin-bottom:0.25rem;"><span>LightGBM</span><span id="loss-leaf">100%</span></div>
+                <div style="background:rgba(255,255,255,0.07); border-radius:4px; height:8px; overflow:hidden;"><div id="loss-bar-leaf" style="height:100%; background:linear-gradient(90deg,#8b5cf6,#a78bfa); border-radius:4px; transition:width 0.5s ease; width:100%;"></div></div>
+              </div>
+            </div>
+          </div>
+
         </div>
+
+        <script>
+        (function(){
+          // ── Tree structures ──────────────────────────────────────────
+          // Each step: array of nodes {id, parent, label, gain, highlight, side}
+          // side: 'l'=left child, 'r'=right child
+
+          const STEPS = [
+            {
+              label: "Step 0 — Root node only (both strategies start identical)",
+              level: [
+                {id:0, parent:null, label:"Root\n(loss 1.0)", gain:1.0, active:false, new:true}
+              ],
+              leaf: [
+                {id:0, parent:null, label:"Root\n(loss 1.0)", gain:1.0, active:false, new:true}
+              ],
+              lossLvl: 100, lossLeaf: 100
+            },
+            {
+              label: "Step 1 — Both split the root (only one split possible at depth 0)",
+              level: [
+                {id:0, parent:null, label:"Root", gain:1.0, active:false, new:false},
+                {id:1, parent:0, side:'l', label:"L1\n(Δ=0.38)", gain:0.38, active:false, new:true},
+                {id:2, parent:0, side:'r', label:"R1\n(Δ=0.22)", gain:0.22, active:false, new:true}
+              ],
+              leaf: [
+                {id:0, parent:null, label:"Root", gain:1.0, active:false, new:false},
+                {id:1, parent:0, side:'l', label:"L1\n(Δ=0.38)", gain:0.38, active:true, new:true},
+                {id:2, parent:0, side:'r', label:"R1\n(Δ=0.22)", gain:0.22, active:false, new:true}
+              ],
+              lossLvl: 60, lossLeaf: 60
+            },
+            {
+              label: "Step 2 — Level-wise splits ALL leaves; Leaf-wise picks the BEST leaf (L1)",
+              level: [
+                {id:0, parent:null, label:"Root", gain:1.0, active:false, new:false},
+                {id:1, parent:0, side:'l', label:"L1", gain:0.38, active:false, new:false},
+                {id:2, parent:0, side:'r', label:"R1", gain:0.22, active:false, new:false},
+                {id:3, parent:1, side:'l', label:"LL\n(Δ=0.20)", gain:0.20, active:false, new:true},
+                {id:4, parent:1, side:'r', label:"LR\n(Δ=0.14)", gain:0.14, active:false, new:true},
+                {id:5, parent:2, side:'l', label:"RL\n(Δ=0.10)", gain:0.10, active:false, new:true},
+                {id:6, parent:2, side:'r', label:"RR\n(Δ=0.06)", gain:0.06, active:false, new:true}
+              ],
+              leaf: [
+                {id:0, parent:null, label:"Root", gain:1.0, active:false, new:false},
+                {id:1, parent:0, side:'l', label:"L1", gain:0.38, active:false, new:false},
+                {id:2, parent:0, side:'r', label:"R1", gain:0.22, active:false, new:false},
+                {id:3, parent:1, side:'l', label:"LL\n(Δ=0.28)", gain:0.28, active:true, new:true},
+                {id:4, parent:1, side:'r', label:"LR\n(Δ=0.08)", gain:0.08, active:false, new:true}
+              ],
+              lossLvl: 40, lossLeaf: 32
+            },
+            {
+              label: "Step 3 — Level-wise grows depth 3; Leaf-wise again picks best remaining leaf (LL)",
+              level: [
+                {id:0, parent:null, label:"Root", gain:1.0, new:false},
+                {id:1, parent:0, side:'l', label:"L1", gain:0.38, new:false},
+                {id:2, parent:0, side:'r', label:"R1", gain:0.22, new:false},
+                {id:3, parent:1, side:'l', label:"LL", gain:0.20, new:false},
+                {id:4, parent:1, side:'r', label:"LR", gain:0.14, new:false},
+                {id:5, parent:2, side:'l', label:"RL", gain:0.10, new:false},
+                {id:6, parent:2, side:'r', label:"RR", gain:0.06, new:false},
+                {id:7,  parent:3, side:'l', label:"LLL\n(Δ=0.11)", gain:0.11, new:true},
+                {id:8,  parent:3, side:'r', label:"LLR\n(Δ=0.07)", gain:0.07, new:true},
+                {id:9,  parent:4, side:'l', label:"LRL\n(Δ=0.07)", gain:0.07, new:true},
+                {id:10, parent:4, side:'r', label:"LRR\n(Δ=0.04)", gain:0.04, new:true},
+                {id:11, parent:5, side:'l', label:"RLL\n(Δ=0.05)", gain:0.05, new:true},
+                {id:12, parent:5, side:'r', label:"RLR\n(Δ=0.03)", gain:0.03, new:true},
+                {id:13, parent:6, side:'l', label:"RRL\n(Δ=0.03)", gain:0.03, new:true},
+                {id:14, parent:6, side:'r', label:"RRR\n(Δ=0.02)", gain:0.02, new:true}
+              ],
+              leaf: [
+                {id:0, parent:null, label:"Root", gain:1.0, new:false},
+                {id:1, parent:0, side:'l', label:"L1", gain:0.38, new:false},
+                {id:2, parent:0, side:'r', label:"R1", gain:0.22, new:false},
+                {id:3, parent:1, side:'l', label:"LL", gain:0.28, new:false},
+                {id:4, parent:1, side:'r', label:"LR", gain:0.08, new:false},
+                {id:5, parent:3, side:'l', label:"LLL\n(Δ=0.18)", gain:0.18, active:true, new:true},
+                {id:6, parent:3, side:'r', label:"LLR\n(Δ=0.08)", gain:0.08, new:true}
+              ],
+              lossLvl: 21, lossLeaf: 14
+            }
+          ];
+
+          let step = 0;
+          const totalSteps = STEPS.length;
+          const cvL = document.getElementById('tree-canvas-level');
+          const cvF = document.getElementById('tree-canvas-leaf');
+          const dots = document.getElementById('tree-step-dots');
+          const lbl  = document.getElementById('tree-step-label');
+
+          // ── Build step dots ──────────────────────────────────────────
+          for(let i=0;i<totalSteps;i++){
+            const d = document.createElement('div');
+            d.style.cssText='width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.15);transition:background 0.3s;cursor:pointer;';
+            d.onclick=()=>{step=i;render();};
+            dots.appendChild(d);
+          }
+
+          function updateDots(){
+            [...dots.children].forEach((d,i)=>{
+              d.style.background = i===step ? '#a78bfa' : 'rgba(255,255,255,0.15)';
+              d.style.transform  = i===step ? 'scale(1.3)' : 'scale(1)';
+            });
+          }
+
+          // ── Layout helpers ───────────────────────────────────────────
+          function layoutNodes(nodes, W, H){
+            // BFS positional layout
+            const byId={};
+            nodes.forEach(n=>byId[n.id]=n);
+            const children={};
+            nodes.forEach(n=>{
+              if(n.parent!==null){
+                if(!children[n.parent]) children[n.parent]=[];
+                children[n.parent].push(n.id);
+              }
+            });
+            const roots = nodes.filter(n=>n.parent===null).map(n=>n.id);
+            const pos={};
+            // Compute subtree widths
+            function subW(id){
+              const ch = children[id]||[];
+              if(!ch.length) return 1;
+              return ch.reduce((s,c)=>s+subW(c),0);
+            }
+            const totalLeaves = subW(roots[0]);
+            const colW = W / (totalLeaves+1);
+            const maxDepth = nodes.reduce((m,n)=>{
+              let d=0, cur=n;
+              while(cur.parent!==null){d++;cur=byId[cur.parent];}
+              return Math.max(m,d);
+            },0);
+            const rowH = Math.min(62, (H-30)/(maxDepth+1));
+
+            function place(id, xLeft, depth){
+              const sw = subW(id);
+              const cx = (xLeft + sw/2) * colW;
+              const cy = depth * rowH + rowH*0.5 + 18;
+              pos[id]={x:cx,y:cy};
+              const ch = children[id]||[];
+              let cur = xLeft;
+              ch.forEach(c=>{ place(c, cur, depth+1); cur+=subW(c); });
+            }
+            place(roots[0], 0, 0);
+            return pos;
+          }
+
+          // ── Draw one tree ─────────────────────────────────────────────
+          function drawTree(cv, nodes, accent, accentNew){
+            const dpr = window.devicePixelRatio||1;
+            const W = cv.clientWidth || 300;
+            const H = 220;
+            cv.width  = W*dpr;
+            cv.height = H*dpr;
+            cv.style.height = H+'px';
+            const ctx = cv.getContext('2d');
+            ctx.scale(dpr,dpr);
+            ctx.clearRect(0,0,W,H);
+
+            if(!nodes.length) return;
+            const byId={};
+            nodes.forEach(n=>byId[n.id]=n);
+            const pos = layoutNodes(nodes,W,H);
+
+            // edges
+            nodes.forEach(n=>{
+              if(n.parent===null) return;
+              const p=pos[n.parent], c=pos[n.id];
+              ctx.beginPath();
+              ctx.moveTo(p.x,p.y+12);
+              ctx.lineTo(c.x,c.y-12);
+              ctx.strokeStyle = n.new ? accentNew+'bb' : 'rgba(255,255,255,0.12)';
+              ctx.lineWidth = n.new ? 1.8 : 1;
+              ctx.setLineDash(n.new ? [] : [3,3]);
+              ctx.stroke();
+              ctx.setLineDash([]);
+            });
+
+            // nodes
+            const R=22;
+            nodes.forEach(n=>{
+              const {x,y}=pos[n.id];
+              // circle
+              const isNew=n.new, isActive=n.active;
+              ctx.beginPath();
+              ctx.arc(x,y,R,0,Math.PI*2);
+              if(isActive){
+                // glowing highlight
+                const grd=ctx.createRadialGradient(x,y,4,x,y,R);
+                grd.addColorStop(0,'rgba(250,204,21,0.5)');
+                grd.addColorStop(1,'rgba(250,204,21,0.1)');
+                ctx.fillStyle=grd;
+              } else if(isNew){
+                ctx.fillStyle=accentNew+'33';
+              } else {
+                ctx.fillStyle='rgba(255,255,255,0.06)';
+              }
+              ctx.fill();
+              ctx.strokeStyle = isActive ? '#fde68a' : (isNew ? accentNew : 'rgba(255,255,255,0.18)');
+              ctx.lineWidth = isActive ? 2.5 : (isNew ? 1.8 : 1);
+              ctx.stroke();
+
+              // label
+              const lines=(n.label||'').split('\n');
+              ctx.textAlign='center';
+              if(lines.length===1){
+                ctx.font=`bold ${Math.min(9,14-nodes.length*0.3)}px Inter,sans-serif`;
+                ctx.fillStyle=isActive?'#fef9c3':(isNew?'#e2e8f0':'rgba(255,255,255,0.55)');
+                ctx.fillText(lines[0],x,y+3.5);
+              } else {
+                const fs=Math.min(8,12-nodes.length*0.25);
+                ctx.font=`bold ${fs}px Inter,sans-serif`;
+                ctx.fillStyle=isActive?'#fef9c3':(isNew?'#e2e8f0':'rgba(255,255,255,0.55)');
+                ctx.fillText(lines[0],x,y-1);
+                ctx.font=`${Math.max(6,fs-1)}px Inter,sans-serif`;
+                ctx.fillStyle=isActive?'#fde68a':(isNew?accentNew:'rgba(255,255,255,0.4)');
+                ctx.fillText(lines[1],x,y+9);
+              }
+            });
+          }
+
+          function render(){
+            const s=STEPS[step];
+            lbl.textContent = s.label;
+            updateDots();
+
+            // loss bars
+            document.getElementById('loss-bar-lvl').style.width  = s.lossLvl+'%';
+            document.getElementById('loss-bar-leaf').style.width = s.lossLeaf+'%';
+            document.getElementById('loss-lvl').textContent  = s.lossLvl+'%';
+            document.getElementById('loss-leaf').textContent = s.lossLeaf+'%';
+
+            drawTree(cvL, s.level, '#ef4444', '#f87171');
+            drawTree(cvF, s.leaf,  '#8b5cf6', '#c4b5fd');
+          }
+
+          window.treeSimNext  = ()=>{ if(step<totalSteps-1){step++;render();} };
+          window.treeSimPrev  = ()=>{ if(step>0){step--;render();} };
+          window.treeSimReset = ()=>{ step=0;render(); };
+
+          const ro = new ResizeObserver(()=>render());
+          ro.observe(document.getElementById('tree-sim-wrap'));
+          setTimeout(render,80);
+        })();
+        </script>
       </div>
 
-      <!-- LightGBM Hyperparameters -->
-      <div class="grid-2" style="margin-top:1.5rem;">
+      </div><!-- end Key Innovations -->
 
-        <div class="card reveal">
-          <h3 style="margin-bottom:1rem; font-size:1.05rem;">🔧 Key Hyperparameters</h3>
-
-          <div class="tabs" id="lgbm-tabs">
-            <button class="tab-btn active" onclick="switchTab('lgbm','tree')">Tree Params</button>
-            <button class="tab-btn" onclick="switchTab('lgbm','sampling')">Sampling</button>
-            <button class="tab-btn" onclick="switchTab('lgbm','reg')">Regularisation</button>
-          </div>
-
-          <div id="lgbm-tree" class="tab-panel active">
-            <div class="param-row">
-              <div class="param-label"><span>num_leaves</span><span style="color:var(--accent-red)">Most important
-                  🔑</span></div>
-              <div class="param-bar">
-                <div class="param-fill" style="width:90%; background:var(--gradient-purple);"></div>
-              </div>
-            </div>
-            <div class="param-row">
-              <div class="param-label"><span>max_depth</span><span style="color:var(--accent-orange)">Use with
-                  num_leaves</span></div>
-              <div class="param-bar">
-                <div class="param-fill" style="width:70%; background:var(--gradient-purple);"></div>
-              </div>
-            </div>
-            <div class="param-row">
-              <div class="param-label"><span>min_data_in_leaf</span><span style="color:var(--accent-orange)">Overfitting
-                  control</span></div>
-              <div class="param-bar">
-                <div class="param-fill" style="width:75%; background:var(--gradient-purple);"></div>
-              </div>
-            </div>
-            <div class="param-row">
-              <div class="param-label"><span>n_estimators + learning_rate</span><span
-                  style="color:var(--accent-red)">Critical</span></div>
-              <div class="param-bar">
-                <div class="param-fill" style="width:85%; background:var(--gradient-purple);"></div>
-              </div>
-            </div>
-          </div>
-
-          <div id="lgbm-sampling" class="tab-panel">
-            <div class="param-row">
-              <div class="param-label"><span>bagging_fraction (GOSS: top_rate)</span><span
-                  style="color:var(--accent-orange)">High impact</span></div>
-              <div class="param-bar">
-                <div class="param-fill" style="width:75%; background:var(--gradient-green);"></div>
-              </div>
-            </div>
-            <div class="param-row">
-              <div class="param-label"><span>feature_fraction (EFB)</span><span style="color:var(--accent-orange)">High
-                  impact</span></div>
-              <div class="param-bar">
-                <div class="param-fill" style="width:70%; background:var(--gradient-green);"></div>
-              </div>
-            </div>
-            <div class="param-row">
-              <div class="param-label"><span>bagging_freq</span><span style="color:var(--accent-blue)">Medium</span>
-              </div>
-              <div class="param-bar">
-                <div class="param-fill" style="width:45%; background:var(--gradient-green);"></div>
-              </div>
-            </div>
-          </div>
-
-          <div id="lgbm-reg" class="tab-panel">
-            <div class="param-row">
-              <div class="param-label"><span>lambda_l1 (L1 reg)</span><span
-                  style="color:var(--accent-blue)">Important</span></div>
-              <div class="param-bar">
-                <div class="param-fill" style="width:65%; background:var(--gradient-blue);"></div>
-              </div>
-            </div>
-            <div class="param-row">
-              <div class="param-label"><span>lambda_l2 (L2 reg)</span><span
-                  style="color:var(--accent-blue)">Important</span></div>
-              <div class="param-bar">
-                <div class="param-fill" style="width:65%; background:var(--gradient-blue);"></div>
-              </div>
-            </div>
-            <div class="param-row">
-              <div class="param-label"><span>min_gain_to_split</span><span
-                  style="color:var(--accent-orange)">Pruning</span></div>
-              <div class="param-bar">
-                <div class="param-fill" style="width:55%; background:var(--gradient-blue);"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="card reveal">
+      <!-- XGBoost vs LightGBM comparison -->
+      <div class="card reveal" style="margin-top:1.5rem;">
           <h3 style="margin-bottom:1rem; font-size:1.05rem;">XGBoost vs LightGBM</h3>
           <table class="compare-table">
             <thead>
@@ -3245,28 +3741,6 @@
             </tbody>
           </table>
         </div>
-
-      </div>
-
-      <!-- Visual Reference -->
-      <div class="grid-2" style="margin-top:1.5rem;">
-        <div class="card reveal">
-          <h3 style="margin-bottom:1rem; font-size:1.05rem;">Visual Reference — GOSS</h3>
-          <div class="img-placeholder" id="img-lgbm-goss">
-            <div class="icon">🖼️</div>
-            <span>Reference image will be added</span>
-            <small style="color:var(--text-muted);">GOSS sampling strategy diagram</small>
-          </div>
-        </div>
-        <div class="card reveal">
-          <h3 style="margin-bottom:1rem; font-size:1.05rem;">Visual Reference — EFB</h3>
-          <div class="img-placeholder" id="img-lgbm-efb">
-            <div class="icon">🖼️</div>
-            <span>Reference image will be added</span>
-            <small style="color:var(--text-muted);">EFB feature bundling illustration</small>
-          </div>
-        </div>
-      </div>
 
       <div class="topic-nav">
         <a href="#xgboost">← XGBoost</a>
