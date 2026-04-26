@@ -1210,6 +1210,117 @@
   <div class="section-divider"></div>
 
   <!-- ============================================================
+     WHY TREE-BASED? — Limitations Bridge Card
+     ============================================================ -->
+  <section>
+    <div class="section">
+      <div class="card reveal" style="border:1px solid rgba(251,191,36,0.3); background:linear-gradient(135deg,rgba(251,191,36,0.08) 0%,rgba(249,115,22,0.06) 100%);">
+
+        <!-- Header -->
+        <div style="display:flex; align-items:center; gap:0.75rem; margin-bottom:1.25rem;">
+          <div style="width:42px;height:42px;border-radius:10px;background:rgba(251,191,36,0.18);border:1px solid rgba(251,191,36,0.4);display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0;">⚠️</div>
+          <div>
+            <h3 style="margin:0;font-size:1.15rem;color:#fde68a;">Where Linear, Logistic &amp; KNN Break Down</h3>
+            <div style="font-size:0.85rem;color:#cbd5e1;margin-top:0.25rem;">Why real-world data forces us to move beyond these algorithms — and toward tree-based models</div>
+          </div>
+        </div>
+
+        <!-- 3-column limitation cards -->
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.25rem;">
+
+          <!-- Linear Regression -->
+          <div style="background:rgba(239,68,68,0.14);border:1px solid rgba(239,68,68,0.35);border-radius:10px;padding:1rem;">
+            <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.75rem;">
+              <span style="font-size:1.1rem;">📈</span>
+              <span style="font-size:0.88rem;font-weight:700;color:#fca5a5;">Linear Regression</span>
+            </div>
+            <ul style="margin:0;padding-left:1.1rem;font-size:0.82rem;color:#cbd5e1;line-height:1.85;">
+              <li>Assumes a <strong style="color:#fff;">straight-line</strong> relationship — fails when data is curved or has bends</li>
+              <li>Cannot model <strong style="color:#fff;">feature interactions</strong> (e.g. price is high only when size AND location are both good)</li>
+              <li>Highly sensitive to <strong style="color:#fff;">outliers</strong> — one bad point skews the whole line</li>
+              <li>Requires <strong style="color:#fff;">feature scaling</strong> and careful engineering to work well</li>
+            </ul>
+          </div>
+
+          <!-- Logistic Regression -->
+          <div style="background:rgba(168,85,247,0.14);border:1px solid rgba(168,85,247,0.35);border-radius:10px;padding:1rem;">
+            <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.75rem;">
+              <span style="font-size:1.1rem;">🔀</span>
+              <span style="font-size:0.88rem;font-weight:700;color:#d8b4fe;">Logistic Regression</span>
+            </div>
+            <ul style="margin:0;padding-left:1.1rem;font-size:0.82rem;color:#cbd5e1;line-height:1.85;">
+              <li>Boundary is <strong style="color:#fff;">always a straight line</strong> — cannot separate XOR-type patterns</li>
+              <li>Struggles with <strong style="color:#fff;">non-linear</strong> class shapes without heavy feature engineering</li>
+              <li>Assumes features are <strong style="color:#fff;">independent</strong> — multicollinearity inflates variance</li>
+              <li>Works poorly on <strong style="color:#fff;">imbalanced</strong> classes without calibration tricks</li>
+            </ul>
+          </div>
+
+          <!-- KNN -->
+          <div style="background:rgba(6,182,212,0.14);border:1px solid rgba(6,182,212,0.35);border-radius:10px;padding:1rem;">
+            <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.75rem;">
+              <span style="font-size:1.1rem;">🔍</span>
+              <span style="font-size:0.88rem;font-weight:700;color:#67e8f9;">K-Nearest Neighbors</span>
+            </div>
+            <ul style="margin:0;padding-left:1.1rem;font-size:0.82rem;color:#cbd5e1;line-height:1.85;">
+              <li><strong style="color:#fff;">Slow at prediction</strong> — must scan every training point for each query</li>
+              <li>Breaks in <strong style="color:#fff;">high dimensions</strong> — curse of dimensionality makes "nearness" meaningless</li>
+              <li>Stores <strong style="color:#fff;">all training data</strong> in memory — unscalable on large datasets</li>
+              <li>Treats all features <strong style="color:#fff;">equally</strong> — irrelevant features distort distance badly</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Shared pain points strip -->
+        <div style="background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.28);border-radius:8px;padding:0.85rem 1.1rem;margin-bottom:1.25rem;">
+          <div style="font-size:0.78rem;font-weight:700;color:#fbbf24;letter-spacing:0.05em;text-transform:uppercase;margin-bottom:0.6rem;">Shared Pain Points Across All Three</div>
+          <div style="display:flex;gap:1.5rem;flex-wrap:wrap;">
+            <span style="font-size:0.82rem;color:#cbd5e1;"><span style="color:#f87171;margin-right:5px;font-weight:700;">✗</span>Cannot capture <strong style="color:#fff;">non-linear</strong> patterns natively</span>
+            <span style="font-size:0.82rem;color:#cbd5e1;"><span style="color:#f87171;margin-right:5px;font-weight:700;">✗</span>Struggle with <strong style="color:#fff;">mixed feature types</strong> (categorical + numeric)</span>
+            <span style="font-size:0.82rem;color:#cbd5e1;"><span style="color:#f87171;margin-right:5px;font-weight:700;">✗</span>Hard to explain <strong style="color:#fff;">why</strong> a prediction was made</span>
+            <span style="font-size:0.82rem;color:#cbd5e1;"><span style="color:#f87171;margin-right:5px;font-weight:700;">✗</span>Sensitive to <strong style="color:#fff;">irrelevant / noisy features</strong></span>
+          </div>
+        </div>
+
+        <!-- Arrow transition -->
+        <div style="display:flex;align-items:center;gap:1rem;">
+          <div style="flex:1;height:1px;background:linear-gradient(to right,rgba(251,191,36,0.4),transparent);"></div>
+          <div style="font-size:0.82rem;font-weight:700;color:#fbbf24;white-space:nowrap;">So what do we need instead?</div>
+          <div style="flex:1;height:1px;background:linear-gradient(to left,rgba(34,197,94,0.4),transparent);"></div>
+        </div>
+
+        <!-- Tree-based answer grid -->
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0.75rem;margin-top:1rem;">
+          <div style="background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.3);border-radius:8px;padding:0.85rem;text-align:center;">
+            <div style="font-size:1.25rem;margin-bottom:0.35rem;">🌿</div>
+            <div style="font-size:0.82rem;font-weight:700;color:#6ee7b7;margin-bottom:0.3rem;">Non-Linear Splits</div>
+            <div style="font-size:0.78rem;color:#94a3b8;line-height:1.5;">Partition any shape of decision boundary with axis-aligned splits</div>
+          </div>
+          <div style="background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.3);border-radius:8px;padding:0.85rem;text-align:center;">
+            <div style="font-size:1.25rem;margin-bottom:0.35rem;">🔗</div>
+            <div style="font-size:0.82rem;font-weight:700;color:#6ee7b7;margin-bottom:0.3rem;">Feature Interactions</div>
+            <div style="font-size:0.78rem;color:#94a3b8;line-height:1.5;">Each branch naturally captures multi-feature combinations</div>
+          </div>
+          <div style="background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.3);border-radius:8px;padding:0.85rem;text-align:center;">
+            <div style="font-size:1.25rem;margin-bottom:0.35rem;">🗂️</div>
+            <div style="font-size:0.82rem;font-weight:700;color:#6ee7b7;margin-bottom:0.3rem;">Mixed Data Types</div>
+            <div style="font-size:0.78rem;color:#94a3b8;line-height:1.5;">Handle numeric and categorical features without encoding tricks</div>
+          </div>
+          <div style="background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.3);border-radius:8px;padding:0.85rem;text-align:center;">
+            <div style="font-size:1.25rem;margin-bottom:0.35rem;">📖</div>
+            <div style="font-size:0.82rem;font-weight:700;color:#6ee7b7;margin-bottom:0.3rem;">Human-Readable</div>
+            <div style="font-size:0.78rem;color:#94a3b8;line-height:1.5;">A printed tree is explainable to any business stakeholder</div>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ============================================================
      04 · DECISION TREE
      ============================================================ -->
   <section id="decision-tree">
@@ -1315,6 +1426,415 @@
         </div>
 
       </div>
+
+      <!-- Full-width Recursive Splitting Simulation -->
+      <div class="card reveal" style="margin-top:1.5rem;">
+        <!-- Header -->
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1rem; flex-wrap:wrap; gap:0.5rem;">
+          <h3 style="font-size:1.05rem; margin:0;">🔀 Recursive Splitting — How a Decision Tree Grows</h3>
+          <div style="display:flex; gap:0.5rem; align-items:center;">
+            <div id="dts-dots" style="display:flex;gap:5px;"></div>
+            <button onclick="dtsPrev()" style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);color:#e2e8f0;border-radius:8px;padding:0.3rem 0.85rem;font-size:0.78rem;cursor:pointer;">← Prev</button>
+            <button onclick="dtsNext()" style="background:rgba(16,185,129,0.2);border:1px solid rgba(16,185,129,0.35);color:#6ee7b7;border-radius:8px;padding:0.3rem 0.85rem;font-size:0.78rem;cursor:pointer;font-weight:600;">Next →</button>
+          </div>
+        </div>
+
+        <!-- Main: canvas + tree diagram side by side -->
+        <div style="display:grid; grid-template-columns:55% 45%; gap:1.25rem; align-items:start;">
+
+          <!-- LEFT: Feature-space canvas -->
+          <div>
+            <div style="font-size:0.7rem;color:#64748b;text-align:center;margin-bottom:4px;letter-spacing:0.04em;">FEATURE SPACE</div>
+            <div style="position:relative;">
+              <canvas id="dts-canvas" style="width:100%;border-radius:10px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.08);display:block;"></canvas>
+            </div>
+            <div style="display:flex;gap:1rem;margin-top:0.5rem;font-size:0.7rem;color:#64748b;justify-content:center;">
+              <span><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#38bdf8;margin-right:3px;vertical-align:middle;"></span>Class A (Positive)</span>
+              <span><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#f97316;margin-right:3px;vertical-align:middle;"></span>Class B (Negative)</span>
+              <span style="margin-left:auto;color:#475569;">╌ split boundary</span>
+            </div>
+          </div>
+
+          <!-- RIGHT: Growing tree + stats -->
+          <div style="display:flex;flex-direction:column;gap:0.75rem;">
+            <div style="font-size:0.7rem;color:#64748b;text-align:center;letter-spacing:0.04em;">DECISION TREE</div>
+            <div id="dts-tree" style="width:100%;"></div>
+            <!-- Entropy/IG stats -->
+            <div id="dts-stats" style="background:rgba(0,0,0,0.2);border-radius:8px;padding:0.7rem 0.85rem;font-size:0.75rem;"></div>
+          </div>
+        </div>
+
+        <!-- Bottom: step description -->
+        <div id="dts-desc" style="margin-top:1rem;padding:0.75rem 1rem;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:10px;"></div>
+      </div>
+
+      <script>
+      (function(){
+        const dpr = window.devicePixelRatio||1;
+        const cv  = document.getElementById('dts-canvas');
+        const treDiv = document.getElementById('dts-tree');
+        const statsDiv = document.getElementById('dts-stats');
+        const descDiv  = document.getElementById('dts-desc');
+        const dotsWrap = document.getElementById('dts-dots');
+
+        // ── Clean 24-point dataset ──────────────────────────────────────
+        // Class A (0/blue): 10 core left + 2 high-y strays in left zone
+        // Class B (1/orange): 10 core right + 2 low-y strays in right zone
+        // Split 1: x < 0.50  → Left 10A+2B  | Right 2A+10B
+        // Split 2: Left, y < 0.78 → pure A(10) | pure B(2)
+        // Split 3: Right, y < 0.22 → pure A(2) | pure B(10)
+        const PTS = [
+          // Class A core (left zone, y < 0.75)
+          [.08,.20,0],[.14,.42,0],[.20,.65,0],[.25,.28,0],[.10,.55,0],
+          [.32,.15,0],[.18,.48,0],[.28,.35,0],[.38,.22,0],[.35,.60,0],
+          // Class B strays in left zone — both HIGH y > 0.82
+          [.15,.88,1],[.30,.92,1],
+          // Class B core (right zone, y > 0.25)
+          [.60,.40,1],[.70,.62,1],[.82,.35,1],[.88,.58,1],[.75,.80,1],
+          [.65,.75,1],[.90,.28,1],[.78,.48,1],[.58,.68,1],[.92,.70,1],
+          // Class A strays in right zone — both LOW y < 0.18
+          [.62,.10,0],[.75,.15,0]
+        ];
+
+        function H(a,b){ // entropy of a/(a+b)
+          if(a===0||b===0) return 0;
+          const n=a+b, p=a/n, q=b/n;
+          return -(p*Math.log2(p)+q*Math.log2(q));
+        }
+
+        // ── Steps ─────────────────────────────────────────────────────
+        const STEPS = [
+          {
+            regions:[], // no splits
+            tree:'root',
+            title:'Step 0 — Root node: all 24 samples, no splits yet',
+            detail:'The tree starts with a single root node containing all data. We compute entropy to measure disorder, then try every possible feature and threshold to find the split with maximum Information Gain.',
+            entropy:{ parent:{a:12,b:12}, left:null, right:null, ig:null, splitLabel:null }
+          },
+          {
+            regions:[{x1:0,y1:0,x2:.50,y2:1,cls:'mixed',a:10,b:2},{x1:.50,y1:0,x2:1,y2:1,cls:'mixed',a:2,b:10}],
+            splitLines:[{type:'v',x:.50,ymin:0,ymax:1,color:'#22c55e',label:'x₁ < 0.50'}],
+            tree:'depth1',
+            title:'Step 1 — Root split: x₁ < 0.50  (best IG = 0.35)',
+            detail:'We try all features and thresholds. Feature x₁ at 0.50 gives the highest Information Gain. Left region has 10A + 2B; right has 2A + 10B. Neither is pure — we recurse on both.',
+            entropy:{ parent:{a:12,b:12}, left:{a:10,b:2}, right:{a:2,b:10}, ig:0.350, splitLabel:'x₁ < 0.50' }
+          },
+          {
+            regions:[
+              {x1:0,y1:0,x2:.50,y2:.78,cls:'A',a:10,b:0},
+              {x1:0,y1:.78,x2:.50,y2:1,cls:'B',a:0,b:2},
+              {x1:.50,y1:0,x2:1,y2:1,cls:'mixed',a:2,b:10}
+            ],
+            splitLines:[
+              {type:'v',x:.50,ymin:0,ymax:1,color:'#22c55e',label:'x₁<0.50'},
+              {type:'h',y:.78,xmin:0,xmax:.50,color:'#38bdf8',label:'x₂<0.78'}
+            ],
+            tree:'depth2L',
+            title:'Step 2 — Left child split: x₂ < 0.78  (IG = 0.65)',
+            detail:'Left region (10A + 2B) is split on x₂ at 0.78. The two Class B strays both have x₂ > 0.78 — they fall into the lower-left region (pure B). Everything with x₂ < 0.78 is all 10 Class A points — pure A leaf. Both left-side leaves done.',
+            entropy:{ parent:{a:10,b:2}, left:{a:10,b:0}, right:{a:0,b:2}, ig:0.650, splitLabel:'x₂ < 0.78 (left region)' }
+          },
+          {
+            regions:[
+              {x1:0,y1:0,x2:.50,y2:.78,cls:'A',a:10,b:0},
+              {x1:0,y1:.78,x2:.50,y2:1,cls:'B',a:0,b:2},
+              {x1:.50,y1:0,x2:1,y2:.22,cls:'A',a:2,b:0},
+              {x1:.50,y1:.22,x2:1,y2:1,cls:'B',a:0,b:10}
+            ],
+            splitLines:[
+              {type:'v',x:.50,ymin:0,ymax:1,color:'#22c55e',label:'x₁<0.50'},
+              {type:'h',y:.78,xmin:0,xmax:.50,color:'#38bdf8',label:'x₂<0.78'},
+              {type:'h',y:.22,xmin:.50,xmax:1,color:'#f97316',label:'x₂<0.22'}
+            ],
+            tree:'depth2R',
+            title:'Step 3 — Right child split: x₂ < 0.22  (IG = 0.65)',
+            detail:'Right region (2A + 10B) is split on x₂ at 0.22. The two Class A strays both have x₂ < 0.22 — upper-right leaf is pure A. Everything with x₂ > 0.22 is 10 pure Class B. All 4 leaf nodes are now pure — tree complete.',
+            entropy:{ parent:{a:2,b:10}, left:{a:2,b:0}, right:{a:0,b:10}, ig:0.650, splitLabel:'x₂ < 0.22 (right region)' }
+          }
+        ];
+
+        let step=0;
+
+        // ── Step dots ─────────────────────────────────────────────────
+        STEPS.forEach((_,i)=>{
+          const d=document.createElement('div');
+          d.style.cssText='width:8px;height:8px;border-radius:50%;cursor:pointer;transition:all 0.25s;';
+          d.onclick=()=>{step=i;render();};
+          dotsWrap.appendChild(d);
+        });
+        function updateDots(){
+          [...dotsWrap.children].forEach((d,i)=>{
+            d.style.background=i===step?'#22c55e':'rgba(255,255,255,0.15)';
+            d.style.transform=i===step?'scale(1.35)':'scale(1)';
+          });
+        }
+
+        // ── Canvas draw ───────────────────────────────────────────────
+        function drawCanvas(){
+          const W=cv.clientWidth||380;
+          const canH=Math.round(W*0.75);
+          cv.width=W*dpr; cv.height=canH*dpr;
+          cv.style.height=canH+'px';
+          const ctx=cv.getContext('2d');
+          ctx.scale(dpr,dpr);
+          ctx.clearRect(0,0,W,canH);
+
+          const s=STEPS[step];
+          const padL=38, padB=28, padT=14, padR=12;
+          const cw=W-padL-padR, ch=canH-padT-padB;
+
+          function cx(px){ return padL+px*cw; }
+          function cy(py){ return padT+py*ch; }
+
+          // helper: draw text with opaque background pill for readability
+          function labelPill(text, x, y, fg, bg, fs=8){
+            ctx.font=`bold ${fs}px Inter,sans-serif`;
+            const tw=ctx.measureText(text).width;
+            const pw=tw+10, ph=fs+6;
+            ctx.fillStyle=bg||'rgba(15,23,42,0.85)';
+            ctx.beginPath();
+            ctx.roundRect ? ctx.roundRect(x-pw/2, y-ph*0.72, pw, ph, 3)
+                          : ctx.rect(x-pw/2, y-ph*0.72, pw, ph);
+            ctx.fill();
+            ctx.fillStyle=fg;
+            ctx.textAlign='center';
+            ctx.fillText(text, x, y);
+          }
+
+          // grid lines (subtle)
+          ctx.strokeStyle='rgba(255,255,255,0.05)'; ctx.lineWidth=0.7;
+          [.25,.5,.75].forEach(v=>{
+            ctx.beginPath(); ctx.moveTo(cx(v),padT); ctx.lineTo(cx(v),padT+ch); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(padL,cy(v)); ctx.lineTo(padL+cw,cy(v)); ctx.stroke();
+          });
+
+          // axes
+          ctx.strokeStyle='rgba(255,255,255,0.3)'; ctx.lineWidth=1.2;
+          ctx.beginPath(); ctx.moveTo(padL,padT); ctx.lineTo(padL,padT+ch); ctx.lineTo(padL+cw,padT+ch); ctx.stroke();
+
+          // x-axis ticks + labels
+          ctx.fillStyle='#94a3b8'; ctx.font='7.5px Inter,sans-serif'; ctx.textAlign='center';
+          [0,.25,.5,.75,1].forEach(v=>{
+            const x=cx(v);
+            ctx.strokeStyle='rgba(255,255,255,0.3)'; ctx.lineWidth=1;
+            ctx.beginPath(); ctx.moveTo(x,padT+ch); ctx.lineTo(x,padT+ch+5); ctx.stroke();
+            ctx.fillStyle='#94a3b8'; ctx.fillText(v.toFixed(2), x, padT+ch+16);
+          });
+
+          // y-axis ticks + labels (data y=0 at top, y=1 at bottom)
+          ctx.textAlign='right';
+          [0,.25,.5,.75,1].forEach(v=>{
+            const y=cy(v);
+            ctx.strokeStyle='rgba(255,255,255,0.3)'; ctx.lineWidth=1;
+            ctx.beginPath(); ctx.moveTo(padL-5,y); ctx.lineTo(padL,y); ctx.stroke();
+            ctx.fillStyle='#94a3b8'; ctx.font='7.5px Inter,sans-serif';
+            ctx.fillText(v.toFixed(2), padL-7, y+3);
+          });
+
+          // axis labels — bold, clearly visible
+          ctx.textAlign='center'; ctx.fillStyle='#cbd5e1'; ctx.font='bold 9px Inter,sans-serif';
+          ctx.fillText('Feature  x₁  →', padL+cw/2, canH-6);
+          ctx.save(); ctx.translate(11, padT+ch/2); ctx.rotate(-Math.PI/2);
+          ctx.fillText('Feature  x₂  →', 0, 0); ctx.restore();
+
+          // region shading + labels
+          if(s.regions) s.regions.forEach(r=>{
+            const rx0=cx(r.x1), ry0=cy(r.y1), rx1=cx(r.x2), ry1=cy(r.y2);
+            const rw=rx1-rx0, rh=ry1-ry0;
+            if(r.cls==='A')      ctx.fillStyle='rgba(56,189,248,0.13)';
+            else if(r.cls==='B') ctx.fillStyle='rgba(249,115,22,0.13)';
+            else                 ctx.fillStyle='rgba(255,255,255,0.04)';
+            ctx.fillRect(rx0,ry0,rw,rh);
+
+            const mx=rx0+rw/2, my=ry0+rh/2;
+            if(rh>30 && rw>30){
+              if(r.cls==='A'){
+                labelPill(`${r.a}A · 0B`, mx, my-6, '#38bdf8', 'rgba(10,18,36,0.82)', 8);
+                labelPill('Pure ✓  H=0', mx, my+9, '#4ade80', 'rgba(10,18,36,0.82)', 7.5);
+              } else if(r.cls==='B'){
+                labelPill(`0A · ${r.b}B`, mx, my-6, '#fb923c', 'rgba(10,18,36,0.82)', 8);
+                labelPill('Pure ✓  H=0', mx, my+9, '#4ade80', 'rgba(10,18,36,0.82)', 7.5);
+              } else {
+                const hv=H(r.a,r.b);
+                labelPill(`${r.a}A · ${r.b}B`, mx, my-6, '#e2e8f0', 'rgba(10,18,36,0.82)', 8);
+                labelPill(`H = ${hv.toFixed(2)}`, mx, my+9, '#fbbf24', 'rgba(10,18,36,0.82)', 7.5);
+              }
+            }
+          });
+
+          // split boundary lines + inline condition label
+          if(s.splitLines) s.splitLines.forEach(sp=>{
+            ctx.beginPath(); ctx.setLineDash([7,4]);
+            ctx.strokeStyle=sp.color; ctx.lineWidth=2;
+            if(sp.type==='v'){
+              ctx.moveTo(cx(sp.x),cy(sp.ymin)); ctx.lineTo(cx(sp.x),cy(sp.ymax));
+            } else {
+              ctx.moveTo(cx(sp.xmin),cy(sp.y)); ctx.lineTo(cx(sp.xmax),cy(sp.y));
+            }
+            ctx.stroke(); ctx.setLineDash([]);
+
+            // condition label on the line
+            if(sp.type==='v'){
+              const lx=cx(sp.x), ly=cy(0.12);
+              labelPill(sp.label, lx+2, ly, sp.color, 'rgba(10,18,36,0.9)', 8);
+            } else {
+              const midX=cx((sp.xmin+sp.xmax)/2);
+              const ly=cy(sp.y)-1;
+              labelPill(sp.label, midX, ly, sp.color, 'rgba(10,18,36,0.9)', 8);
+            }
+          });
+
+          // data points — drawn last so they sit on top
+          PTS.forEach(([px,py,cls])=>{
+            const pcx=cx(px), pcy=cy(py);
+            ctx.beginPath(); ctx.arc(pcx,pcy,5.5,0,Math.PI*2);
+            ctx.fillStyle=cls===0?'#38bdf8':'#f97316'; ctx.fill();
+            ctx.strokeStyle='rgba(5,10,20,0.7)'; ctx.lineWidth=1.2; ctx.stroke();
+          });
+        }
+
+        // ── Decision Tree SVG ─────────────────────────────────────────
+        // Layout constants — carefully calculated so nothing overlaps
+        const SW=300, SH=220;
+        // row y-positions
+        const RY=6,   RH=26, RW=76;  // root
+        const CY=82,  CH=24, CW=64;  // children
+        const LY=158, LH=22, LW=56;  // leaves
+        // x-centers
+        const ROOT_CX=SW/2;          // 150
+        const LC_CX=72,  RC_CX=228;  // child centers
+        // leaf centers: LL=40, LR=104, RL=196, RR=260
+        const LL_CX=40, LR_CX=104, RL_CX=196, RR_CX=260;
+
+        function nd(cx,y,w,h,line1,line2,fill,stroke,tc){
+          const x=cx-w/2;
+          return `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="5" fill="${fill}" stroke="${stroke}" stroke-width="1.2"/>
+            <text x="${cx}" y="${y+h*0.44}" text-anchor="middle" font-size="7.5" font-weight="700" fill="${tc}" font-family="Inter,sans-serif">${line1}</text>
+            ${line2?`<text x="${cx}" y="${y+h*0.82}" text-anchor="middle" font-size="6" fill="rgba(255,255,255,0.42)" font-family="Inter,sans-serif">${line2}</text>`:''}`;
+        }
+        function lf(cx,y,pred,counts,cls){
+          const x=cx-LW/2;
+          const fill=cls==='A'?'rgba(56,189,248,0.16)':'rgba(249,115,22,0.16)';
+          const stroke=cls==='A'?'#38bdf8':'#f97316';
+          const tc=cls==='A'?'#7dd3fc':'#fdba74';
+          return `<rect x="${x}" y="${y}" width="${LW}" height="${LH}" rx="4" fill="${fill}" stroke="${stroke}" stroke-width="1.2" stroke-dasharray="3,2"/>
+            <text x="${cx}" y="${y+LH*0.42}" text-anchor="middle" font-size="7" font-weight="700" fill="${tc}" font-family="Inter,sans-serif">${pred}</text>
+            <text x="${cx}" y="${y+LH*0.82}" text-anchor="middle" font-size="6" fill="rgba(255,255,255,0.38)" font-family="Inter,sans-serif">${counts}</text>`;
+        }
+        function edge(x1,y1,x2,y2,label,lside){
+          const mx=(x1+x2)/2, my=(y1+y2)/2-2;
+          const lx= lside==='l' ? mx-4 : mx+4;
+          return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="rgba(255,255,255,0.18)" stroke-width="1.1"/>
+            <text x="${lx}" y="${my}" text-anchor="${lside==='l'?'end':'start'}" font-size="6" fill="rgba(255,255,255,0.35)" font-family="Inter,sans-serif">${label}</text>`;
+        }
+
+        function buildTreeSVG(treeState){
+          let s=`<svg viewBox="0 0 ${SW} ${SH}" style="width:100%;height:auto;" xmlns="http://www.w3.org/2000/svg">`;
+
+          // Root node — always visible; label changes based on whether split is decided yet
+          if(treeState==='root'){
+            s+=nd(ROOT_CX,RY,RW,RH,'Root Node','12A · 12B · H=1.00','rgba(34,197,94,0.12)','#22c55e','#86efac');
+            s+=`<text x="${SW/2}" y="${SH/2+20}" text-anchor="middle" font-size="8" fill="rgba(255,255,255,0.25)" font-family="Inter,sans-serif">Click Next → to grow the tree</text>`;
+          } else {
+            s+=nd(ROOT_CX,RY,RW,RH,'x₁ < 0.50','12A · 12B · H=1.00','rgba(34,197,94,0.14)','#22c55e','#86efac');
+          }
+
+          // Depth-1 children
+          if(treeState==='depth1'||treeState==='depth2L'||treeState==='depth2R'){
+            s+=edge(ROOT_CX,RY+RH, LC_CX,CY, 'Yes','l');
+            s+=edge(ROOT_CX,RY+RH, RC_CX,CY, 'No','r');
+            s+=nd(LC_CX,CY,CW,CH,'x₂ < 0.78','10A · 2B · H=0.65','rgba(56,189,248,0.1)','#38bdf8','#7dd3fc');
+            s+=nd(RC_CX,CY,CW,CH,'x₂ < 0.22','2A · 10B · H=0.65','rgba(249,115,22,0.1)','#f97316','#fdba74');
+            if(treeState==='depth1'){
+              s+=`<text x="${LC_CX}" y="${CY+CH+11}" text-anchor="middle" font-size="6" fill="#fbbf24" font-family="Inter,sans-serif">not pure yet…</text>`;
+              s+=`<text x="${RC_CX}" y="${CY+CH+11}" text-anchor="middle" font-size="6" fill="#fbbf24" font-family="Inter,sans-serif">not pure yet…</text>`;
+            }
+          }
+
+          // Left leaves
+          if(treeState==='depth2L'||treeState==='depth2R'){
+            s+=edge(LC_CX,CY+CH, LL_CX,LY, 'Yes','l');
+            s+=edge(LC_CX,CY+CH, LR_CX,LY, 'No','r');
+            s+=lf(LL_CX,LY,'✓ Class A','10A · 0B · H=0','A');
+            s+=lf(LR_CX,LY,'✓ Class B','0A · 2B · H=0','B');
+          }
+
+          // Right leaves
+          if(treeState==='depth2R'){
+            s+=edge(RC_CX,CY+CH, RL_CX,LY, 'Yes','l');
+            s+=edge(RC_CX,CY+CH, RR_CX,LY, 'No','r');
+            s+=lf(RL_CX,LY,'✓ Class A','2A · 0B · H=0','A');
+            s+=lf(RR_CX,LY,'✓ Class B','0A · 10B · H=0','B');
+            s+=`<text x="${SW/2}" y="${SH-4}" text-anchor="middle" font-size="7" fill="#4ade80" font-weight="600" font-family="Inter,sans-serif">All 4 leaves pure — tree complete ✓</text>`;
+          }
+
+          s+='</svg>';
+          return s;
+        }
+
+        // ── Entropy/IG stats ──────────────────────────────────────────
+        function buildStats(e){
+          if(!e.left){
+            const h=H(e.parent.a,e.parent.b);
+            return `<div style="color:#e2e8f0;font-weight:600;margin-bottom:0.4rem;">Root Entropy</div>
+                    <div style="color:#fbbf24;">H(${e.parent.a}A,${e.parent.b}B) = <strong>${h.toFixed(3)}</strong> — max disorder (50/50)</div>`;
+          }
+          const hP=H(e.parent.a,e.parent.b);
+          const hL=H(e.left.a,e.left.b);
+          const hR=H(e.right.a,e.right.b);
+          const nL=e.left.a+e.left.b, nR=e.right.a+e.right.b, nP=nL+nR;
+          const ig=hP-(nL/nP)*hL-(nR/nP)*hR;
+          return `<div style="color:#e2e8f0;font-weight:600;margin-bottom:0.45rem;">Split: <span style="color:#22c55e;">${e.splitLabel}</span></div>
+                  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.5rem;font-size:0.72rem;">
+                    <div style="background:rgba(255,255,255,0.04);border-radius:6px;padding:0.4rem;">
+                      <div style="color:#94a3b8;margin-bottom:2px;">Parent H</div>
+                      <div style="color:#fbbf24;font-weight:700;">${hP.toFixed(3)}</div>
+                      <div style="color:#64748b;font-size:0.65rem;">${e.parent.a}A, ${e.parent.b}B</div>
+                    </div>
+                    <div style="background:rgba(56,189,248,0.06);border-radius:6px;padding:0.4rem;">
+                      <div style="color:#94a3b8;margin-bottom:2px;">Left H</div>
+                      <div style="color:${hL===0?'#22c55e':'#fbbf24'};font-weight:700;">${hL.toFixed(3)} ${hL===0?'✓':''}</div>
+                      <div style="color:#64748b;font-size:0.65rem;">${e.left.a}A, ${e.left.b}B</div>
+                    </div>
+                    <div style="background:rgba(249,115,22,0.06);border-radius:6px;padding:0.4rem;">
+                      <div style="color:#94a3b8;margin-bottom:2px;">Right H</div>
+                      <div style="color:${hR===0?'#22c55e':'#fbbf24'};font-weight:700;">${hR.toFixed(3)} ${hR===0?'✓':''}</div>
+                      <div style="color:#64748b;font-size:0.65rem;">${e.right.a}A, ${e.right.b}B</div>
+                    </div>
+                  </div>
+                  <div style="margin-top:0.45rem;padding:0.35rem 0.6rem;background:rgba(34,197,94,0.1);border-left:3px solid #22c55e;border-radius:4px;font-size:0.75rem;">
+                    <strong style="color:#6ee7b7;">IG = ${hP.toFixed(3)} − (${nL}/${nP})×${hL.toFixed(3)} − (${nR}/${nP})×${hR.toFixed(3)} = <span style="font-size:0.85rem;">${ig.toFixed(3)}</span></strong>
+                  </div>`;
+        }
+
+        // ── Render ─────────────────────────────────────────────────────
+        function render(){
+          const s=STEPS[step];
+          updateDots();
+          drawCanvas();
+          treDiv.innerHTML=buildTreeSVG(s.tree);
+          statsDiv.innerHTML=buildStats(s.entropy);
+          descDiv.innerHTML=`
+            <div style="display:flex;gap:0.75rem;align-items:flex-start;">
+              <span style="background:rgba(34,197,94,0.15);color:#6ee7b7;border-radius:6px;padding:0.15rem 0.55rem;font-size:0.72rem;font-weight:700;white-space:nowrap;">Step ${step}/3</span>
+              <div>
+                <div style="font-size:0.85rem;font-weight:700;color:#e2e8f0;margin-bottom:0.25rem;">${s.title}</div>
+                <div style="font-size:0.78rem;color:#94a3b8;line-height:1.6;">${s.detail}</div>
+              </div>
+            </div>
+            <div style="display:flex;gap:0.35rem;margin-top:0.65rem;">
+              ${STEPS.map((_,i)=>`<div style="height:3px;flex:1;border-radius:2px;background:${i<=step?'#22c55e':'rgba(255,255,255,0.1)'};transition:background 0.3s;"></div>`).join('')}
+            </div>`;
+        }
+
+        window.dtsNext=()=>{ if(step<STEPS.length-1){step++;render();} };
+        window.dtsPrev=()=>{ if(step>0){step--;render();} };
+
+        const ro=new ResizeObserver(()=>drawCanvas());
+        ro.observe(cv.parentElement);
+        setTimeout(render,80);
+      })();
+      </script>
 
       <div class="grid-2" style="margin-top:1.5rem;">
         <div class="card card-accent card-green reveal">
@@ -2180,6 +2700,128 @@
         <a href="#bagging-boosting">Bagging &amp; Boosting →</a>
       </div>
 
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ============================================================
+     MIXED FEATURES — Why Trees Handle Real Data Better
+     ============================================================ -->
+  <section>
+    <div class="section">
+
+      <div class="card reveal" style="padding:0;overflow:hidden;border:1px solid rgba(56,189,248,0.2);background:transparent;">
+
+        <!-- Card header band -->
+        <div style="background:linear-gradient(90deg,rgba(56,189,248,0.12) 0%,rgba(34,197,94,0.08) 100%);border-bottom:1px solid rgba(255,255,255,0.08);padding:1.25rem 1.75rem;display:flex;align-items:center;gap:1rem;">
+          <div style="width:48px;height:48px;border-radius:12px;background:rgba(56,189,248,0.15);border:1px solid rgba(56,189,248,0.35);display:flex;align-items:center;justify-content:center;font-size:1.6rem;flex-shrink:0;">🗂️</div>
+          <div>
+            <h3 style="margin:0;font-size:1.3rem;color:#e2e8f0;font-weight:700;">Handling Real-World Data: Numeric + Categorical Features</h3>
+            <div style="font-size:0.92rem;color:#94a3b8;margin-top:0.3rem;">Why linear models struggle with mixed data — and how decision trees handle it naturally</div>
+          </div>
+          <!-- Feature type badges -->
+          <div style="margin-left:auto;display:flex;gap:0.5rem;flex-shrink:0;">
+            <span style="background:rgba(56,189,248,0.15);border:1px solid rgba(56,189,248,0.3);color:#7dd3fc;border-radius:20px;padding:0.3rem 0.9rem;font-size:0.82rem;font-weight:700;">123 Numeric</span>
+            <span style="background:rgba(249,115,22,0.15);border:1px solid rgba(249,115,22,0.3);color:#fdba74;border-radius:20px;padding:0.3rem 0.9rem;font-size:0.82rem;font-weight:700;">Abc Categorical</span>
+          </div>
+        </div>
+
+        <!-- What are mixed features — top strip -->
+        <div style="padding:1.1rem 1.75rem;background:rgba(255,255,255,0.02);border-bottom:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;gap:1.25rem;flex-wrap:wrap;">
+          <span style="font-size:0.85rem;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:0.05em;">Real datasets contain:</span>
+          <div style="display:flex;align-items:center;gap:0.7rem;flex-wrap:wrap;">
+            <div style="background:rgba(56,189,248,0.1);border:1px solid rgba(56,189,248,0.25);border-radius:8px;padding:0.45rem 1rem;font-size:0.88rem;color:#7dd3fc;font-weight:600;">age, salary, temperature</div>
+            <span style="color:#475569;font-weight:700;font-size:1.1rem;">+</span>
+            <div style="background:rgba(249,115,22,0.1);border:1px solid rgba(249,115,22,0.25);border-radius:8px;padding:0.45rem 1rem;font-size:0.88rem;color:#fdba74;font-weight:600;">city, gender, product type</div>
+            <span style="color:#475569;font-weight:700;font-size:1.1rem;">=</span>
+            <div style="font-size:0.88rem;color:#e2e8f0;font-weight:600;">Every real-world ML problem</div>
+          </div>
+        </div>
+
+        <!-- Main 2-col comparison -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;">
+
+          <!-- LEFT column — Linear / Logistic pain -->
+          <div style="padding:1.4rem 1.75rem;border-right:1px solid rgba(255,255,255,0.07);">
+            <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:1.1rem;">
+              <div style="width:32px;height:32px;border-radius:8px;background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.3);display:flex;align-items:center;justify-content:center;font-size:1rem;">📉</div>
+              <span style="font-size:1rem;font-weight:700;color:#fca5a5;">Linear &amp; Logistic Regression</span>
+            </div>
+
+            <div style="background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.18);border-radius:8px;padding:0.75rem 1rem;margin-bottom:0.75rem;">
+              <div style="font-size:0.9rem;font-weight:700;color:#e2e8f0;margin-bottom:0.35rem;">Why they need numbers only</div>
+              <div style="font-size:0.88rem;color:#94a3b8;font-family:monospace;background:rgba(0,0,0,0.25);border-radius:6px;padding:0.45rem 0.75rem;">y = w₁x₁ + w₂x₂ + …</div>
+              <div style="font-size:0.86rem;color:#94a3b8;margin-top:0.45rem;">Every feature must be a number with a linear contribution — categories don't fit this formula.</div>
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:0.6rem;">
+              <div style="display:flex;gap:0.75rem;align-items:flex-start;background:rgba(239,68,68,0.07);border-radius:8px;padding:0.7rem 0.85rem;">
+                <span style="color:#f87171;font-size:1.1rem;flex-shrink:0;margin-top:1px;">✗</span>
+                <div>
+                  <div style="font-size:0.9rem;font-weight:700;color:#fca5a5;margin-bottom:0.25rem;">Encoding required — extra work &amp; risks</div>
+                  <div style="font-size:0.85rem;color:#94a3b8;">One-hot encoding: 500 cities → 500 columns. High cardinality makes the model huge and slow. Sparse data wastes memory.</div>
+                </div>
+              </div>
+              <div style="display:flex;gap:0.75rem;align-items:flex-start;background:rgba(239,68,68,0.07);border-radius:8px;padding:0.7rem 0.85rem;">
+                <span style="color:#f87171;font-size:1.1rem;flex-shrink:0;margin-top:1px;">✗</span>
+                <div>
+                  <div style="font-size:0.9rem;font-weight:700;color:#fca5a5;margin-bottom:0.25rem;">Fake numeric ordering</div>
+                  <div style="font-size:0.85rem;color:#94a3b8;">Label encoding: Red=1, Blue=2, Green=3. The model reads this as <em style="color:#e2e8f0;">Green &gt; Blue &gt; Red</em> — a meaningless rank that distorts learning.</div>
+                </div>
+              </div>
+              <div style="display:flex;gap:0.75rem;align-items:flex-start;background:rgba(239,68,68,0.07);border-radius:8px;padding:0.7rem 0.85rem;">
+                <span style="color:#f87171;font-size:1.1rem;flex-shrink:0;margin-top:1px;">✗</span>
+                <div>
+                  <div style="font-size:0.9rem;font-weight:700;color:#fca5a5;margin-bottom:0.25rem;">Interactions need manual engineering</div>
+                  <div style="font-size:0.85rem;color:#94a3b8;">"City = Bangalore AND Salary &gt; 10L → high risk" can't be learned automatically. You must create a new feature by hand.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- RIGHT column — Trees advantage -->
+          <div style="padding:1.4rem 1.75rem;">
+            <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:1.1rem;">
+              <div style="width:32px;height:32px;border-radius:8px;background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.3);display:flex;align-items:center;justify-content:center;font-size:1rem;">🌳</div>
+              <span style="font-size:1rem;font-weight:700;color:#6ee7b7;">Decision Trees</span>
+            </div>
+
+            <div style="background:rgba(34,197,94,0.07);border:1px solid rgba(34,197,94,0.2);border-radius:8px;padding:0.75rem 1rem;margin-bottom:0.75rem;">
+              <div style="font-size:0.9rem;font-weight:700;color:#e2e8f0;margin-bottom:0.35rem;">How splits work on any feature type</div>
+              <div style="display:flex;gap:0.6rem;">
+                <div style="font-size:0.85rem;color:#7dd3fc;font-family:monospace;background:rgba(0,0,0,0.25);border-radius:6px;padding:0.4rem 0.7rem;flex:1;">Salary &gt; 10L<br><span style="color:#64748b;font-size:0.76rem;">numeric threshold</span></div>
+                <div style="font-size:0.85rem;color:#fdba74;font-family:monospace;background:rgba(0,0,0,0.25);border-radius:6px;padding:0.4rem 0.7rem;flex:1;">City ∈ {Blr, Del}<br><span style="color:#64748b;font-size:0.76rem;">categorical subset</span></div>
+              </div>
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:0.6rem;">
+              <div style="display:flex;gap:0.75rem;align-items:flex-start;background:rgba(34,197,94,0.07);border-radius:8px;padding:0.7rem 0.85rem;">
+                <span style="color:#4ade80;font-size:1.1rem;flex-shrink:0;margin-top:1px;">✓</span>
+                <div>
+                  <div style="font-size:0.9rem;font-weight:700;color:#6ee7b7;margin-bottom:0.25rem;">No encoding needed</div>
+                  <div style="font-size:0.85rem;color:#94a3b8;">Splits directly on raw category values — <em style="color:#e2e8f0;">City ∈ {Bangalore, Delhi}</em>. No column explosion, no sparse matrix.</div>
+                </div>
+              </div>
+              <div style="display:flex;gap:0.75rem;align-items:flex-start;background:rgba(34,197,94,0.07);border-radius:8px;padding:0.7rem 0.85rem;">
+                <span style="color:#4ade80;font-size:1.1rem;flex-shrink:0;margin-top:1px;">✓</span>
+                <div>
+                  <div style="font-size:0.9rem;font-weight:700;color:#6ee7b7;margin-bottom:0.25rem;">No fake ordering</div>
+                  <div style="font-size:0.85rem;color:#94a3b8;">Categories are split into <em style="color:#e2e8f0;">groups</em>, never ranked as numbers. Red, Blue, Green are just distinct labels.</div>
+                </div>
+              </div>
+              <div style="display:flex;gap:0.75rem;align-items:flex-start;background:rgba(34,197,94,0.07);border-radius:8px;padding:0.7rem 0.85rem;">
+                <span style="color:#4ade80;font-size:1.1rem;flex-shrink:0;margin-top:1px;">✓</span>
+                <div>
+                  <div style="font-size:0.9rem;font-weight:700;color:#6ee7b7;margin-bottom:0.25rem;">Interactions discovered automatically</div>
+                  <div style="font-size:0.85rem;color:#94a3b8;">Each tree path <em style="color:#e2e8f0;">is</em> an interaction rule: IF City = Bangalore AND Salary &gt; 10L → high risk. No manual work.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
     </div>
   </section>
 
