@@ -530,7 +530,8 @@
           style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.75rem;margin-bottom:1rem;">
           <div>
             <h3 style="margin:0;font-size:1.05rem;">📉 Gradient Descent — Live Simulation</h3>
-            <div style="font-size:0.82rem;color:#94a3b8;margin-top:0.25rem;">Watch the parameter β₁ descend the MSE loss curve step by step to find the optimal fit</div>
+            <div style="font-size:0.82rem;color:#94a3b8;margin-top:0.25rem;">Watch the parameter β₁ descend the MSE loss
+              curve step by step to find the optimal fit</div>
           </div>
           <div style="display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap;">
             <label style="font-size:0.82rem;color:#cbd5e1;">Learning rate α:</label>
@@ -542,9 +543,11 @@
               <option value="0.9">0.90 — unstable</option>
             </select>
             <button onclick="gdRun()" id="gd-btn-run"
-              style="background:rgba(59,130,246,0.2);border:1px solid rgba(59,130,246,0.4);color:#93c5fd;border-radius:8px;padding:0.3rem 0.9rem;font-size:0.82rem;cursor:pointer;font-weight:600;">▶ Run</button>
+              style="background:rgba(59,130,246,0.2);border:1px solid rgba(59,130,246,0.4);color:#93c5fd;border-radius:8px;padding:0.3rem 0.9rem;font-size:0.82rem;cursor:pointer;font-weight:600;">▶
+              Run</button>
             <button onclick="gdReset()"
-              style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.18);color:#cbd5e1;border-radius:8px;padding:0.3rem 0.9rem;font-size:0.82rem;cursor:pointer;">↺ Reset</button>
+              style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.18);color:#cbd5e1;border-radius:8px;padding:0.3rem 0.9rem;font-size:0.82rem;cursor:pointer;">↺
+              Reset</button>
           </div>
         </div>
 
@@ -553,44 +556,65 @@
 
           <!-- LEFT: Loss bowl -->
           <div>
-            <div style="font-size:0.78rem;font-weight:600;color:#cbd5e1;text-align:center;margin-bottom:5px;letter-spacing:0.04em;text-transform:uppercase;">MSE Loss vs β₁</div>
+            <div
+              style="font-size:0.78rem;font-weight:600;color:#cbd5e1;text-align:center;margin-bottom:5px;letter-spacing:0.04em;text-transform:uppercase;">
+              MSE Loss vs β₁</div>
             <canvas id="gd-loss-canvas"
               style="width:100%;border-radius:10px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.08);display:block;"></canvas>
-            <div style="font-size:0.78rem;color:#94a3b8;text-align:center;margin-top:5px;">The loss bowl is convex — gradient descent always finds the global minimum</div>
+            <div style="font-size:0.78rem;color:#94a3b8;text-align:center;margin-top:5px;">The loss bowl is convex —
+              gradient descent always finds the global minimum</div>
           </div>
 
           <!-- RIGHT: Regression line on data -->
           <div>
-            <div style="font-size:0.78rem;font-weight:600;color:#cbd5e1;text-align:center;margin-bottom:5px;letter-spacing:0.04em;text-transform:uppercase;">Regression Line Updating</div>
+            <div
+              style="font-size:0.78rem;font-weight:600;color:#cbd5e1;text-align:center;margin-bottom:5px;letter-spacing:0.04em;text-transform:uppercase;">
+              Regression Line Updating</div>
             <canvas id="gd-line-canvas"
               style="width:100%;border-radius:10px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.08);display:block;"></canvas>
-            <div style="font-size:0.78rem;color:#94a3b8;text-align:center;margin-top:5px;">Line rotates each step until it minimises the squared residuals</div>
+            <div style="font-size:0.78rem;color:#94a3b8;text-align:center;margin-top:5px;">Line rotates each step until
+              it minimises the squared residuals</div>
           </div>
         </div>
 
         <!-- Step info bar -->
         <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0.6rem;margin-top:0.85rem;">
-          <div style="background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.2);border-radius:8px;padding:0.55rem 0.7rem;text-align:center;">
-            <div style="font-size:0.74rem;color:#94a3b8;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:3px;">Step</div>
+          <div
+            style="background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.2);border-radius:8px;padding:0.55rem 0.7rem;text-align:center;">
+            <div
+              style="font-size:0.74rem;color:#94a3b8;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:3px;">
+              Step</div>
             <div id="gd-info-step" style="font-size:1rem;font-weight:700;color:#93c5fd;">0</div>
           </div>
-          <div style="background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.2);border-radius:8px;padding:0.55rem 0.7rem;text-align:center;">
-            <div style="font-size:0.74rem;color:#94a3b8;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:3px;">β₁ (slope)</div>
+          <div
+            style="background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.2);border-radius:8px;padding:0.55rem 0.7rem;text-align:center;">
+            <div
+              style="font-size:0.74rem;color:#94a3b8;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:3px;">
+              β₁ (slope)</div>
             <div id="gd-info-beta" style="font-size:1rem;font-weight:700;color:#93c5fd;">—</div>
           </div>
-          <div style="background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2);border-radius:8px;padding:0.55rem 0.7rem;text-align:center;">
-            <div style="font-size:0.74rem;color:#94a3b8;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:3px;">MSE Loss</div>
+          <div
+            style="background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2);border-radius:8px;padding:0.55rem 0.7rem;text-align:center;">
+            <div
+              style="font-size:0.74rem;color:#94a3b8;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:3px;">
+              MSE Loss</div>
             <div id="gd-info-loss" style="font-size:1rem;font-weight:700;color:#6ee7b7;">—</div>
           </div>
-          <div style="background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.2);border-radius:8px;padding:0.55rem 0.7rem;text-align:center;">
-            <div style="font-size:0.74rem;color:#94a3b8;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:3px;">Gradient ∂L/∂β₁</div>
+          <div
+            style="background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.2);border-radius:8px;padding:0.55rem 0.7rem;text-align:center;">
+            <div
+              style="font-size:0.74rem;color:#94a3b8;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:3px;">
+              Gradient ∂L/∂β₁</div>
             <div id="gd-info-grad" style="font-size:1rem;font-weight:700;color:#fcd34d;">—</div>
           </div>
         </div>
 
         <!-- Update rule reminder -->
-        <div style="margin-top:0.75rem;background:rgba(59,130,246,0.06);border:1px solid rgba(59,130,246,0.18);border-radius:8px;padding:0.6rem 0.9rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap;">
-          <span style="font-size:0.8rem;color:#cbd5e1;font-weight:600;text-transform:uppercase;letter-spacing:0.04em;">Update rule:</span>
+        <div
+          style="margin-top:0.75rem;background:rgba(59,130,246,0.06);border:1px solid rgba(59,130,246,0.18);border-radius:8px;padding:0.6rem 0.9rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap;">
+          <span
+            style="font-size:0.8rem;color:#cbd5e1;font-weight:600;text-transform:uppercase;letter-spacing:0.04em;">Update
+            rule:</span>
           <span style="font-size:0.88rem;color:#e2e8f0;font-family:monospace;">β₁ ← β₁ − α · (∂L/∂β₁)</span>
           <span style="font-size:0.8rem;color:#94a3b8;margin-left:auto;" id="gd-status">Press ▶ Run to start</span>
         </div>
@@ -1817,7 +1841,7 @@
       <div class="topic-header reveal">
         <div class="topic-icon topic-icon-green">🌳</div>
         <div class="topic-header-text">
-          <div class="tag" style="color:var(--accent-green)">04 · TREE-BASED MODEL · BRIEF</div>
+          <div class="tag" style="color:var(--accent-green)">04 · TREE-BASED MODEL ·</div>
           <h2>Decision Tree</h2>
         </div>
       </div>
@@ -3186,7 +3210,7 @@
         </div>
 
         <div class="card reveal" style="height:100%; border-top:3px solid #3b82f6;">
-          <h3 style="margin-bottom:1rem; font-size:1.05rem;">Time Complexity (Brief)</h3>
+          <h3 style="margin-bottom:1rem; font-size:1.05rem;">Time Complexity</h3>
           <ul class="check-list" style="margin:0; gap:0.5rem;">
             <li><span class="mark mark-blue">Σ</span> <strong>Total training complexity:</strong>
               <code>O(n_features × n_samples × log n_samples)</code>.
@@ -3223,16 +3247,8 @@
             miss the global optimum.</li>
           <li><span class="mark mark-orange">⚠️</span> <strong>Feature bias:</strong> High-cardinality categorical
             features can dominate Information Gain.</li>
-          <li><span class="mark mark-orange">⚠️</span> <strong>Linear pattern limits:</strong> Piecewise constant leaves
-            struggle with smooth trends.</li>
-          <li><span class="mark mark-orange">⚠️</span> <strong>Depth cost:</strong> Very large trees increase comparison
-            steps at inference time.</li>
-          <li><span class="mark mark-orange">⚠️</span> <strong>Axis-aligned splits:</strong> Diagonal boundaries usually
-            require deeper trees.</li>
           <li><span class="mark mark-orange">⚠️</span> <strong>Small-data risk:</strong> Trees can fit noise when
             training samples are limited.</li>
-          <li><span class="mark mark-orange">⚠️</span> <strong>Regression cap:</strong> Leaf means are constant and
-            cannot extrapolate beyond training range.</li>
         </ul>
       </div>
 
@@ -3965,7 +3981,7 @@
       <div class="topic-header reveal">
         <div class="topic-icon topic-icon-red">⚡</div>
         <div class="topic-header-text">
-          <div class="tag" style="color:var(--accent-red)">06 · GRADIENT BOOSTING · IN DEPTH</div>
+          <div class="tag" style="color:var(--accent-red)">06 · GRADIENT BOOSTING · </div>
           <h2>XGBoost</h2>
           <div style="font-size:0.8rem; color:var(--text-muted); margin-top:0.2rem;">eXtreme Gradient Boosting — Chen
             &amp; Guestrin, 2016</div>
@@ -4380,7 +4396,7 @@
       <div class="topic-header reveal">
         <div class="topic-icon topic-icon-pink">💡</div>
         <div class="topic-header-text">
-          <div class="tag" style="color:var(--accent-pink)">07 · GRADIENT BOOSTING · IN DEPTH</div>
+          <div class="tag" style="color:var(--accent-pink)">07 · GRADIENT BOOSTING ·</div>
           <h2>LightGBM</h2>
           <div
             style="font-size:0.95rem; color:var(--accent-purple); font-weight:600; margin-top:0.3rem; letter-spacing:0.04em;">
